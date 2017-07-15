@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Config\View as View;
+use App\Config\Session as Session;
 use App\Model\PeriodModel as Period;
 use App\Model\TeacherModel as Teacher;
 use App\Model\GeneralReportPeriodModel as GeneralReportPeriod;
@@ -16,7 +17,11 @@ class GeneralReportPeriodController
 
 	function __construct()
 	{
-		$this->_generalReportPeriod = new GeneralReportPeriod(DB);
+		if(Session::check('authenticated')):
+			$this->_generalReportPeriod = new GeneralReportPeriod(Session::get('db'));
+			$this->_teacher = new Teacher(Session::get('db'));
+			$this->_period = new Period(Session::get('db'));
+		endif;
 	}
 
 	/**
@@ -27,29 +32,26 @@ class GeneralReportPeriodController
 	*/
 	public function indexAction($role)
 	{
-		// Validanos la Sesion
-		if(true):
 
-			// Validamos el rol
-			if(isset($role) && $role == 'teacher'):
+		// Validamos el rol
+		if(isset($role) && $role == 'teacher'):
 
-				$reports = $this->_generalReportPeriod->getGeneralReportPeriodByTeacher(TC)['data'];
+			$reports = $this->_generalReportPeriod->getGeneralReportPeriodByTeacher($_SESSION['id_teacher'])['data'];
 
-				$view = new View(
-					'teacher/partials/evaluation/generalReport',
-					'home',
-					[
-						'tittle_panel'	=>	'Informe General de Periodo',
-						'reports'	=>	$reports,
-						'history'		=>	array(
-							'current'	=> '/GeneralReportPeriod/index/teacher'
-						)
-					]
-				);
+			$view = new View(
+				'teacher/partials/evaluation/generalReport',
+				'home',
+				[
+					'tittle_panel'	=>	'Informe General de Periodo',
+					'reports'	=>	$reports,
+					'history'		=>	array(
+						'current'	=> '/GeneralReportPeriod/index/teacher'
+					)
+				]
+			);
 
-				$view->execute();
+			$view->execute();
 
-			endif;
 		endif;
 	}
 
@@ -66,12 +68,11 @@ class GeneralReportPeriodController
 			// Validamos la peticion GET
 			if(isset($_GET['rol']) && $_GET['rol'] == 'teacher'):
 
-				$teacher = new Teacher(DB);
-				$period = new Period(DB);
+				
 
 				// Pendiende actualizar
-				$myGroups = $teacher->getGroupByDirector(TC)['data'];
-				$periods = $period->getPeriods()['data'];
+				$myGroups = $this->_teacher->getGroupByDirector($_SESSION['id_teacher'])['data'];
+				$periods = $this->_period->getPeriods()['data'];
 
 				$view = new View(
 					'teacher/partials/evaluation/generalReport',
@@ -105,7 +106,7 @@ class GeneralReportPeriodController
 				'id_student'		=> $id,
 				'id_group'			=> $_POST['group'],
 				'id_period'			=> $_POST['period'],
-				'id_group_director'	=>	TC,
+				'id_group_director'	=>	$_SESSION['id_teacher'],
 				'observations'		=> $_POST['observation']
 			);
 
@@ -166,7 +167,7 @@ class GeneralReportPeriodController
 		echo json_encode($this->_generalReportPeriod->update($data));
 	}
 
-	/*
+	/**
 	 *
 	 * @param
 	 * @return
@@ -175,7 +176,7 @@ class GeneralReportPeriodController
 	public function deleteAction()
 	{
 		if($this->_generalReportPeriod->delete($_POST['id_report'])['state']):
-			$reports = $this->_generalReportPeriod->getGeneralReportPeriodByTeacher(TC)['data'];
+			$reports = $this->_generalReportPeriod->getGeneralReportPeriodByTeacher($_SESSION['id_teacher'])['data'];
 
 				$view = new View(
 					'teacher/partials/evaluation/generalReport',
@@ -188,8 +189,6 @@ class GeneralReportPeriodController
 						)
 					]
 				);
-
-				$view->execute();
 
 			$view->execute();
 		endif;

@@ -44,7 +44,7 @@ class TeacherController
 	public function HomeAction($db='', $idTeacher='')
 	{
 
-		$asginatures = $this->_teacher->getAsignaturesAndGroups(TC)['data'];
+		$asginatures = $this->_teacher->getAsignaturesAndGroups($_SESSION['id_teacher'])['data'];
 
 		$view = new View(
 			'teacher',
@@ -65,11 +65,7 @@ class TeacherController
 	public function indexAction($db='', $idTeacher='')
 	{	
 
-		if(Session::check('authenticated')):
-			print_r($_SESSION);
-		else:
-			echo "string";
-		endif;
+		print_r($_SESSION);
 
 		$subheader = array(
 			'title'	=>	'Inicio',
@@ -95,7 +91,7 @@ class TeacherController
 	*/ 
 	public function evaluationAction()
 	{	
-		$groupsAndAsign = $this->_teacher->getAsignaturesAndGroups(TC)['data'];
+		$groupsAndAsign = $this->_teacher->getAsignaturesAndGroups($_SESSION['id_teacher'])['data'];
 			
 		// Creamos el subheader para los menus horizontal
 		$subheader = array(
@@ -111,7 +107,7 @@ class TeacherController
 		);
 
 		// Preguntamos si el docente es director de algun grupo
-		if($this->_teacher->isDirector(TC))
+		if($this->_teacher->isDirector($_SESSION['id_teacher']))
 		{
 			array_push($subheader['items'], array(
 				'title'	=>	'Observaciones Generales',
@@ -147,7 +143,7 @@ class TeacherController
 	public function sheetsAction()
 	{
 		$periods = $this->_periods->getPeriods()['data'];
-		$asignatures = $this->_teacher->getAsignaturesAndGroups(TC)['data'];
+		$asignatures = $this->_teacher->getAsignaturesAndGroups($_SESSION['id_teacher'])['data'];
 
 		$subheader = array(
 			'title'	=>	'Planillas',
@@ -177,7 +173,7 @@ class TeacherController
 	public function evaluationPeriodAction()
 	{	
 
-		$groupsAndAsign = $this->_teacher->getAsignaturesAndGroups(TC)['data'];
+		$groupsAndAsign = $this->_teacher->getAsignaturesAndGroups($_SESSION['id_teacher'])['data'];
 
 		$view = new View(
 			'teacher/partials/evaluation',

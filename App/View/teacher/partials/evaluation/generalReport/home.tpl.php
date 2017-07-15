@@ -73,10 +73,10 @@
     	<div class="modal-content">
       		<form action="/generalReportPeriod/delete" method="POST" id="deleteGeneralReport" enctype="application/x-www-form-urlencoded">
       			<div class="modal-header">
-	        		<h4 class="modal-title" id="myModalLabel">Eliminar Obserbacione</h4>
+	        		<h4 class="modal-title" id="myModalLabel">Eliminar Obserbación</h4>
 	      		</div>
 	      		<div class="modal-body">
-	        		<span>¿Este seguro que desea eliminar esta Observacion ?</span>
+	        		<span>¿Este seguro que desea eliminar esta Observación ?</span>
 	      		</div>
 	      		<div class="modal-footer">
 	      			<input type="hidden" name="request" value="crud">

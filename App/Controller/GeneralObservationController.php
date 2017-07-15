@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Config\View as View;
+use App\Config\Session as Session;
 use App\Model\PeriodModel as Period;
 use App\Model\TeacherModel as Teacher;
 use App\Model\GeneralObservationModel as GeneralObservation;
@@ -11,10 +12,16 @@ use App\Model\GeneralObservationModel as GeneralObservation;
 class GeneralObservationController
 {	
 	private $_generalObservation;
+	private $_teacher;
+	private $_period;
 
 	function __construct()
-	{
-		$this->_generalObservation = new GeneralObservation(DB);
+	{	
+		if(Session::check('authenticated')):
+			$this->_generalObservation = new GeneralObservation(Session::get('db'));
+			$this->_teacher = new Teacher(Session::get('db'));
+			$this->_period = new Period(Session::get('db'));
+		endif;
 	}
 
 	/**
@@ -31,8 +38,7 @@ class GeneralObservationController
 			// Validamos el rol
 			if(isset($role) && $role == 'teacher'):
 
-				$teacher = new Teacher(DB);
-				$gObservation = $teacher->getGeneralObservations(TC)['data'];
+				$gObservation = $this->_teacher->getGeneralObservations($_SESSION['id_teacher'])['data'];
 
 				$view = new View(
 					'teacher/partials/evaluation/observations',
@@ -64,11 +70,10 @@ class GeneralObservationController
 		if(true):
 
 			if(isset($_GET['rol']) && $_GET['rol'] == 'teacher'):
-				$teacher = new Teacher(DB);
-				$period = new Period(DB);
+				
 
-				$myGroups = $teacher->getGroupByDirector(TC)['data'];
-				$periods = $period->getPeriods()['data'];
+				$myGroups = $this->_teacher->getGroupByDirector($_SESSION['id_teacher'])['data'];
+				$periods = $this->_period->getPeriods()['data'];
 
 				$view = new View(
 					'teacher/partials/evaluation/observations',
@@ -105,7 +110,7 @@ class GeneralObservationController
 				'id_student'		=> $id,
 				'id_group'			=> $_POST['group'],
 				'id_period'			=> $_POST['period'],
-				'id_group_director'	=>	TC,
+				'id_group_director'	=>	$_SESSION['id_teacher'],
 				'observations'		=> $_POST['observation']
 			);
 
@@ -124,30 +129,27 @@ class GeneralObservationController
 	*/
 	public function showAction($id_observation)
 	{
-		// Validamos la sesion
-		if(true):
-			$response = $this->_generalObservation->find($id_observation)['data'][0];
+	
+		$response = $this->_generalObservation->find($id_observation)['data'][0];
 
-			if(isset($_GET['rol']) && $_GET['rol'] == 'teacher'):
-				$view = new View(
-					'teacher/partials/evaluation/observations',
-					'show',
-					[
-						'tittle_panel'	=>	'Ver Observaciones Generales',
-						'observation'		=>	$response,
-						'back'			=>	$_GET['options']['back']
-					]
-				);
+		if(isset($_GET['rol']) && $_GET['rol'] == 'teacher'):
+			$view = new View(
+				'teacher/partials/evaluation/observations',
+				'show',
+				[
+					'tittle_panel'	=>	'Ver Observaciones Generales',
+					'observation'		=>	$response,
+					'back'			=>	$_GET['options']['back']
+				]
+			);
 
-				$view->execute();
+			$view->execute();
 
-			elseif(isset($_GET['rol']) && $_GET['rol'] == 'institution'):
-				echo "institution";
-			else:
-				echo "404 no se puede mostrar el contenido";
-			endif;
+		elseif(isset($_GET['rol']) && $_GET['rol'] == 'institution'):
+			echo "institution";
+		else:
+			echo "404 no se puede mostrar el contenido";
 		endif;
-
 	}
 
 
@@ -159,29 +161,27 @@ class GeneralObservationController
 	*/
 	public function editAction($id_observation)
 	{
-		// Validamos la Sesion
-		if(true):
-			$response = $this->_generalObservation->find($id_observation)['data'][0];
 
-			// Validamos el tipo de usuario
-			if(isset($_GET['rol']) && $_GET['rol'] == 'teacher'):
+		$response = $this->_generalObservation->find($id_observation)['data'][0];
 
-				$view = new View(
-					'teacher/partials/evaluation/observations',
-					'edit',
-					[
-						'tittle_panel'	=>	'Editar Observaciones Generales',
-						'observation'		=>	$response,
-						'back'			=>	$_GET['options']['back']
-					]
-				);
+		// Validamos el tipo de usuario
+		if(isset($_GET['rol']) && $_GET['rol'] == 'teacher'):
 
-				$view->execute();
-			elseif($_GET['rol'] == 'institution'):
-				echo "institution";
-			else:
-				echo "404 no se puede mostrar el contenido";
-			endif;
+			$view = new View(
+				'teacher/partials/evaluation/observations',
+				'edit',
+				[
+					'tittle_panel'	=>	'Editar Observaciones Generales',
+					'observation'		=>	$response,
+					'back'			=>	$_GET['options']['back']
+				]
+			);
+
+			$view->execute();
+		elseif($_GET['rol'] == 'institution'):
+			echo "institution";
+		else:
+			echo "404 no se puede mostrar el contenido";
 		endif;
 	}
 
@@ -211,8 +211,7 @@ class GeneralObservationController
 	public function deleteAction()
 	{
 		if($this->_generalObservation->delete($_POST['id_observation'])['state']):
-			$teacher = new Teacher(DB);
-			$gObservation = $teacher->getGeneralObservations(TC)['data'];;
+			$gObservation = $this->_teacher->getGeneralObservations($_SESSION['id_teacher'])['data'];;
 
 			$view = new View(
 				'teacher/partials/evaluation/observations',

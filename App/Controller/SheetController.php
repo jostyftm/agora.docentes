@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller;
 
+use App\Config\Session as Session;
 use App\Model\SheetModel as Sheet;
 use App\Model\TeacherModel as Teacher;
 use App\Model\PerformanceModel as Performance;
@@ -22,12 +23,14 @@ class SheetController
 	*
 	*/
 	function __construct()
-	{
-		$this->_sheet = new Sheet(DB);
-		$this->_performance = new Performance(DB);
-		$this->_evaluation = new Evaluation(DB);
-		$this->_institution = new Institution(DB);
-		$this->_teacher = new Teacher(DB);
+	{	
+		if(Session::check('authenticated')):
+			$this->_sheet = new Sheet(Session::get('db'));
+			$this->_performance = new Performance(Session::get('db'));
+			$this->_evaluation = new Evaluation(Session::get('db'));
+			$this->_institution = new Institution(Session::get('db'));
+			$this->_teacher = new Teacher(Session::get('db'));
+		endif;
 	}
 
 	/**
