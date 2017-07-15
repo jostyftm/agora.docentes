@@ -30,9 +30,34 @@ class AuthController
 	 * @param
 	 * @return
 	*/
-	public function login()
+	public function loginAction()
 	{
+		if(isset($_POST)):
 
+			// Validamos la session
+		if(!Session::check('authenticated')):
+
+			$teacher = new Teacher($_POST['db']);
+			$resp = $teacher->find($_POST['id_teacher']);
+
+			// Preguntamos si hay resultados
+			if($resp['state']):
+
+				// Creamos las variables de session
+				Session::set('authenticated', true);
+				Session::set('db', $_POST['db']);
+				Session::set('id_teacher', $resp['data'][0]['id_docente']);
+				Session::set('rol', 'teacher');
+
+				// Redireccionamos al home
+				header("Location: /");
+			endif;
+			
+		else:
+			echo "404";
+		endif;
+
+		endif;
 	}
 
 	/**
