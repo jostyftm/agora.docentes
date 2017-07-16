@@ -73,5 +73,14 @@ class EvaluationPeriodModel extends DB
 
 		return $this->getResultsFromQuery();
 	}
+
+	public function getEvaluation($id_group, $id_asignature){
+			$this->query = "SELECT * 
+							FROM t_evaluacion 
+							WHERE id_grupo = '{$id_group}' AND id_asignatura = '{$id_asignature}'
+							ORDER BY primer_apellido";
+
+			return $this->getResultsFromQuery();
+	}
 }
 ?>

@@ -2,12 +2,13 @@
 namespace App\Model;
 
 use App\Config\DataBase as DB;
+
 /**
 * 
 */
-class PeriodModel extends DB
+class ValorationModel extends DB
 {
-	private $table = "periodos";
+	private $_table = 'valoracion';
 
 	function __construct($db='')
 	{
@@ -17,14 +18,10 @@ class PeriodModel extends DB
 			parent::__construct($db);
 	}
 
-	/**
-	 *
-	 * @param
-	 * @return
-	*/
 	public function all()
 	{
-		$this->query = "SELECT * FROM {$this->table}";
+		$this->query = "SELECT *
+						FROM {$this->_table}";
 
 		return $this->getResultsFromQuery();
 	}

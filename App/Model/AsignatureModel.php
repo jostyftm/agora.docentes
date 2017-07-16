@@ -30,5 +30,15 @@ class AsignatureModel extends DB
 		return $this->getResultsFromQuery();
 	}
 
+	/**
+	 *
+	 * @param
+	 * @return
+	*/
+	public function all()
+	{
+		$this->query = "SELECT * FROM {$this->table}";
+		return $this->getResultsFromQuery();
+	}
 }
 ?>

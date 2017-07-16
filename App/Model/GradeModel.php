@@ -5,12 +5,13 @@ use App\Config\DataBase as DB;
 /**
 * 
 */
-class PeriodModel extends DB
+class GradeModel extends DB
 {
-	private $table = "periodos";
-
+	
+	private $table = 't_grados';
+	
 	function __construct($db='')
-	{
+	{	
 		if(!$db)
 			throw new \Exception("La clase ".get_class($this)." no encontro la base de datos", 1);
 		else
@@ -25,8 +26,8 @@ class PeriodModel extends DB
 	public function all()
 	{
 		$this->query = "SELECT * FROM {$this->table}";
-
 		return $this->getResultsFromQuery();
 	}
+	
 }
 ?>

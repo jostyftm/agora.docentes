@@ -45,7 +45,6 @@ class GroupModel extends DB
 						INNER JOIN jornadas j on g.jornada=j.id_jornada
 						INNER JOIN sedes s ON g.id_sede=s.id_sede
 						INNER JOIN t_grados gra ON g.id_grado=gra.id_grado";
-
 		return $this->getResultsFromQuery();
 	}
 
@@ -62,6 +61,18 @@ class GroupModel extends DB
 						ORDER BY e.primer_apellido";
 
 		return $this->getResultsFromQuery();
+	}
+
+	/**
+	 *
+	 *	@param
+	 *  @return
+	*/ 
+	public function groupAndAsign($id_asignature, $id_group)
+	{
+		$this->query = "SELECT nombre_grupo, asignatura, t_grupos.id_grado FROM t_grupos, t_asignaturas 
+						WHERE id_grupo = {$id_group} AND id_asignatura = {$id_asignature}";
+		return	$this->getResultsFromQuery();
 	}
 }
 ?>

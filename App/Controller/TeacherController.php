@@ -100,7 +100,7 @@ class TeacherController
 			'items'	=>	array(
 				1	=>	array(
 					'title'	=>	'Evaluar',
-					'link'	=>	'/teacher/evaluationPeriod',
+					'link'	=>	'/teacher/evaluate',
 					'active' =>	'active'
 				)
 			),
@@ -141,8 +141,8 @@ class TeacherController
 	 *  @return
 	*/ 
 	public function sheetsAction()
-	{
-		$periods = $this->_periods->getPeriods()['data'];
+	{	
+		$periods = $this->_periods->all()['data'];
 		$asignatures = $this->_teacher->getAsignaturesAndGroups($_SESSION['id_teacher'])['data'];
 
 		$subheader = array(
@@ -165,12 +165,91 @@ class TeacherController
 		$view->execute();
 	}
 
+
+	/**
+	 * 
+	 * @param
+	 * @return
+	*/
+	public function StatisticsAction()
+	{
+		// Creamos el subheader para los menus horizontal
+		$subheader = array(
+			'title'	=>	'Estadisticas',
+			'icon'	=>	'fa fa-line-chart',
+			'items'	=>	array(
+				1	=>	array(
+					'title'	=>	'Consolidado',
+					'link'	=>	'/statistic/consolidateEvaluation',
+					'active' =>	'active'
+				),
+				2	=>	array(
+					'title'		=>	'Estudiante',
+					'link'		=>	'#',
+					'active'	=>	'',
+					'subItem'	=>	array(
+						1	=>	array(
+							'tittle'	=>	'Matriculado por sexo',
+							'link'		=>	'/statistic/studentSexRegistered'
+						),
+						2	=>	array(
+							'tittle'	=>	'Eficiencia',
+							'link'		=>	'/statistic/studentEfficiency'
+						)
+					)
+				),
+				3	=>	array(
+					'title'		=>	'Reprobados',
+					'link'		=>	'#',
+					'active'	=>	'',
+					'subItem'	=>	array(
+						1	=>	array(
+							'tittle'	=>	'Estudianes Reprobados',
+							'link'		=>	'/statistic/studentDisapproved'
+						),
+						2	=>	array(
+							'tittle'	=>	'Reprobrados Detallados',
+							'link'		=>	'/statistic/detailDisapproved'
+						)
+					)
+				),
+				4	=>	array(
+					'title'	=>	'Desempeño por Docente',
+					'link'	=>	'/statistic/performanceByTeacher',
+					'active' =>	''
+				)
+			),
+		);
+
+		$view = new View(
+			'teacher',
+			'index',
+			[
+				'tittle_panel'		=>	'',
+				'include'			=>	'partials/statistic/consolidate/consolidate.tpl.php',
+				'subheader'			=>	$subheader,
+			]
+		);
+
+		$view->execute();
+	}
+
 	/**
 	 *
 	 *	@param
 	 *  @return
 	*/ 
-	public function evaluationPeriodAction()
+	public function setting()
+	{
+
+	}
+
+	/**
+	 *
+	 *	@param
+	 *  @return
+	*/ 
+	public function evaluateAction()
 	{	
 
 		$groupsAndAsign = $this->_teacher->getAsignaturesAndGroups($_SESSION['id_teacher'])['data'];
@@ -219,6 +298,16 @@ class TeacherController
 		endif;
 	}
 
+
+	/**
+	 *
+	 *
+	 *
+	*/
+	public function performanceByGroup()
+	{
+		
+	} 
 
 	/**
 	 *

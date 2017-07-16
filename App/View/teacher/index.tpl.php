@@ -72,7 +72,7 @@
                     	<div class="pull-left">
           							<b>Derechos Reservados </b>&copy; <?php  echo date('Y') ?>
           						</div>
-          						<dsiv class="pull-right">
+          						<div class="pull-right">
           							@tenea
           						</div> 
                   	</footer>

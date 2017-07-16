@@ -44,7 +44,7 @@ class TeacherModel extends DB
 	public function getAsignaturesAndGroups($id_teacher)
 	{
 
-		$this->query = "SELECT g.id_grupo, g.nombre_grupo, a.id_asignatura, a.asignatura
+		$this->query = "SELECT g.id_grupo, g.nombre_grupo, a.id_asignatura, a.asignatura, g.id_grado
 						FROM t_asignaturas a
 						INNER JOIN grupo_x_asig_x_doce ad ON a.id_asignatura=ad.id_asignatura
 						INNER JOIN t_grupos g ON ad.id_grupo=g.id_grupo

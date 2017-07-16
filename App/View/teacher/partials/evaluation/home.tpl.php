@@ -29,7 +29,7 @@
 		                             	</button>
 		                           		<ul class='dropdown-menu'>
 		                           			<li>
-		                           				<a href='#' data-request='spa'>Evaluar Periodo
+		                           				<a href='/evaluation/evaluateGroup/".$group['id_asignatura']."/".$group['id_grupo']."' data-request='spa'>Evaluar Periodo
 				                        		</a>
 		                           			</li>
 				                        	<li>
