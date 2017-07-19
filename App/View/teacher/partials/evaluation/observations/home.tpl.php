@@ -2,7 +2,9 @@
 	<div class="col-md-12 content">
 		<div class="panel panel-default">
 		  	<div class="panel-heading">
-		    	<h3 class="panel-title"><?php echo "GRUPO: ".$observations[0]['nombre_grupo']; ?></h3>
+		    	<h3 class="panel-title">
+		    		<?php echo "GRUPO: ".$group['nombre_grupo']; ?>
+		    	</h3>
 		  	</div>
 		  	<div class="panel-body">
 		  		<div class="row">

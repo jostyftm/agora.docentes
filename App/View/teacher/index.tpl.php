@@ -15,7 +15,7 @@
         <link href="/Public/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
    		<!-- Style -->
-   		<link href="/Public/css/default.css" rel="stylesheet" type="text/css">
+   		<link href="/Public/css/default2.css" rel="stylesheet" type="text/css">
     
       <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
       <script src="/Public/js/jquery-1.12.4.js"></script>
@@ -41,50 +41,95 @@
     <![endif]-->
   	</head>
 	<body>
-      <div class="container-fluid display-table">
-         <div class="row display-table-row">
-            <div class="col-md-2 col-sm-1 hidden-xs display-table-cell valign-top" id="sidebar">
-              <!-- Sidebar -->
-              <?php
-              	include ('dashboard/sidebar.tpl.php');
-              ?>
-            </div>
-            <div class="col-md-10 col-sm-11 display-table-cell valign-top">
-               <div class="row">
-                  	<!-- Header -->
-					       <?php
-		             	include ('dashboard/header.tpl.php');
-		            ?>
-                <!-- SubHeader -->
-                <?php
-                  include ('dashboard/subheader.tpl.php');
-                ?>
-		            <!-- Content -->
-                  <div  class="container" id="content">
-                      <?php
-                        include ($include);
-                      ?>
-                  </div>
-               </div>
-               <div class="row">
-               		<!-- Footer -->
-                  	<footer id="footerAd" class="clearfix">
-                    	<div class="pull-left">
-          							<b>Derechos Reservados </b>&copy; <?php  echo date('Y') ?>
-          						</div>
-          						<div class="pull-right">
-          							@tenea
-          						</div> 
-                  	</footer>
-               </div>
-            </div>
-         </div>
-      </div>
+		<!-- NAV -->
+		<nav class="navbar navbar-default no-margin" id="nav">
+			<div class="image">
+           <?php 
+               if($institution[0]['logo_byte'] != NULL): 
+                     $pic = 'data:image/png;base64,'.base64_encode($institution[0]["logo_byte"]);
+           ?>
+               <img src="<?php echo $pic;?>" alt="" class="img-responsive" width="60">
+            <?php endif;?>
+        </div>
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header fixed-brand">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"  id="menu-toggle">
+           <span class="glyphicon glyphicon-th-large" aria-hidden="true"></span>
+        </button>
+        <a class="navbar-brand" href="#"><?php echo $institution[0]['nombre_inst'];?></a>
+     </div><!-- navbar-header-->
 
-      
-      <!-- Include all compiled plugins (below), or include individual files as needed -->
-      <script src="/Public/js/bootstrap.js"></script>
+     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+       <ul class="nav navbar-nav">
+        <li class="active" ><button class="navbar-toggle collapse in" data-toggle="collapse" id="menu-toggle-2"> <span class="glyphicon glyphicon-th-large" aria-hidden="true"></span></button></li>
+     </ul>
+     <ul class="pull-right menu_option">
+        <li>Bienvenido Pepito perez</li>
+					<!-- <li class="fixed-with">
+						<a href="#">
+							<span class="fa fa-bell" arial-hidden="true"></span>
+							<span class="label label-warning">3</span>
+						</a>
+					</li>
+					<li class="fixed-with">
+						<a href="#">
+							<span class="fa fa-envelope" arial-hidden="true"></span>
+							<span class="label label-message">3</span>
+						</a>
+					</li> -->
+					<li>
+						<a href="#" class="log-out">
+							<span class="fa fa-sign-out" arial-hidden="true"></span>
+							Cerra Sesion
+						</a>
+					</li>
+				</ul>
+			</div><!-- bs-example-navbar-collapse-1 -->
+		</nav>
+		<!-- END NAV -->
+
+		<div id="wrapper">
+        <!-- Sidebar -->
+        <?php
+            include ('dashboard/sidebar2.tpl.php');
+         ?>
+        <!-- /#sidebar-wrapper -->
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+        		<!-- SubHeader -->
+				<?php
+	            include ('dashboard/subheader.tpl.php');
+	         ?>
+	        <!-- /#subHeader-wrapper -->
+            <div class="container-fluid xyz" id="content">
+               <?php
+                  include ($include);
+               ?>
+            </div>
+
+            <footer class="contentF">
+            <div id="footerAd" class="clearfix">
+              <div class="pull-left">
+                <b>Derechos Reservados </b>&copy; <?php  echo date('Y') ?>
+              </div>
+              <div class="pull-right">
+                @tenea
+              </div> 
+            </div> 
+          </footer>
+        </div>
+        <!-- /#page-content-wrapper -->
+
+        <!-- Footer -->
+        
+        <!-- /#footer-wrapper -->
+    </div>
+    <!-- /#wrapper -->
+	
+
+	<!-- SCRIPTS -->
+    <script src="/Public/js/bootstrap.js"></script>
       <!--  -->
       <script src="/Public/js/default.js"></script>
-   </body>
+	</body>
 </html>

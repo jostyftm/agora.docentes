@@ -11,7 +11,7 @@
 		<!-- <input type="text" id="header-search-field" class="hidden-sm hidden-xs" value="INSTITUCIÓN EDUCATIVA TALES TALES" > -->
 		<ul>
 			<li>
-				<h3><strong>INSTITUCIÓN EDUCATIVA TALES TALES</strong></h3>
+				<h3><strong><?php echo $institution['nombre_inst']; ?></strong></h3>
 			</li>
 		</ul>
 	</div>

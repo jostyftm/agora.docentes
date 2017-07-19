@@ -27,12 +27,7 @@ class TeacherModel extends DB
 	{
 		$this->query = "SELECT * FROM {$this->table} WHERE id_docente={$id}";
 
-		$resp = $this->getResultsFromQuery();
-
-		if($resp['state'])
-			return $resp;
-
-		return $resp;
+		return $this->getResultsFromQuery();
 	}
 
 	/**

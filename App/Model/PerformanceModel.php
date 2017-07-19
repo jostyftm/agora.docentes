@@ -23,6 +23,20 @@ class PerformanceModel extends DB
 	 *
 	 *
 	*/
+	public function save($data=array())
+	{
+		$this->query = "INSERT INTO desempeno ( id_grado, id_area, id_asignatura, id_clas_chs, periodos, superior, alto, basico, refuerzo_academino, bajo, recomendacion)
+						VALUES ({$data['id_grade']}, {$data['id_area']}, {$data['id_asignature']}, {$data['category']}, {$data['period']}, '{$data["higher"]}', '{$data["high"]}', '{$data["basic"]}', '{$data["reinforcement"]}', '{$data["low"]}', '{$data['recommendation']}')";
+
+		return $this->executeQuerySingle();
+	}
+
+
+	/**
+	 *
+	 *
+	 *
+	*/
 	public function getPerformances($id_grade, $id_asignature, $category, $period)
 	{
 		$g=$id_grade==-1?'<>':'=';
@@ -148,6 +162,31 @@ class PerformanceModel extends DB
 						FROM rel_desemp_posicion 
 						WHERE id_grupo = {$id_group} AND id_asign = {$id_asignature}  AND periodo = {$period} AND posicion = '{$position}'";
 		return $this->getResultsFromQuery();
+	}
+
+	/**
+	 *
+	 *
+	 *
+	*/
+	public function saveRelation($data=array())
+	{
+		$this->query = " INSERT INTO rel_desemp_posicion ( id_grado, id_grupo, id_asign, periodo, posicion, cod_desemp)
+			VALUES ({$data['id_grade']}, {$data['id_group']}, {$data['id_asignature']}, {$data['period']}, '{$data['position']}', {$data['id_performance']})";
+
+		return $this->executeQuerySingle();
+	}
+
+	/**
+	 *
+	 *
+	 *
+	*/
+	public function deleteRelation($position,$id_performance,$id_group,$id_asignature,$period)
+	{
+		$this->query = "DELETE FROM rel_desemp_posicion WHERE posicion='{$position}'  and cod_desemp ={$id_performance} and periodo = {$period} and id_grupo = {$id_group} and id_asign={$id_asignature}";
+
+		return $this->executeQuerySingle();
 	}
 }
 ?>

@@ -101,7 +101,7 @@
 							<td>
 								<span data-id="<?=$row['id_estudiante']?>">
 
-									<?= $row['primer_apellido']." ".$row['segundo_apellido']." ". $row['primer_nombre']." ".$row['segundo_nombre']?>
+									<?= $clave." ".$row['primer_apellido']." ".$row['segundo_apellido']." ". $row['primer_nombre']." ".$row['segundo_nombre']?>
 
 
 								</span>  
@@ -118,7 +118,9 @@
 							</td>
 
 							<td >
-								<input data-id="<?=$row['id_estudiante']?>" name="inasistencia_p1" data-cont="<?=$cont++;?>" step="1.0"  type="text"  class="form-control"   value="<?=$row['inasistencia_p1']?>"> 
+								<input data-id="<?=$row['id_estudiante']?>" name="inasistencia_p1" data-cont="<?=$cont++;?>" step="1.0"  type="number"  class="form-control"   value="<?=$row['inasistencia_p1']?>"> 
+
+
 							</td>       
 							<td>
 								<input data-id="<?=$row['id_estudiante']?>" data-desemp="dc" name="dc1"  data-cont="<?=$cont++;?>" step="0.1" type="text" class="form-control " value="<?=$row['dc1']?>">                 

@@ -40,5 +40,20 @@ class AsignatureModel extends DB
 		$this->query = "SELECT * FROM {$this->table}";
 		return $this->getResultsFromQuery();
 	}
+
+	/**
+	*
+	*
+	*
+	*/
+	public function getByAreaAndGrade($id_area, $id_grade)
+	{
+		$this->query = "SELECT DISTINCT ta.id_asignatura, ta.asignatura  
+						FROM  t_asignatura_x_area t 
+						INNER JOIN t_asignaturas ta  ON t.id_asignatura = ta.id_asignatura  
+						WHERE t.id_area={$id_area} and t.id_grado ={$id_grade} ORDER BY ta.asignatura ASC";
+
+		return $this->getResultsFromQuery();
+	}
 }
 ?>

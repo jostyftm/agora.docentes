@@ -37,13 +37,15 @@ class GeneralReportPeriodController
 		if(isset($role) && $role == 'teacher'):
 
 			$reports = $this->_generalReportPeriod->getGeneralReportPeriodByTeacher($_SESSION['id_teacher'])['data'];
+			$group = $this->_teacher->getGroupByDirector(Session::get('id_teacher'))['data'][0];
 
 			$view = new View(
 				'teacher/partials/evaluation/generalReport',
 				'home',
 				[
 					'tittle_panel'	=>	'Informe General de Periodo',
-					'reports'	=>	$reports,
+					'reports'		=>	$reports,
+					'group'			=>	$group,
 					'history'		=>	array(
 						'current'	=> '/GeneralReportPeriod/index/teacher'
 					)
@@ -72,7 +74,7 @@ class GeneralReportPeriodController
 
 				// Pendiende actualizar
 				$myGroups = $this->_teacher->getGroupByDirector($_SESSION['id_teacher'])['data'];
-				$periods = $this->_period->getPeriods()['data'];
+				$periods = $this->_period->all()['data'];
 
 				$view = new View(
 					'teacher/partials/evaluation/generalReport',

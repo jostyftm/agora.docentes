@@ -4,7 +4,7 @@
 </div>
 <ul>
 	<!-- Inicio -->
-	<li>
+	<li class="active">
 		<a href="/teacher">
 			<span class="fa fa-dashboard" aria-hidden="true"></span>
 			<span class="hidden-sm hidden-xs">Inicio</span>
@@ -33,23 +33,13 @@
 			<span class="fa fa-line-chart" aria-hidden="true"></span>
 			<span class="hidden-sm hidden-xs">Estadistica</span>
 		</a>
-		<!-- <ul class="collapse collapseable" id="collapse-report">
-			<li><a href="">Consolidados de Evaluaciones</a></li>
-			<li><a href="">Consolidados de Inasistencia</a></li>
-			<li><a href="">Promedio General</a></li>
-			<li><a href="">Desempeños por Grupos</a></li>
-			<li><a href="">Desempeños por Docentes</a></li>
-		</ul> -->
 	</li>
 
 	<!-- Configuracion -->
 	<li>
-		<a href="#collapse-cog" data-toggle="collapse" arial-controls="collapse-cog">
+		<a href="/teacher/settings" ">
 			<span class="fa fa-cog" aria-hidden="true"></span>
 			<span class="hidden-sm hidden-xs">Configuración</span>
 		</a>
-		<ul class="collapse collapseable" id="collapse-cog">
-			<li><a href="">Configuración de Cuenta</a></li>
-		</ul>
 	</li>
 </ul>

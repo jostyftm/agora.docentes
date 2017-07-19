@@ -40,12 +40,15 @@ class GeneralObservationController
 
 				$gObservation = $this->_teacher->getGeneralObservations($_SESSION['id_teacher'])['data'];
 
+				$group = $this->_teacher->getGroupByDirector(Session::get('id_teacher'))['data'][0];
+
 				$view = new View(
 					'teacher/partials/evaluation/observations',
 					'home',
 					[
 						'tittle_panel'	=>	'',
 						'observations'	=>	$gObservation,
+						'group'			=>	$group,
 						'history'		=>	array(
 							'current'	=> '/generalObservation/index/teacher'
 						)
@@ -73,7 +76,7 @@ class GeneralObservationController
 				
 
 				$myGroups = $this->_teacher->getGroupByDirector($_SESSION['id_teacher'])['data'];
-				$periods = $this->_period->getPeriods()['data'];
+				$periods = $this->_period->all()['data'];
 
 				$view = new View(
 					'teacher/partials/evaluation/observations',

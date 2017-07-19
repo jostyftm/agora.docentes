@@ -29,26 +29,26 @@
 			  				</div>
 			  			</div>
 			  			<div class="col-md-3">
-							    	<div class="form-group">
-							    		<label for="">Diseño</label>
-							    		<select name="orientation" id="orientation" class="form-control" disabled>
-							    			<option value="l" selected="selected">Horizontal</option>
-							    			<option value="p">Vertical</option>
-							    		</select>
-							    	</div>
-					    		</div>
-								<div class="col-md-3">
-							    	<div class="form-group">
-							    		<label for="">Tamaño de página</label>
-							    		<select name="papper" id="" class="form-control">
-							    			<option value="A3">A3</option>
-							    			<option value="A4" selected="selected">A4</option>
-							    			<option value="A5">A5</option>
-							    			<option value="Letter">Letter</option>
-							    			<option value="Legal">Legal</option>
-							    		</select>
-							    	</div>
-					    		</div>
+			  				<div class="form-group">
+			  					<label for="">Diseño</label>
+			  					<select name="orientation" id="orientation" class="form-control" disabled>
+			  						<option value="l" selected="selected">Horizontal</option>
+			  						<option value="p">Vertical</option>
+			  					</select>
+			  				</div>
+			  			</div>
+			  			<div class="col-md-3">
+			  				<div class="form-group">
+			  					<label for="">Tamaño de página</label>
+			  					<select name="papper" id="" class="form-control">
+			  						<option value="A3">A3</option>
+			  						<option value="A4" selected="selected">A4</option>
+			  						<option value="A5">A5</option>
+			  						<option value="Letter">Letter</option>
+			  						<option value="Legal">Legal</option>
+			  					</select>
+			  				</div>
+			  			</div>
 			  		</div>
 			  		<div class="row">
 						<div class="col-md-5">

@@ -75,7 +75,7 @@ class EvaluationController
 					'valoracion'=>$valoraciones,  
 					'categorias' => $categorias, 
                     'criterios'    => $criterios,
-                    'expresiones' => $expresiones,
+                    'expresiones' => $expresiones['data'][0],
 					'asignatura'=>$id_asignature, 
 					'asignaturas' => $asignaturas, 
 					'porcentajes' => $result_porcentajes[0] , 
@@ -136,6 +136,34 @@ class EvaluationController
 				]
 			);
 			$view->execute();
+		endif;
+	}
+
+	/**
+	*
+	*
+	*
+	*/
+	public function updateAllAction()
+	{
+		if(!empty($_POST) && isset($_POST['idEstudiante'])):
+
+			$resp = array();
+
+			foreach ($_POST['obj'] as $key => $value):
+				array_push(
+					$resp,
+					$this->_evaluation->updatePeriod(
+						$key, 
+						$_POST['idEstudiante'],
+						$_POST['asignaturaDB'],
+						$value
+					)
+				);
+			endforeach;
+
+			echo json_encode($resp);
+
 		endif;
 	}
 }

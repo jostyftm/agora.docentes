@@ -28,6 +28,30 @@ class PerformanceController
 		endif;
 	}
 
+
+	/**
+	 *
+	 *
+	 *
+	*/
+	public function storeAction()
+	{	
+		$data = array(
+			'low'				=>	$_POST['bajo'],
+			'high'				=>	$_POST['alto'],
+			'basic'				=>	$_POST['basico'],
+			'higher'			=>	$_POST['superior'],
+			'period'			=>	$_POST['periodo'],
+			'id_area'			=>	$_POST['area'],
+			'category'			=>	$_POST['categoria'],
+			'id_grade'			=>	$_POST['grado'],
+			'reinforcement'		=>	$_POST['refuerzo'],
+			'id_asignature'		=>	$_POST['asignatura'],
+			'recommendation'	=>	$_POST['recomendacion']
+		);
+		echo json_encode($this->_performance->save($data));
+	}
+
 	/**
 	 *
 	 *
@@ -51,7 +75,7 @@ class PerformanceController
 		$indicadores = $this->_performance->getPerformances($id_grade, $id_asignature, $category, $period);
 		
 
-		if($indicadores['state']):
+		// if($indicadores['state']):
 			$asignaturas = $this->_asignature->all()['data'];
 			$grados = $this->_grade->all()['data'];
 			$periodos = $this->_period->all()['data'];
@@ -70,6 +94,49 @@ class PerformanceController
 				]
 			);
 			$view->execute();
+		// endif;
+	}
+
+	/**
+	 *
+	 *
+	 *
+	*/
+	public function storeRelationAction()
+	{
+		if(!empty($_POST) && isset($_POST['cod_desemp'])):
+
+			$data = array(
+				'period' 			=> $_POST['periodo'],
+				'id_grade' 			=> $_POST['grado'],
+				'id_group'			=> $_POST['grupo'],			
+				'position' 			=> $_POST['posicion'],
+				'id_asignature'		=> $_POST['asignatura'],
+				'id_performance'	=> $_POST['cod_desemp']
+			);
+
+			echo json_encode($this->_performance->saveRelation($data));
+		endif;
+	}
+
+	/**
+	 *
+	 *
+	 *
+	*/
+	public function deleteRelationAction()
+	{	
+		if(!empty($_POST) && isset($_POST['id_performance'])):
+
+			echo json_encode(
+				$this->_performance->deleteRelation(
+					$_POST['position'],
+					$_POST['id_performance'],
+					$_POST['id_group'],
+					$_POST['id_asignature'],
+					$_POST['period']
+				)
+			);
 		endif;
 	}
 }

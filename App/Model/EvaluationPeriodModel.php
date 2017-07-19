@@ -44,12 +44,13 @@ class EvaluationPeriodModel extends DB
 	 * @param
 	 * @return
 	*/
-	public function updatePeriod($period,$id_student, $id_asignature, $value){
+	public function updatePeriod($field,$id_student, $id_asignature, $value){
 			$this->query = "UPDATE {$this->table}
-							SET {$period}={$value}
+							SET {$field}={$value}
 							WHERE id_estudiante={$id_student} AND id_asignatura={$id_asignature}";
 
-			return $this->execute_single_query();
+			// return ['query'=>$this->query];
+			return $this->executeQuerySingle();
 	}
 
 	/**
