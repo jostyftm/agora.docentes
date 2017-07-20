@@ -1,7 +1,7 @@
 <header class="sub_header container-fluid">
 	<i class="<?php echo $subheader['icon']?>  fa-fw"></i>
 	<div class="inline-block">
-		<h4><?php echo $subheader['title']; ?></h4>
+		<h4><?php echo $subheader['tittle']; ?></h4>
 		<p></p>
 	</div>
 
@@ -14,7 +14,7 @@
 			<?php if(isset($value['subItem']) && count($value['subItem']) > 0): ?>
 				<li role='presentation' class="dropdown">
 					<a class="dropdown-toggle" data-toggle="dropdown" href="#">
-						<?php echo $value['title']?>
+						<?php echo $value['tittle']?>
     					<span class="caret"></span>
     				</a>
     				<ul class="dropdown-menu">
@@ -28,7 +28,7 @@
 			<?php else: ?>
 				<li role='presentation' class='<?php echo $value['active']?>'>
 				 	<a href='#' data-link='<?php echo $value['link']?>' aria-controls='' role='tab' data-toggle='tab'>
-					 	<?php echo $value['title']?>
+					 	<?php echo $value['tittle']?>
 				 	</a>
 				</li>
 			<?php endif; ?>

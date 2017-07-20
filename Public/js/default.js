@@ -1,12 +1,5 @@
 $(document).ready(function(){
 	
-	// 
-	// $('#nav').affix({
- //      	offset: {
- //      		top: 100,
-	//       }
-	// });	
-
 	// Colapsar el menu
 	$("#menu-toggle").click(function(e) {
         e.preventDefault();
@@ -15,7 +8,7 @@ $(document).ready(function(){
      $("#menu-toggle-2").click(function(e) {
         e.preventDefault();
         $("#wrapper").toggleClass("toggled-2");
-        $('#menu ul').hide();
+        // $('#menu ul').hide();
     });
 
 	// Peticiones para los subHeaders
@@ -54,7 +47,7 @@ $(document).ready(function(){
 		});
 	});
 
-	initMenu();
+	// initMenu();
 });
 
 function initMenu() {

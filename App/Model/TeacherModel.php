@@ -36,6 +36,18 @@ class TeacherModel extends DB
 	 * @param
 	 * @return
 	*/
+	public function findBy($field, $value)
+	{
+		$this->query = "SELECT * FROM {$this->table} WHERE {$field}='{$value}'";
+
+		return $this->getResultsFromQuery();
+	}
+
+	/**
+	 *
+	 * @param
+	 * @return
+	*/
 	public function update($id, $field, $value)
 	{
 		$this->query = "UPDATE {$this->table}

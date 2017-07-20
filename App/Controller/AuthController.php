@@ -31,7 +31,7 @@ class AuthController
 	 * @param
 	 * @return
 	*/
-	public function loginAction()
+	public function loginAction($db='', $documnet='')
 	{
 		if(!empty($_POST) && isset($_POST)):
 
@@ -61,6 +61,33 @@ class AuthController
 				echo "404";
 			endif;
 
+		elseif($db !='' && $documnet !=''):
+
+			// Validamos la session
+			if(!Session::check('authenticated')):
+
+				$teacher = new Teacher($db);
+				$resp = $teacher->findBy('documento', $documnet);
+				$institution = new Institution($db);
+
+				// Preguntamos si hay resultados
+				if($resp['state']):
+
+					// Creamos las variables de session
+					Session::set('db', $db);
+					Session::set('rol', 'teacher');
+					Session::set('authenticated', true);
+					Session::set('id_teacher', $resp['data'][0]['id_docente']);
+					Session::set('institution', $institution->getInfo()['data']);
+
+					// Redireccionamos al home
+					header("Location: /");
+				endif;
+				
+			else:
+				echo "404";
+			endif;
+
 		endif;
 	}
 
@@ -69,13 +96,13 @@ class AuthController
 	*
 	* @return
 	*/
-	public function loginTestAction($db='', $id_teacher)
+	public function loginTestAction($db='', $documnet)
 	{	
 		// Validamos la session
 		if(!Session::check('authenticated')):
 
 			$teacher = new Teacher($db);
-			$resp = $teacher->find($id_teacher);
+			$resp = $teacher->findBy('documneto', $documnet);
 			$institution = new Institution($db);
 
 			// Preguntamos si hay resultados

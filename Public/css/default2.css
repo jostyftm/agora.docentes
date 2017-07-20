@@ -110,7 +110,7 @@ body{
 .sidebar-nav {
     position: absolute;
     top: 0;
-    width: 180px;
+    width: 190px;
     margin: 0;
     padding: 0;
     list-style: none;
@@ -163,7 +163,31 @@ body{
 .no-margin{
     margin:0;
 }
- 
+
+.sidebar-nav .collapseable li{
+    /*padding: 5px 5px 10px 20px;*/
+    margin-left: -40px;
+    /*padding-left: 20px;
+    padding-top: 5px;*/
+}
+
+.sidebar-nav .collapseable a{
+    color: #9fb1c2;
+    font-size: 12px;
+    padding: 0 10px;
+    text-decoration: none;
+    display: block;
+}
+
+.sidebar-nav .collapseable a:hover{
+    color: #fff;
+}
+
+.sidebar-nav .collapseable{
+    border-left: 4px solid #1ab394;
+    background-color: #293846;
+}
+
 @media(min-width:768px) {
     #wrapper {
         padding-left: 190px;

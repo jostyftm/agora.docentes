@@ -11,7 +11,7 @@ class StatisticController
 {
 	
 	// Declara objetos a utilizar
-	private $_teacher
+	private $_teacher;
 
 	function __construct()
 	{

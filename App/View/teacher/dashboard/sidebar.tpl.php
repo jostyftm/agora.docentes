@@ -40,13 +40,26 @@
 
 
 		<!-- Estadisticas -->
-        <li>
+        <!-- <li>
             <a href="/teacher/statistics"> 
             	<span class="fa-stack fa-lg pull-left">
             		<i class="fa fa-line-chart fa-stack-1x "></i>
             	</span>
             	Estadistica
             </a>
+        </li> -->
+        <li class="">
+            <a data-toggle="collapse" data-parent="#menu" href="#collapse-statictics" aria-expanded="true" aria-controls="collapse-statictics">
+                <span class="fa-stack fa-lg pull-left"><i class="fa fa-line-chart fa-stack-1x "></i>
+                </span> 
+                Estadistica
+            </a>
+            <ul id="collapse-statictics" class="nav-pills nav-stacked collapse collapseable" style="list-style-type:none;">
+                <li><a href="/teacher/statistics/consolidate">Consolidado</a></li>
+                <li><a href="/teacher/statistics/student">Estudiante</a></li>
+                <li><a href="/teacher/statistics/disapproved">Reprobados</a></li>
+                <li><a href="/teacher/statistics/performanceByTeacher">Desempeño por Docente</a></li>
+            </ul>
         </li>
 
         <!-- Estadisticas -->

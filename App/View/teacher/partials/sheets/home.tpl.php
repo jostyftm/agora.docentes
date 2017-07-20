@@ -53,7 +53,7 @@
 			  		<div class="row">
 						<div class="col-md-5">
 							<div class="form-group">
-						    	<select name="" id="gaa" class="form-control" multiple="multiple" size="7">
+						    	<select name="" id="gaa" class="form-control" multiple="multiple" size="10">
 						    		<?php foreach($asignatures as $key => $asignature): ?>
 										<option value="<?php echo $asignature['id_asignatura'].'-'.$asignature['id_grupo'];?>"><?php 
 											echo $asignature['nombre_grupo'].' - '.
@@ -72,7 +72,7 @@
 						</div>
 						<div class="col-md-5">
 						    <div class="form-group">
-								<select name="groups[]" id="gaa_to" class="form-control" multiple="multiple" size="7"></select>
+								<select name="groups[]" id="gaa_to" class="form-control" multiple="multiple" size="10"></select>
 							</div>
 						</div>
 					</div>

@@ -74,7 +74,7 @@ class TeacherController
 			$teacher = $this->_teacher->find($_SESSION['id_teacher'])['data'][0];
 
 			$subheader = array(
-			'title'	=>	'Inicio',
+			'tittle'	=>	'Inicio',
 			'icon'	=>	'fa fa-home',
 				'items'	=>	array()
 			);
@@ -106,11 +106,11 @@ class TeacherController
 
 			// Creamos el subheader para los menus horizontal
 			$subheader = array(
-				'title'	=>	'Evaluación',
+				'tittle'	=>	'Evaluación',
 				'icon'	=>	'fa fa-check',
 				'items'	=>	array(
 					1	=>	array(
-						'title'	=>	'Evaluar',
+						'tittle'	=>	'Evaluar',
 						'link'	=>	'/teacher/evaluate',
 						'active' =>	'active'
 					)
@@ -121,12 +121,12 @@ class TeacherController
 			if($this->_teacher->isDirector($_SESSION['id_teacher']))
 			{
 				array_push($subheader['items'], array(
-					'title'	=>	'Observaciones Generales',
+					'tittle'	=>	'Observaciones Generales',
 					'link'	=>	'/generalObservation/index/teacher',
 					'active' =>	''
 				));
 				array_push($subheader['items'], array(
-					'title'	=>	'Informe General de Periodo',
+					'tittle'	=>	'Informe General de Periodo',
 					'link'	=>	'/generalReportPeriod/index/teacher',
 					'active' =>	''
 				));
@@ -140,8 +140,8 @@ class TeacherController
 					'include'			=>	'partials/evaluation/home.tpl.php',
 					'subheader'			=>	$subheader,
 					'groupsAndAsign'	=>	$groupsAndAsign,
-					'institution'	=>	$_SESSION['institution'],
-					'teacher'		=>	$teacher
+					'institution'		=>	$_SESSION['institution'],
+					'teacher'			=>	$teacher
 				]
 			);
 
@@ -163,7 +163,7 @@ class TeacherController
 			$teacher = $this->_teacher->find($_SESSION['id_teacher'])['data'][0];
 
 			$subheader = array(
-				'title'	=>	'Planillas',
+				'tittle'	=>	'Planillas',
 				'icon'	=>	'fa fa-file-text-o',
 				'items'	=>	array()
 			);
@@ -191,60 +191,43 @@ class TeacherController
 	 * @param
 	 * @return
 	*/
-	public function StatisticsAction()
+	public function StatisticsAction($section='')
 	{
 		if(Session::check('authenticated')):
 			$teacher = $this->_teacher->find($_SESSION['id_teacher'])['data'][0];
 
-			// Creamos el subheader para los menus horizontal
-			$subheader = array(
-				'title'	=>	'Estadisticas',
-				'icon'	=>	'fa fa-line-chart',
-				'items'	=>	array(
-					1	=>	array(
-						'title'	=>	'Consolidado',
-						'link'	=>	'/statistic/consolidateEvaluation',
-						'active' =>	'active'
-					),
-					2	=>	array(
-						'title'		=>	'Estudiante',
-						'link'		=>	'#',
-						'active'	=>	'',
-						'subItem'	=>	array(
-							1	=>	array(
-								'tittle'	=>	'Matriculado por sexo',
-								'link'		=>	'/statistic/studentSexRegistered'
-							),
-							2	=>	array(
-								'tittle'	=>	'Eficiencia',
-								'link'		=>	'/statistic/studentEfficiency'
-							)
-						)
-					),
-					3	=>	array(
-						'title'		=>	'Reprobados',
-						'link'		=>	'#',
-						'active'	=>	'',
-						'subItem'	=>	array(
-							1	=>	array(
-								'tittle'	=>	'Estudianes Reprobados',
-								'link'		=>	'/statistic/studentDisapproved'
-							),
-							2	=>	array(
-								'tittle'	=>	'Reprobrados Detallados',
-								'link'		=>	'/statistic/detailDisapproved'
-							)
-						)
-					),
-					4	=>	array(
-						'title'	=>	'Desempeño por Docente',
-						'link'	=>	'/statistic/performanceByTeacher',
-						'active' =>	''
-					)
-				),
-			);
+			switch ($section) {
+				case 'consolidate':
+					$this->StatisticsConsolidate($teacher);
+					break;
+				case 'student':
+					$this->StatisticsStudent($teacher);
+					break;
+				case 'disapproved':
+					$this->StatisticsDisapproved($teacher);
+					break;
+				case 'performanceByTeacher':
+					$this->performanceByTeacher($teacher);
+					break;
+			}
+			
+		endif;
+	}
 
-			$view = new View(
+	/**
+	 * 
+	 * @param
+	 * @return
+	*/
+	private function StatisticsConsolidate($teacher)
+	{
+		// Creamos el subheader para los menus horizontal
+		$subheader = array(
+			'tittle'	=>	'Estadisticas - Consolidados',
+			'icon'	=>	'fa fa-line-chart',
+			'items'	=>	array()
+		);
+		$view = new View(
 				'teacher',
 				'index',
 				[
@@ -257,9 +240,121 @@ class TeacherController
 			);
 
 			$view->execute();
-		endif;
 	}
 
+	/**
+	 * 
+	 * @param
+	 * @return
+	*/
+	private function StatisticsStudent($teacher)
+	{
+		// Creamos el subheader para los menus horizontal
+		$subheader = array(
+			'tittle'	=>	'Estadisticas - Studiantes',
+			'icon'	=>	'fa fa-line-chart',
+			'items'	=>	array(
+				1	=>	array(
+					'tittle'	=>	'Matriculado por sexo',
+					'link'		=>	'/statistic/studentSexRegistered',
+					'active'	=>	'active'
+				),
+				2	=>	array(
+					'tittle'	=>	'Eficiencia',
+					'link'		=>	'/statistic/studentEfficiency',
+					'active'	=>	''
+				)
+			)
+		);
+
+		$view = new View(
+			'teacher',
+			'index',
+			[
+				'tittle_panel'		=>	'',
+				'include'			=>	'partials/statistic/student/studentSexRegistered.tpl.php',
+				'subheader'			=>	$subheader,
+				'institution'	=>	$_SESSION['institution'],
+				'teacher'		=>	$teacher
+			]
+		);
+
+		$view->execute();
+	}
+
+	/**
+	 * 
+	 * @param
+	 * @return
+	*/
+	private function StatisticsDisapproved($teacher)
+	{
+		// Creamos el subheader para los menus horizontal
+		$subheader = array(
+			'tittle'	=>	'Estadisticas - Reprobados',
+			'icon'	=>	'fa fa-line-chart',
+			'items'	=>	array(
+				1	=>	array(
+					'tittle'	=>	'Estudianes Reprobados',
+					'link'		=>	'/statistic/studentDisapproved',
+					'active'	=>	'active'
+				),
+				2	=>	array(
+					'tittle'	=>	'Reprobrados Detallados',
+					'link'		=>	'/statistic/detailDisapproved',
+					'active'	=>	''
+				)
+			)
+		);
+
+		$view = new View(
+			'teacher',
+			'index',
+			[
+				'tittle_panel'		=>	'',
+				'include'			=>	'partials/statistic/disapproved/studentDisapproved.tpl.php',
+				'subheader'			=>	$subheader,
+				'institution'	=>	$_SESSION['institution'],
+				'teacher'		=>	$teacher
+			]
+		);
+
+		$view->execute();
+	}
+
+	/**
+	*
+	*
+	*/
+	public function performanceByTeacher($teacher)
+	{
+		// Creamos el subheader para los menus horizontal
+		$subheader = array(
+			'tittle'	=>	'Estadisticas - Desempeño por Docente',
+			'icon'	=>	'fa fa-line-chart',
+			'items'	=>	array()
+		);
+
+		$view = new View(
+			'teacher',
+			'index',
+			[
+				'tittle_panel'		=>	'',
+				'include'			=>	'partials/statistic/performance/performanceByTeacher.tpl.php',
+				'subheader'			=>	$subheader,
+				'institution'	=>	$_SESSION['institution'],
+				'teacher'		=>	$teacher
+			]
+		);
+
+		$view->execute();
+	}
+
+	/**
+	 * 
+	 * @param
+	 * @return
+	*/
 	/**
 	 *
 	 *	@param
@@ -273,16 +368,16 @@ class TeacherController
 
 			// Creamos el subheader para los menus horizontal
 			$subheader = array(
-				'title'	=>	'Configuracio',
+				'tittle'	=>	'Configuracio',
 				'icon'	=>	'fa fa-cog',
 				'items'	=>	array(
 					1	=>	array(
-						'title'	=>	'Configuracion de la cuenta',
+						'tittle'	=>	'Configuracion de la cuenta',
 						'link'	=>	'/settings/index/teacher',
 						'active' =>	'active'
 					),
 					// 2	=>	array(
-					// 	'title'		=>	'Seguridad e inicio de sesión',
+					// 	'tittle'		=>	'Seguridad e inicio de sesión',
 					// 	'link'		=>	'/settings/security/teacher',
 					// 	'active'	=>	''
 					// )
