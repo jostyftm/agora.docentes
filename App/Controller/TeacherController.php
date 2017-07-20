@@ -71,6 +71,8 @@ class TeacherController
 	{	
 
 		if(Session::check('authenticated')):
+			$teacher = $this->_teacher->find($_SESSION['id_teacher'])['data'][0];
+
 			$subheader = array(
 			'title'	=>	'Inicio',
 			'icon'	=>	'fa fa-home',
@@ -83,7 +85,8 @@ class TeacherController
 				[
 					'include'		=>	'partials/home.tpl.php',
 					'subheader'		=>	$subheader,
-					'institution'	=>	$_SESSION['institution']
+					'institution'	=>	$_SESSION['institution'],
+					'teacher'		=>	$teacher
 				]
 			);
 			$view->execute();
@@ -99,7 +102,8 @@ class TeacherController
 	{	
 		if(Session::check('authenticated')):
 			$groupsAndAsign = $this->_teacher->getAsignaturesAndGroups($_SESSION['id_teacher'])['data'];
-				
+			$teacher = $this->_teacher->find($_SESSION['id_teacher'])['data'][0];
+
 			// Creamos el subheader para los menus horizontal
 			$subheader = array(
 				'title'	=>	'Evaluación',
@@ -136,7 +140,8 @@ class TeacherController
 					'include'			=>	'partials/evaluation/home.tpl.php',
 					'subheader'			=>	$subheader,
 					'groupsAndAsign'	=>	$groupsAndAsign,
-					'institution'	=>	$_SESSION['institution']
+					'institution'	=>	$_SESSION['institution'],
+					'teacher'		=>	$teacher
 				]
 			);
 
@@ -155,6 +160,8 @@ class TeacherController
 			$periods = $this->_periods->all()['data'];
 			$asignatures = $this->_teacher->getAsignaturesAndGroups($_SESSION['id_teacher'])['data'];
 
+			$teacher = $this->_teacher->find($_SESSION['id_teacher'])['data'][0];
+
 			$subheader = array(
 				'title'	=>	'Planillas',
 				'icon'	=>	'fa fa-file-text-o',
@@ -169,7 +176,8 @@ class TeacherController
 					'institution'	=>	$_SESSION['institution'],
 					'subheader'		=>	$subheader,
 					'asignatures'	=>	$asignatures,
-					'periods'		=>	$periods
+					'periods'		=>	$periods,
+					'teacher'		=>	$teacher
 				]
 			);
 
@@ -186,6 +194,8 @@ class TeacherController
 	public function StatisticsAction()
 	{
 		if(Session::check('authenticated')):
+			$teacher = $this->_teacher->find($_SESSION['id_teacher'])['data'][0];
+
 			// Creamos el subheader para los menus horizontal
 			$subheader = array(
 				'title'	=>	'Estadisticas',
@@ -241,7 +251,8 @@ class TeacherController
 					'tittle_panel'		=>	'',
 					'include'			=>	'partials/statistic/consolidate/consolidate.tpl.php',
 					'subheader'			=>	$subheader,
-					'institution'	=>	$_SESSION['institution']
+					'institution'	=>	$_SESSION['institution'],
+					'teacher'		=>	$teacher
 				]
 			);
 
@@ -258,7 +269,7 @@ class TeacherController
 	{	
 		if(Session::check('authenticated')):
 			// 
-			$info = $this->_teacher->find(Session::get('id_teacher'));
+			$teacher = $this->_teacher->find($_SESSION['id_teacher'])['data'][0];
 
 			// Creamos el subheader para los menus horizontal
 			$subheader = array(
@@ -285,9 +296,8 @@ class TeacherController
 					'tittle_panel'	=>	'',
 					'subheader'		=>	$subheader,
 					'include'		=>	'partials/settings/account/general.tpl.php',
-					'info'			=>	$info['data'][0],
-					'institution'	=>	$_SESSION['institution']
-
+					'teacher'		=>	$teacher,
+					'institution'	=>	$_SESSION['institution'],
 				]
 			);
 

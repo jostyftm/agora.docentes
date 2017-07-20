@@ -33,32 +33,33 @@ class AuthController
 	*/
 	public function loginAction()
 	{
-		if(isset($_POST)):
+		if(!empty($_POST) && isset($_POST)):
 
 			// Validamos la session
-		if(!Session::check('authenticated')):
+			if(!Session::check('authenticated')):
 
-			$teacher = new Teacher($_POST['db']);
-			$institution = new Institution($_POST['db']);
-			$resp = $teacher->find($_POST['id_teacher']);
+				$teacher = new Teacher($_POST['db']);
+				$institution = new Institution($_POST['db']);
 
-			// Preguntamos si hay resultados
-			if($resp['state']):
+				$resp = $teacher->find($_POST['id_teacher']);
 
-				// Creamos las variables de session
-				Session::set('authenticated', true);
-				Session::set('db', $_POST['db']);
-				Session::set('id_teacher', $resp['data'][0]['id_docente']);
-				Session::set('institution', $institution->getInfo()['data']);
-				Session::set('rol', 'teacher');
+				// Preguntamos si hay resultados
+				if($resp['state']):
 
-				// Redireccionamos al home
-				header("Location: /");
+					// Creamos las variables de session
+					Session::set('authenticated', true);
+					Session::set('db', $_POST['db']);
+					Session::set('id_teacher', $resp['data'][0]['id_docente']);
+					Session::set('institution', $institution->getInfo()['data']);
+					Session::set('rol', 'teacher');
+
+					// Redireccionamos al home
+					header("Location: /");
+				endif;
+				
+			else:
+				echo "404";
 			endif;
-			
-		else:
-			echo "404";
-		endif;
 
 		endif;
 	}

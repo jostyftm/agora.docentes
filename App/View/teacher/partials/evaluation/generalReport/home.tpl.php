@@ -28,26 +28,26 @@
 									<tr class="text-center">
 										<td class="text-left">
 											<a href="/generalReportPeriod/edit/<?php echo $report['id_reporte']?>" class="btn btn-primary btn-xs" data-method="edit" data-request="crud" data-rol="teacher" data-historyBack="<?php echo $history['current']?>"><i class="fa fa-edit"></i></a>
-											<a href="/generalReportPeriod/show/<?php echo $report['id_reporte']?>" class="btn btn-default btn-xs" data-method="show" data-request="crud" data-rol="teacher" data-historyBack="<?php echo $history['current']?>"><i class="fa fa-eye"></i></a>
+											<!-- <a href="/generalReportPeriod/show/<?php echo $report['id_reporte']?>" class="btn btn-default btn-xs" data-method="show" data-request="crud" data-rol="teacher" data-historyBack="<?php echo $history['current']?>"><i class="fa fa-eye"></i></a> -->
 											<a href="#" data-id="<?php echo $report['id_reporte']?>" class="btn btn-danger btn-xs" data-method="delete" data-request="crud" data-rol="teacher" data-historyBack="<?php echo $history['current']?>"><i class="fa fa-trash"></i></a>
 										</td>
 										<td class="text-left">
 											<?php 
 											if($key < 9){
-												echo utf8_encode('0'.($key+1).'  '.
+												echo '0'.($key+1).'  '.
 													$report['p_a_alu']." ".
 													$report['s_a_alu']." ".
 													$report['p_n_alu']." ".
 													$report['s_n_alu']
-													);
+													;
 											}
 											else{
-												echo utf8_encode(($key+1).'  '.
+												echo ($key+1).'  '.
 													$report['p_a_alu']." ".
 													$report['s_a_alu']." ".
 													$report['p_n_alu']." ".
 													$report['s_n_alu']
-													);
+													;
 											}
 											
 											?>
@@ -56,7 +56,7 @@
 											<?php echo $report['id_periodo'];?>
 										</td>
 										<td class="text-left">
-											<?php echo strip_tags(substr(utf8_encode($report['observaciones']), 0, 50))."...";?>
+											<?php echo strip_tags(substr($report['observaciones'], 0, 50))."...";?>
 										</td>
 									</tr>
 		  						<?php endforeach;?>

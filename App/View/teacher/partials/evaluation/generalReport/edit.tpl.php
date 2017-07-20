@@ -25,7 +25,7 @@
 		  				<form action="/generalReportPeriod/update" method="POST" id="generalReportPeriod" enctype="application/x-www-form-urlencoded">
 							<div class="form-group">
 								<label for="">Observación</label>
-								<textarea class="form-control" id="id_textReportEdit" rows="5" name="observation"><?php echo utf8_encode($report['observaciones'])?></textarea>
+								<textarea class="form-control" id="id_textReportEdit" rows="5" name="observation"><?php echo $report['observaciones']?></textarea>
 							</div>
 							<div class="form-group text-center">
 								<input type="hidden" id="id_report" name="id_report" value="<?php echo $report['id_reporte']?>">

@@ -16,6 +16,8 @@ body{
 
 .image{
 	float: left;
+    margin-left: 3em;
+    margin-top: 5px;
 }
 
 .navbar-default{
@@ -171,7 +173,7 @@ body{
     }
  	
     #sidebar-wrapper {
-        width: 180px;
+        width: 190px;
     }
  
     #wrapper.toggled #sidebar-wrapper {

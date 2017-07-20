@@ -19,8 +19,8 @@
 	    				foreach($groupsAndAsign  as $key => $group){
 		               	echo "<tr>
 		                        <td>".($key+1)."</td>
-		                        <td>".utf8_encode($group['nombre_grupo'])."</td>
-		                        <td>".utf8_encode($group['asignatura'])."</td>
+		                        <td>".$group['nombre_grupo']."</td>
+		                        <td>".$group['asignatura']."</td>
 		                        <td>
 		                           <div class='btn-group' role='group'>
 		                              	<button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>

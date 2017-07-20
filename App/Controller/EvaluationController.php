@@ -1,15 +1,15 @@
 <?php
 namespace App\Controller;
 use App\Config\View as View;
-use App\Model\GradeModel as Grade;
+use App\Model\GroupModel as Group;
 use App\config\Session as Session;
+use App\Model\GradeModel as Grade;
 use App\Model\PeriodModel as Period;
 use App\Model\TeacherModel as Teacher;
 use App\Model\AsignatureModel as Asignature;
 use App\Model\ValorationModel as Valoration;
 use App\Model\PerformanceModel	as Performance;
 use App\Model\EvaluationPeriodModel as Evaluation;
-use App\Model\GroupModel as Group;
 /**
 * 
 */

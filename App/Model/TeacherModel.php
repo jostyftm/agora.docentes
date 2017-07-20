@@ -9,6 +9,7 @@ use App\Config\DataBase as DB;
 class TeacherModel extends DB
 {
 	private $table = 'docentes';
+	private $table_auth = 'sec_users';
 	
 	function __construct($db='')
 	{	
@@ -28,6 +29,47 @@ class TeacherModel extends DB
 		$this->query = "SELECT * FROM {$this->table} WHERE id_docente={$id}";
 
 		return $this->getResultsFromQuery();
+	}
+
+	/**
+	 *
+	 * @param
+	 * @return
+	*/
+	public function update($id, $field, $value)
+	{
+		$this->query = "UPDATE {$this->table}
+						SET {$field}='{$value}'";
+
+		return $this->executeQuerySingle();
+	}
+
+	/**
+	 *
+	 * @param
+	 * @return
+	*/
+	public function checkPassword($document, $password)
+	{
+		$this->query = "SELECT *
+						FROM {$this->table_auth}
+						WHERE login='{$document}' AND pswd='{$password}'";
+
+		return $this->getResultsFromQuery();
+	}
+
+	/**
+	 *
+	 * @param
+	 * @return
+	*/
+	public function updatePassword($document, $password)
+	{
+		$this->query = "UPDATE {$this->table_auth}
+						SET pswd='{$password}'
+						WHERE login='{$document}'";
+
+		return $this->executeQuerySingle();
 	}
 
 	/**

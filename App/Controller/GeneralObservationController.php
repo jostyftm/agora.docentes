@@ -214,7 +214,10 @@ class GeneralObservationController
 	public function deleteAction()
 	{
 		if($this->_generalObservation->delete($_POST['id_observation'])['state']):
+			
 			$gObservation = $this->_teacher->getGeneralObservations($_SESSION['id_teacher'])['data'];;
+
+			$group = $this->_teacher->getGroupByDirector(Session::get('id_teacher'))['data'][0];
 
 			$view = new View(
 				'teacher/partials/evaluation/observations',
@@ -222,6 +225,7 @@ class GeneralObservationController
 				[
 					'tittle_panel'	=>	'Observaciones Generales',
 					'observations'	=>	$gObservation,
+					'group'			=>	$group,
 					'history'		=>	array(
 						'current'	=> '/generalObservation/index/teacher'
 					)

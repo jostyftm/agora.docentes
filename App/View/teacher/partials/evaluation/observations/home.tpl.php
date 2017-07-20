@@ -35,20 +35,20 @@
 
 											<?php 
 											if($key < 9){
-												echo utf8_encode('0'.($key+1).'  '.
+												echo '0'.($key+1).'  '.
 													$observation['p_a_alu']." ".
 													$observation['s_a_alu']." ".
 													$observation['p_n_alu']." ".
 													$observation['s_n_alu']
-													);
+													;
 											}
 											else{
-												echo utf8_encode(($key+1).'  '.
+												echo ($key+1).'  '.
 													$observation['p_a_alu']." ".
 													$observation['s_a_alu']." ".
 													$observation['p_n_alu']." ".
 													$observation['s_n_alu']
-													);
+													;
 											}
 											
 											?>
@@ -57,7 +57,7 @@
 											<?php echo $observation['id_periodo'];?>
 										</td>
 										<td class="text-left">
-											<?php echo strip_tags(substr(utf8_encode($observation['observaciones']), 0, 50))."...";?>
+											<?php echo strip_tags(substr($observation['observaciones'], 0, 50))."...";?>
 										</td>
 									</tr>
 		  						<?php endforeach;?>

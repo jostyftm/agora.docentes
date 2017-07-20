@@ -56,9 +56,8 @@
 						    	<select name="" id="gaa" class="form-control" multiple="multiple" size="7">
 						    		<?php foreach($asignatures as $key => $asignature): ?>
 										<option value="<?php echo $asignature['id_asignatura'].'-'.$asignature['id_grupo'];?>"><?php 
-											echo utf8_encode(
-												$asignature['nombre_grupo'].' - '.
-												$asignature['asignatura']) 
+											echo $asignature['nombre_grupo'].' - '.
+												 $asignature['asignatura']
 											?>
 										</option>
 			  						<?php endforeach; ?>

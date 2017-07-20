@@ -22,6 +22,114 @@ class SettingsController
 		endif;
 	}
 
+	/**
+	*
+	*
+	*
+	*/
+	public function updateInfoAction()
+	{	
+		// 
+		if(!empty($_POST) && isset($_POST['request'])):
+
+			if($_POST['role'] == 'teacher'):
+				
+				$response = array();
+
+				foreach ($_POST['data'] as $field => $value):
+					array_push(
+						$response,
+						$this->_teacher->update(
+							$_POST['id_teacher'],
+							$field,
+							$value
+						)
+					);
+				endforeach;
+				
+				if($response[0]['state']):
+					// echo json_encode($response);
+
+					$info = $this->_teacher->find($_POST['id_teacher'])['data'];
+
+					$view = new View(
+						'/teacher/partials/settings/account',
+						'general',
+						[
+							'teacher'	=>	$info[0]
+						]
+					);
+					$view->execute();
+				endif;
+			endif;
+
+		endif;
+		
+	}
+
+	/**
+	*
+	*
+	*/
+	public function checkPasswordAction()
+	{
+		// 
+		if(!empty($_POST) && isset($_POST['request'])):
+
+			if($_POST['role'] == 'teacher'):
+				sleep(3);
+				echo json_encode(
+						$this->_teacher->checkPassword(
+							$_POST['documento'],
+							$_POST['password']
+						)
+					);
+			endif;
+
+		endif;
+	}
+
+	/**
+	*
+	*
+	*
+	*/
+	public function updatePasswordAction()
+	{
+		// 
+		if(!empty($_POST) && isset($_POST['request'])):
+
+			if($_POST['role'] == 'teacher'):
+
+				sleep(3);
+				$response = $this->_teacher->updatePassword(
+					$_POST['documento'],
+					$_POST['newPassword']
+				);
+				if($response['state']):
+
+					$info = $this->_teacher->find($_POST['id_teacher'])['data'];
+
+					$view = new View(
+						'/teacher/partials/settings/account',
+						'general',
+						[
+							'teacher'	=>	$info[0]
+						]
+					);
+					$view->execute();
+				endif;
+			endif;
+
+		endif;
+	}
+
+
+	/**
+	*
+	*
+	*
+	*/
 	public function indexAction($role)
 	{
 		if($role == 'teacher'):
@@ -32,7 +140,7 @@ class SettingsController
 				'/teacher/partials/settings/account',
 				'general',
 				[
-					'info'	=>	$info
+					'teacher'	=>	$info
 				]
 			);
 
@@ -52,7 +160,7 @@ class SettingsController
 				'/teacher/partials/settings/account',
 				'security',
 				[
-					'info'	=>	$info
+					'teacher'	=>	$info
 				]
 			);
 
