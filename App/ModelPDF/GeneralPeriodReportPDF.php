@@ -44,7 +44,7 @@ class GeneralPeriodReportPDF extends FPDF
 	    // Movernos a la dereca
 	    // $this->Cell(50, 6, '', 1,0);
 	    // Título
-	    $this->Cell(0, 6, $this->institution['nombre_inst'], 0, 0, 'C');
+	    $this->Cell(0, 6, utf8_decode($this->institution['nombre_inst']), 0, 0, 'C');
 
 	    // Salto de línea
 	    $this->Ln(6);
@@ -73,10 +73,12 @@ class GeneralPeriodReportPDF extends FPDF
 	    
 	    // DIRECTOR DE GRUPO
 	    $this->Cell(0,4, 'DIR. DE GRUPO: '.
-	    	$this->infoGroupAndAsig['doc_primer_nomb']." ".
-	    	$this->infoGroupAndAsig['doc_segundo_nomb']." ".
-	    	$this->infoGroupAndAsig['doc_primer_ape']." ".
-	    	$this->infoGroupAndAsig['doc_segundo_ape'], 0, 0, 'L');
+	    	utf8_decode(
+	    		$this->infoGroupAndAsig['doc_primer_nomb']." ".
+		    	$this->infoGroupAndAsig['doc_segundo_nomb']." ".
+		    	$this->infoGroupAndAsig['doc_primer_ape']." ".
+		    	$this->infoGroupAndAsig['doc_segundo_ape']
+	    	), 0, 0, 'L');
 	    
 	    // Salto de línea
 	    $this->Ln(4);
@@ -85,10 +87,12 @@ class GeneralPeriodReportPDF extends FPDF
 	    // Movernos a la derecha
 	    $this->Cell(17, 4, '', 0,0);
 	    $this->Cell(80, 4, 'ESTUDIANTE: '.
-	    	$this->infoStudent['primer_ape_alu'].' '.
-	    	$this->infoStudent['segundo_ape_alu'].' '.
-	    	$this->infoStudent['primer_nom_alu'].' '.
-	    	$this->infoStudent['segundo_nom_alu'], 0, 0, 'L');
+	    	utf8_decode(
+	    		$this->infoStudent['primer_ape_alu'].' '.
+		    	$this->infoStudent['segundo_ape_alu'].' '.
+		    	$this->infoStudent['primer_nom_alu'].' '.
+		    	$this->infoStudent['segundo_nom_alu']
+	    	), 0, 0, 'L');
 	    // Título
 	    // $this->Cell(120,4, 'DOCENTE: ', 0, 0, 'C');
 	    // Movernos a la derecha
@@ -105,7 +109,7 @@ class GeneralPeriodReportPDF extends FPDF
 	 * @return
 	*/
 	private function subHeader(){
-		$this->Cell(0, $this->_h_c, utf8_decode('INFORME GENERAL DEL PERIODO 1 - AÑO LECTIVO ').date('Y'), 1,0, 'L'); 
+		$this->Cell(0, $this->_h_c, 'INFORME GENERAL DEL PERIODO 1 - AÑO LECTIVO '.date('Y'), 1,0, 'L'); 
 		$this->Ln($this->_h_c);
 	}
 
@@ -159,7 +163,7 @@ class GeneralPeriodReportPDF extends FPDF
 	    // Arial italic 8
 	    $this->SetFont('Arial','I',8);
 	    // Número de página
-	    $this->Cell(0,$this->_h_c,utf8_decode('Ágora - Página ').$this->PageNo(),0,0,'C');
+	    $this->Cell(0,10,utf8_decode('Ágora - Página ').$this->PageNo(),0,0,'C');
 	}
 }
 ?>

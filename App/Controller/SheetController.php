@@ -118,7 +118,7 @@ class SheetController
 				$id_asignature = split('-', $group)[0];
 				$id_group = split('-', $group)[1];
 
-				$this->_sheet->evaluactionSheet($_POST['period'], $id_asignature, $id_group);
+				$this->_sheet->evaluactionSheet(4, $id_asignature, $id_group);
 			}
 
 			// 

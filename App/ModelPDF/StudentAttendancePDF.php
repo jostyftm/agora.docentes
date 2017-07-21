@@ -42,7 +42,7 @@ class StudentAttendancePDF extends FPDF
 	    // Movernos a la dereca
 	    $this->Cell(90, 6, '', 0,0);
 	    // Título
-	    $this->Cell(120, 6, $this->institution['nombre_inst'], 0, 0, 'C');
+	    $this->Cell(120, 6, utf8_decode($this->institution['nombre_inst']), 0, 0, 'C');
 	    // Movernos a la derecha
 	    $this->Cell(0, 6, '', 0,0);
 	    // Salto de línea
@@ -74,10 +74,12 @@ class StudentAttendancePDF extends FPDF
 	    $this->Cell(75, 4, 'GRUPO: '.$this->infoGroupAndAsig['nombre_grupo'], 0, 0, 'L');
 	    // Título
 	    $this->Cell(110,4, 'DIRECTOR DE GRUPO: '.
-	    					$this->infoGroupAndAsig['dir_primer_nomb']." ".
-			    			$this->infoGroupAndAsig['dir_segundo_nomb']." ".
-			    			$this->infoGroupAndAsig['dir_primer_ape']." ".
-			    			$this->infoGroupAndAsig['dir_segundo_ape'], 0, 0, 'L');
+	    					utf8_decode(
+		    					$this->infoGroupAndAsig['dir_primer_nomb']." ".
+				    			$this->infoGroupAndAsig['dir_segundo_nomb']." ".
+				    			$this->infoGroupAndAsig['dir_primer_ape']." ".
+				    			$this->infoGroupAndAsig['dir_segundo_ape']
+	    					), 0, 0, 'L');
 	    // Movernos a la derecha
 	    $this->Cell(0, 4, 'FECHA: ____________________', 0,0);
 	    // Salto de línea
@@ -86,13 +88,15 @@ class StudentAttendancePDF extends FPDF
 	    // QUINTA LINEA
 	    // Movernos a la derecha
 	    $this->Cell(25, 4, '', 0,0);
-	    $this->Cell(75, 4, 'ASIGNATURA: '.substr($this->infoGroupAndAsig['asignatura'], 0,30), 0, 0, 'L');
+	    $this->Cell(75, 4, 'ASIGNATURA: '.substr(utf8_decode($this->infoGroupAndAsig['asignatura']), 0,30), 0, 0, 'L');
 	    // Título
 	    $this->Cell(110,4, 'DOCENTE: '.
-	    					$this->infoGroupAndAsig['doc_primer_nomb']." ".
-			    			$this->infoGroupAndAsig['doc_segundo_nomb']." ".
-			    			$this->infoGroupAndAsig['doc_primer_ape']." ".
-			    			$this->infoGroupAndAsig['doc_segundo_ape'], 0, 0, 'L');
+	    					utf8_decode(
+	    						$this->infoGroupAndAsig['doc_primer_nomb']." ".
+				    			$this->infoGroupAndAsig['doc_segundo_nomb']." ".
+				    			$this->infoGroupAndAsig['doc_primer_ape']." ".
+				    			$this->infoGroupAndAsig['doc_segundo_ape']
+	    					), 0, 0, 'L');
 	    // Movernos a la derecha
 	    $this->Cell(0, 4, utf8_decode('AÑO LECTIVO ').date('Y'), 0,0);
 	    // Salto de línea
@@ -141,21 +145,21 @@ class StudentAttendancePDF extends FPDF
 
 				if($clave < 9)
 				{
-					$this->Cell($this->_with_CE, 4, '0'.($clave+1).' '.utf8_encode(
+					$this->Cell($this->_with_CE, 4, '0'.($clave+1).' '.
 						$valor['primer_ape_alu'].' '.
 						$valor['segundo_ape_alu'].' '.
 						$valor['primer_nom_alu'].' '.
 						$valor['segundo_nom_alu']
-					), 1,0);	
+					, 1,0);	
 				}
 				else
 				{
-					$this->Cell($this->_with_CE, 4, ($clave+1).' '.utf8_encode(
+					$this->Cell($this->_with_CE, 4, ($clave+1).' '.
 						$valor['primer_ape_alu'].' '.
 						$valor['segundo_ape_alu'].' '.
 						$valor['primer_nom_alu'].' '.
 						$valor['segundo_nom_alu']
-					), 1,0);
+					, 1,0);
 				}
 				
 				$this->Cell(8, 4, '', 1, 0, 'C');

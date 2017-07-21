@@ -16,7 +16,7 @@ body{
 
 .image{
 	float: left;
-    margin-left: 3em;
+    margin-left: 1em;
     margin-top: 5px;
 }
 
@@ -338,4 +338,24 @@ input[type=number] {
 
     -moz-appearance:textfield;
 
+}
+
+/**/
+body.error{
+    color: #73879C;
+    background: #2A3F54;
+    font-family: "Helvetica Neue",Roboto,Arial,"Droid Sans",sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.471;
+}
+
+.middle_row{
+    margin-top: 5%;
+}
+
+.error-number{
+    font-size: 90px;
+    line-height: 90px;
+    margin: 20px 0;
 }

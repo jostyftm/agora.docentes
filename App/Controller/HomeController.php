@@ -20,7 +20,7 @@ class HomeController
 			header("Location: /".Session::get('rol'));
 
 		else:
-			echo "404";
+			header("Location: http://agora.net.co/app_Login/");
 		endif;
 	}
 }

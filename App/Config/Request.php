@@ -1,6 +1,8 @@
 <?php 
 namespace App\Config;
 
+use App\Config\View as View;
+
 class Request{
     
     protected $url                  ='';
@@ -79,7 +81,12 @@ class Request{
         $params                 = $this->getParams();
         
         if(!file_exists($controllerFileName)){
-            exit("El controlador no existe");
+            $view = new View(
+                'http',
+                '404'
+            );
+            $view->execute();
+            exit();
         }
         
         

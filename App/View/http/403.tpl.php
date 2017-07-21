@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>404 - Página no encontrada</title>
+    <title>403 - Permiso Denegado</title>
 
     <!-- Bootstrap -->
     <link href="/Public/css/bootstrap.min.css" rel="stylesheet">
@@ -25,7 +25,7 @@
 			<div class="middle_row">
 					<div class="text-center">	
 						<h1 class="error-number">Ooops!</h1>
-						<h3>No podemos encontrar la página que estas buscando</h3>
+						<h3>No tienes permiso para esta Sección</h3>
 						<h4>Codigo de error: 404</h4>
 						<p>
 							puedes regresar al  <a href="http://docente.agora.dev/"><strong>inicio</strong></a>

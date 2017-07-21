@@ -13,12 +13,10 @@
 		        echo "<tr>
 		      			<td>".($clave+1)."</td>
 						<td>".
-							utf8_encode(
 								$valor['primer_ape_alu']." ".
 								$valor['segundo_ape_alu']." ".
 								$valor['primer_nom_alu']." ".
-								$valor['segundo_nom_alu']
-							).
+								$valor['segundo_nom_alu'].
 						"</td>";
 
 					if($valor['periodo'] != NULL) { 

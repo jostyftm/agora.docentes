@@ -32,12 +32,7 @@ class TeacherController
 			$this->_asignature = new Asignature(Session::get('db'));
 			$this->_evaluation = new Evaluation(Session::get('db'));
 		else:
-			$view = new View(
-				'http',
-				'404'
-			);
-
-			$view->execute();
+			header("Location: http://agora.net.co/app_Login/");
 		endif;
 	}
 
@@ -71,25 +66,26 @@ class TeacherController
 	{	
 
 		if(Session::check('authenticated')):
-			$teacher = $this->_teacher->find($_SESSION['id_teacher'])['data'][0];
+			$this->evaluationAction();
+			// $teacher = $this->_teacher->find($_SESSION['id_teacher'])['data'][0];
 
-			$subheader = array(
-			'tittle'	=>	'Inicio',
-			'icon'	=>	'fa fa-home',
-				'items'	=>	array()
-			);
+			// $subheader = array(
+			// 'tittle'	=>	'Inicio',
+			// 'icon'	=>	'fa fa-home',
+			// 	'items'	=>	array()
+			// );
 
-			$view = new View(
-				'teacher',
-				'index',
-				[
-					'include'		=>	'partials/home.tpl.php',
-					'subheader'		=>	$subheader,
-					'institution'	=>	$_SESSION['institution'],
-					'teacher'		=>	$teacher
-				]
-			);
-			$view->execute();
+			// $view = new View(
+			// 	'teacher',
+			// 	'index',
+			// 	[
+			// 		'include'		=>	'partials/home.tpl.php',
+			// 		'subheader'		=>	$subheader,
+			// 		'institution'	=>	$_SESSION['institution'],
+			// 		'teacher'		=>	$teacher
+			// 	]
+			// );
+			// $view->execute();
 		endif;
 	}
 
@@ -194,22 +190,42 @@ class TeacherController
 	public function StatisticsAction($section='')
 	{
 		if(Session::check('authenticated')):
+
 			$teacher = $this->_teacher->find($_SESSION['id_teacher'])['data'][0];
 
-			switch ($section) {
-				case 'consolidate':
-					$this->StatisticsConsolidate($teacher);
-					break;
-				case 'student':
-					$this->StatisticsStudent($teacher);
-					break;
-				case 'disapproved':
-					$this->StatisticsDisapproved($teacher);
-					break;
-				case 'performanceByTeacher':
-					$this->performanceByTeacher($teacher);
-					break;
-			}
+			$subheader = array(
+				'tittle'	=>	'Estadisticas',
+				'icon'	=>	'fa fa-line-chart',
+				'items'	=>	array()
+			);
+
+			$view = new View(
+				'teacher',
+				'index',
+				[
+					'include'		=>	'construction.tpl.php',
+					'institution'	=>	$_SESSION['institution'],
+					'subheader'		=>	$subheader,
+					'teacher'		=>	$teacher
+				]
+			);
+			$view->execute();
+			// $teacher = $this->_teacher->find($_SESSION['id_teacher'])['data'][0];
+
+			// switch ($section) {
+			// 	case 'consolidate':
+			// 		$this->StatisticsConsolidate($teacher);
+			// 		break;
+			// 	case 'student':
+			// 		$this->StatisticsStudent($teacher);
+			// 		break;
+			// 	case 'disapproved':
+			// 		$this->StatisticsDisapproved($teacher);
+			// 		break;
+			// 	case 'performanceByTeacher':
+			// 		$this->performanceByTeacher($teacher);
+			// 		break;
+			// }
 			
 		endif;
 	}

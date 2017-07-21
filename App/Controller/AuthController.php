@@ -85,14 +85,14 @@ class AuthController
 				endif;
 				
 			else:
-				echo "404";
+				header("Location: /");
 			endif;
 
 		endif;
 	}
 
 	/**
-	* @params
+	* @param
 	*
 	* @return
 	*/
@@ -120,8 +120,23 @@ class AuthController
 			endif;
 			
 		else:
-			echo "404";
+			header("Location: /");
 		endif;
+	}
+
+	/**
+	* @param
+	*
+	* @return
+	*/
+	public function logoutAction()
+	{
+		// Validamos la session
+		if(Session::check('authenticated')):
+			Session::destroy();
+		endif;
+
+		header("Location: http://agora.net.co/app_Login/");
 	}
 }
 ?>

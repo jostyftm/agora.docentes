@@ -41,8 +41,6 @@
     <![endif]-->
   	</head>
 	<body>
-
-
 		<div id="wrapper">
         <!-- Sidebar -->
         <?php
@@ -73,7 +71,7 @@
                 <b>Derechos Reservados </b>&copy; <?php  echo date('Y') ?>
               </div>
               <div class="pull-right">
-                @tenea
+                Ágora
               </div> 
             </div> 
           </footer>

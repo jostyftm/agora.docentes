@@ -10,7 +10,7 @@
 	  		<div class="panel-body">
 		  		<div class="row">
 	            	<div class="col-md-8">
-	               	<h4><?php echo utf8_encode($asignature['asignatura'])." | ".utf8_encode($group['nombre_grupo']); ?></h4>
+	               	<h4><?php echo $asignature['asignatura']." | ".$group['nombre_grupo']; ?></h4>
 	            	</div>
 	            	<div class="col-md-4">
 		               	<form action="">

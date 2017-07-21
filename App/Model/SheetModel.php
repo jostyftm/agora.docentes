@@ -4,6 +4,7 @@ namespace App\Model;
 use Lib\merge\FPDI as FPDI;
 use App\Config\DataBase as DB;
 use App\Model\GroupModel as Group;
+use App\Model\NoveltyModel as Novelty;
 use App\Model\TeacherModel as Teacher;
 use App\Model\InstitutionModel as Institution;
 use App\Model\EvaluationPeriodModel as Evaluation;
@@ -20,8 +21,9 @@ class SheetModel extends DB
 	// Objectos a utilizar
 	private $_group;
 	private $_teacher;
-	private $_institution;
+	private $_novelty;
 	private $_evaluation;
+	private $_institution;
 
 	// 
 	private $_pdi;
@@ -44,6 +46,7 @@ class SheetModel extends DB
 			$this->_pdi = new FPDI();
 			$this->_group = new Group($db);
 			$this->_teacher = new Teacher($db);
+			$this->_novelty = new Novelty($db);
 			$this->_evaluation = new Evaluation($db);
 			$this->_institution = new Institution($db);
 		}
@@ -116,6 +119,7 @@ class SheetModel extends DB
 		$this->_pdf->institution = $this->options['infoIns'];
 		$this->_pdf->evaluation_parameters = $this->options['e_parameters'];
 		$this->_pdf->infoGroupAndAsig = $this->_teacher->getInfoAsignatureAndGroup($id_asignature, $id_group)['data'][0];
+		$this->_pdf->novelties = $this->_novelty->getByYear(Date('Y'))['data'];
 		$this->_pdf->AddPage();
 		$this->_pdf->showData($resp);
 		$this->_pdf->Output($this->_path.'l_e-'.$id_asignature.'-'.$id_group.'.pdf', 'F');

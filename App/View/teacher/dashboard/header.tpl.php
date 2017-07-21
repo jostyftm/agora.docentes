@@ -29,7 +29,8 @@
           </button></li>
      </ul>
      <ul class="pull-right menu_option">
-        <li>Bienvenid@
+        <li>
+          <!-- Bienvenid@ -->
             <strong>
                 <?php echo $teacher['primer_nombre']." ".$teacher['segundo_nombre']." ".$teacher['primer_apellido']." ".$teacher['segundo_apellido']?>
             </strong>
@@ -47,7 +48,7 @@
 						</a>
 					</li> -->
 					<li>
-						<a href="#" class="log-out">
+						<a href="/auth/logout" class="log-out">
 							<span class="fa fa-sign-out" arial-hidden="true"></span>
 							Cerra Sesion
 						</a>
