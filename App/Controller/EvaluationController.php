@@ -166,5 +166,92 @@ class EvaluationController
 
 		endif;
 	}
+
+	/**
+	*
+	*
+	*
+	*/
+	public function groupRecoveryAction($id_asignature, $id_group){
+
+		$group = $this->_group->find($id_group)['data'][0];
+		$asignature = $this->_asignature->find($id_asignature)['data'][0];
+
+		$view = new View(
+            'teacher/partials/evaluation/recovery',
+            'groupRecovery',
+			[
+				'tittle_panel'	=>	'Superaciones',
+				'asignature'	=>	$asignature,
+				'group'			=>	$group,
+				'periods'		=>	$this->_period->all()['data'],
+				'back'			=>	$_GET['options']['back']
+			]
+		);
+		$view->execute();
+	}
+
+	/**
+	*
+	*
+	*
+	*/
+	public function getGroupRecoveryRenderAction($period, $id_group, $id_asignature)
+	{
+		$resp = $this->_evaluation->getGroupRecovery($period,$id_group, $id_asignature );
+
+		$view = new View(
+            'teacher/partials/evaluation/recovery',
+            'groupRecoveryRender',
+			[
+				'students'		=>	$resp['data'],
+				'period'		=>	$period,
+				'id_group'		=>	$id_group,
+				'id_asignature'	=>	$id_asignature,
+				'period'		=>	$period,
+				'periods'		=>	$this->_period->all()['data']
+			]
+		);
+		$view->execute();
+	}
+
+	/**
+	*
+	*
+	*
+	*/
+	public function updateGroupRecoveryAction()
+	{
+		
+
+		if(!empty($_POST) && count($_POST) == 6):
+			
+			$recovery = $this->_evaluation->getRecovery(
+				$_POST['id_student'],
+				$_POST['id_group'],
+				$_POST['id_asignature'],
+				$_POST['period']
+			);
+
+			if($recovery['state']):
+				
+				sleep(3);
+				echo json_encode(
+					$this->_evaluation->updateRecovery(
+						$recovery['data'][0]['id_superacion'],
+						$_POST
+					)
+				);
+
+			else:
+
+				sleep(3);
+				echo json_encode(
+					$this->_evaluation->saveRecovery($_POST)
+				);
+
+			endif;
+		endif;
+	}
 }
 ?>

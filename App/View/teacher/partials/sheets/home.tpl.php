@@ -7,24 +7,13 @@
 		  	<div class="panel-body">
 		  		<form action="" method="POST" id="formCreateSheets" enctype="application/x-www-form-urlencoded" target="_blank">
 			  		<div class="row">
-			  			<div class="col-md-3">
+			  			<div class="col-md-offset-2 col-md-3">
 			  				<div class="form-group">
 			  					<label for="">Tipo de planilla</label>
 			  					<select class="form-control" id="sheet" name="type_sheet">
 			  						<option value="0" class="text-center"> - Seleccione un tipo de planilla - </option>
 			  						<option value="Attendance">Asistencia</option>
 			  						<option value="Evaluation">Evaluacion</option>
-			  					</select>
-			  				</div>
-			  			</div>
-			  			<div class="col-md-3">
-			  				<div class="form-group">
-			  					<label for="Periodo">Periodo</label>
-			  					<select name="period" id="period" class="form-control" disabled="">
-			  						<option value="">- Seleccione un periodo -</option>
-			  						<?php foreach($periods as $key => $period): ?>
-										<option value="<?php echo $period['periodos'];?>"><?php echo $period['periodos']; ?></option>
-			  						<?php endforeach; ?>
 			  					</select>
 			  				</div>
 			  			</div>
@@ -41,11 +30,8 @@
 			  				<div class="form-group">
 			  					<label for="">Tamaño de página</label>
 			  					<select name="papper" id="" class="form-control">
-			  						<option value="A3">A3</option>
-			  						<option value="A4" selected="selected">A4</option>
-			  						<option value="A5">A5</option>
-			  						<option value="Letter">Letter</option>
-			  						<option value="Legal">Legal</option>
+			  						<option value="Letter">Carta</option>
+			  						<option value="Legal">Oficio</option>
 			  					</select>
 			  				</div>
 			  			</div>

@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use App\Config\Session as Session;
 use App\Model\SheetModel as Sheet;
+use App\Model\PeriodModel as Period;
 use App\Model\TeacherModel as Teacher;
 use App\Model\PerformanceModel as Performance;
 use App\Model\InstitutionModel as Institution;
@@ -13,11 +14,12 @@ use App\Model\EvaluationPeriodModel as Evaluation;
 class SheetController
 {
 	private $_sheet;
+	private $_period;
 	private $_teacher;
 	private $_evaluation;
 	private $_institution;
 	private $_performance;
-	
+
 	/**
 	*
 	*
@@ -26,10 +28,11 @@ class SheetController
 	{	
 		if(Session::check('authenticated')):
 			$this->_sheet = new Sheet(Session::get('db'));
-			$this->_performance = new Performance(Session::get('db'));
-			$this->_evaluation = new Evaluation(Session::get('db'));
-			$this->_institution = new Institution(Session::get('db'));
+			$this->_period = new Period(Session::get('db'));
 			$this->_teacher = new Teacher(Session::get('db'));
+			$this->_evaluation = new Evaluation(Session::get('db'));
+			$this->_performance = new Performance(Session::get('db'));
+			$this->_institution = new Institution(Session::get('db'));
 		endif;
 	}
 
@@ -82,6 +85,9 @@ class SheetController
 				mkdir($path);
 			}
 
+			// Obtenemos la cantidad de periodos
+			$periods = count($this->_period->all()['data']);
+
 			// OBtenemos los parametros de evaluacion
 			$Resp_eP = $this->_performance->getEvaluationParameters()['data'];
 			// 
@@ -118,7 +124,7 @@ class SheetController
 				$id_asignature = split('-', $group)[0];
 				$id_group = split('-', $group)[1];
 
-				$this->_sheet->evaluactionSheet(4, $id_asignature, $id_group);
+				$this->_sheet->evaluactionSheet($periods, $id_asignature, $id_group);
 			}
 
 			// 

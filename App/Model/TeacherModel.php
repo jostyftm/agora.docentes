@@ -51,7 +51,8 @@ class TeacherModel extends DB
 	public function update($id, $field, $value)
 	{
 		$this->query = "UPDATE {$this->table}
-						SET {$field}='{$value}'";
+						SET {$field}='{$value}'
+						WHERE id_docente={$id}";
 
 		return $this->executeQuerySingle();
 	}

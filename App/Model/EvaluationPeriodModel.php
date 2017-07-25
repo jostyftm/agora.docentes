@@ -3,6 +3,7 @@
 namespace App\Model;
 
 use App\Config\DataBase as DB;
+use App\Model\ValorationModel as Valoration;
 
 /**
 * 
@@ -10,16 +11,21 @@ use App\Config\DataBase as DB;
 class EvaluationPeriodModel extends DB
 {
 	protected $table = 't_evaluacion';
+	protected $table_recovery = 'superacion';
 
 	private $_periods = array();
 
+	// 
+	private $_valoration;
 
 	function __construct($db='')
 	{
 		if(!$db)
 			throw new \Exception("La clase ".get_class($this)." no encontro la base de datos", 1);
-		else
+		else{
 			parent::__construct($db);
+			$this->_valoration = new Valoration($db);
+		}
 	}
 
 	/**
@@ -76,12 +82,158 @@ class EvaluationPeriodModel extends DB
 	}
 
 	public function getEvaluation($id_group, $id_asignature){
-			$this->query = "SELECT * 
-							FROM t_evaluacion 
-							WHERE id_grupo = '{$id_group}' AND id_asignatura = '{$id_asignature}'
-							ORDER BY primer_apellido";
+		$this->query = "SELECT * 
+						FROM t_evaluacion 
+						WHERE id_grupo = '{$id_group}' AND id_asignatura = '{$id_asignature}'
+						ORDER BY primer_apellido";
 
-			return $this->getResultsFromQuery();
+		return $this->getResultsFromQuery();
+	}
+
+	/**
+	*
+	*
+	*/
+	public function getGroupRecovery($period, $id_group, $id_asignature){
+
+		$this->query = "SELECT ev.eval_{$period}_per AS periodo,  s.idstudents, s.primer_apellido AS primer_ape_alu, s.segundo_apellido AS segundo_ape_alu, s.primer_nombre AS primer_nom_alu, s.segundo_nombre AS segundo_nom_alu, a.asignatura, g.nombre_grupo
+						FROM t_evaluacion ev
+						INNER JOIN students s ON ev.id_estudiante=s.idstudents
+						INNER JOIN t_grupos g ON ev.id_grupo = g.id_grupo AND g.id_grupo = {$id_group}
+						INNER JOIN t_asignaturas a ON ev.id_asignatura=a.id_asignatura AND a.id_asignatura = {$id_asignature}
+						WHERE ev.eval_{$period}_per < 
+						(
+						    SELECT v.minimo
+						    FROM valoracion v
+						    WHERE v.valoracion='Basico'
+						) ";
+
+		return $this->getResultsFromQuery();
+	}
+
+
+	/**
+	*
+	*
+	*/
+	public function checkQualification($qualification){
+
+		$valorations = $this->_valoration->all();
+
+		if(!$valorations['state'])
+			throw new \Exception("No hay Valoracion para calificar", 1);
+		else{
+
+			foreach ($valorations['data'] as $key => $valoration) {
+				
+				if($qualification >= $valoration['minimo'] && $qualification <= $valoration['maximo'])
+					return true;
+			}
+
+			return false;
+		}
+	}
+
+	/**
+	*
+	*
+	*/
+	public function getRecovery($id_student, $id_group, $id_asignature, $period){
+
+		$this->query = "SELECT * 
+						FROM {$this->table_recovery} 
+						WHERE id_estudiante={$id_student}  AND id_asignatura={$id_asignature} AND id_grupo={$id_group}";
+
+		return $this->getResultsFromQuery();
+	}
+
+	/**
+	*
+	*
+	*/
+	public function saveRecovery($data=array()){
+
+		$resp = array();
+
+		if($this->checkQualification($data['newContent'])):
+
+			$this->query = "INSERT INTO {$this->table_recovery} 
+							(id_estudiante, id_asignatura, id_grupo, periodo, nota, nota_evaluacion)
+							VALUES
+							({$data['id_student']}, {$data['id_asignature']}, {$data['id_group']}, {$data['period']}, {$data['newContent']}, {$data['oldContent']})";
+			$rows = $this->executeQuerySingle();
+
+			array_push($resp, $rows);
+
+			if($rows['data']):
+				// ($field,$id_student, $id_asignature, $value)
+				$data = $this->updatePeriod(
+					"eval_{$data['period']}_per",
+					$data['id_student'],
+					$data['id_asignature'],
+					$data['newContent']
+				);
+
+				array_push($resp, $data);
+			endif;
+
+
+			return array(
+				'state'		=>	true,
+				'mensaje' 	=>	$resp
+			);
+
+		else:
+
+			return array(
+				'state'		=> 	false,
+				'mensaje'	=>	'Rango excedido'
+			);
+		endif;
+	}
+
+
+	/**
+	*
+	*
+	*/
+	public function updateRecovery($id_recovery, $data=array()){
+
+		$response = array();
+		if($this->checkQualification($data['newContent'])):
+
+			$this->query = "UPDATE {$this->table_recovery} 
+							SET nota={$data['newContent']}, nota_evaluacion={$data['oldContent']} 
+							WHERE id_superacion={$id_recovery} ";
+
+			$rows = $this->executeQuerySingle();
+
+			array_push($response, $rows);
+
+			if($rows['data']):
+				$data = $this->updatePeriod(
+					"eval_{$data['period']}_per",
+					$data['id_student'],
+					$data['id_asignature'],
+					$data['newContent']
+				);
+
+			array_push($response, $data);
+			endif;
+
+			return array(
+				'state'	=>	true,
+				'data'	=>	$response
+			);
+
+		else:
+
+			return array(
+				'state'		=> 	false,
+				'mensaje'	=>	'Rango excedido'
+			);
+
+		endif;
 	}
 }
 ?>

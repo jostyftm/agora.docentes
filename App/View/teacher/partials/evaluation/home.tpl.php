@@ -33,7 +33,7 @@
 				                        		</a>
 		                           			</li>
 				                        	<li>
-					                        	<a href='#' data-request='spa'>Superaciones
+					                        	<a href='/evaluation/groupRecovery/".$group['id_asignatura']."/".$group['id_grupo']."' data-request='spa'>Superaciones
 					                        	</a>
 				                        	</li>
 				                        	<li>

@@ -51,7 +51,8 @@
         		var ele = $(this).parent().parent().prev().find("input");
         		ele.focus();
         	}
-        });
+        }
+    );
 
         $("td input").focus(function(){
             var oldContent = $(this).val();
