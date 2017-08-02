@@ -2,7 +2,7 @@
 namespace App\Controller;
 use App\Config\View as View;
 use App\Model\GroupModel as Group;
-use App\config\Session as Session;
+use App\Config\Session as Session;
 use App\Model\GradeModel as Grade;
 use App\Model\PeriodModel as Period;
 use App\Model\TeacherModel as Teacher;
@@ -84,7 +84,6 @@ class EvaluationController
                     'expresiones' => $expresiones['data'][0],
 					'asignatura'=>$id_asignature, 
 					'asignaturas' => $asignaturas, 
-					'database' => Session::get('db'),
 					'porcentajes' => $result_porcentajes[0] , 
 					'grado' => $id_grado, 
                     'porcentajeDefinidos' => $porcentajeDefinidos			
@@ -103,6 +102,7 @@ class EvaluationController
 	{
 
 		$resultado = $this->_evaluation->getEvaluation($id_group, $id_asignature);
+		$disciplina = $this->_evaluation->getEvaluationByDiscipline($id_group);
 
 
 		if($resultado['state']):
@@ -118,17 +118,21 @@ class EvaluationController
 				$modelo = 'modelo_a';
 			
 			else if(Session::get('db') == 'agoranet_ipec' || Session::get('db') == 'agoranet_cabal'
-                || Session::get('db') == 'agoranet_jrbejarano' || Session::get('db') == 'agoranet_iensjl' )
+                || Session::get('db') == 'agoranet_jrbejarano' || Session::get('db') == 'agoranet_iensjl' 
+				|| Session::get('db') == 'agoranet_diocesano' || Session::get('db') == 'agoranet_comfamar')
 				$modelo = 'modelo_b';
 			
-			else if(Session::get('db') == 'agoranet_iean' )
+			else if(Session::get('db') == 'agoranet_iean' || Session::get('db') == 'agoranet_itimp' )
 				$modelo = 'modelo_c';				
 			
 			else if(Session::get('db') == 'agoranet_simonb' ||Session::get('db') == 'agoranet_liceo' )
 				$modelo = 'modelo_d';				
 			
-            else if(Session::get('db') == 'agoranet_termarit' || Session::get('db') == 'agoranet_iesr' || Session::get('db') == 'agoranet_litoral'
-				   || Session::get('db') == 'agoranet_comfamar')
+            else if(Session::get('db') == 'agoranet_termarit' || Session::get('db') == 'agoranet_iesr'
+					|| Session::get('db') == 'agoranet_esther_ea' || Session::get('db') == 'agoranet_litoral'
+                	|| Session::get('db') == 'agoranet_jose_ag'   || Session::get('db') == 'agoranet_jmcordoba'
+                	|| Session::get('db') == 'agoranet_lavictoria'
+				   )
             	$modelo = 'modelo_e';
 
             else if(Session::get('db') == 'agoranet_jjrondon' || Session::get('db') == 'agoranet_itigvc')
@@ -141,13 +145,13 @@ class EvaluationController
             	'teacher/partials/evaluation/evaluatedPeriod/'.$modelo,
             	'render',
 				[
-					'codigos' => $codigos, 
-                    'p'        =>$period,
-					'criterios' =>$criterios,
 					'datos'=>$resultado['data'], 
-					'id_asignature'	=> $id_asignature,
+					'porcentajes' => $result_porcentajes[0], 
+					'codigos' => $codigos, 
 					'baseDatos' => Session::get('db'),
-					'porcentajes' => $result_porcentajes[0]
+					'criterios' =>$criterios,
+                    'p'        =>$period,
+					'disciplina'    => $disciplina['data']
 				]
 			);
 			$view->execute();
@@ -183,7 +187,8 @@ class EvaluationController
 
 		endif;
 	}
-
+	
+	
 	/**
 	*
 	*
@@ -207,7 +212,8 @@ class EvaluationController
 		);
 		$view->execute();
 	}
-
+	
+	
 	/**
 	*
 	*
@@ -231,7 +237,8 @@ class EvaluationController
 		);
 		$view->execute();
 	}
-
+	
+	
 	/**
 	*
 	*
@@ -252,7 +259,6 @@ class EvaluationController
 
 			if($recovery['state']):
 				
-				sleep(3);
 				echo json_encode(
 					$this->_evaluation->updateRecovery(
 						$recovery['data'][0]['id_superacion'],
@@ -262,7 +268,6 @@ class EvaluationController
 
 			else:
 
-				sleep(3);
 				echo json_encode(
 					$this->_evaluation->saveRecovery($_POST)
 				);
@@ -270,5 +275,28 @@ class EvaluationController
 			endif;
 		endif;
 	}
+	
+	/**
+     *
+     *
+     *
+    
+	public function changeColumnsTableAction(){
+        $p=0;
+	    $fields=array(
+	        0 => array(
+	            'columnOld' =>  'dc1',
+                'columnNew' =>  'dc1_'.$p,
+                'type'      =>  'float'
+            )
+        );
+	    $this->_evaluation->queryChangeColumns($fields);
+
+	    //var_dump($fields);
+
+
+    }
+	 */
+
 }
 ?>

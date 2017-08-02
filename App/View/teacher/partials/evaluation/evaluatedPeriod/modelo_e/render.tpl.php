@@ -127,7 +127,7 @@ if($baseDatos=='agoranet_iesr'){
 
     foreach ($datos  as $clave => $row) {
 
-
+		$estudiante = $row['primer_apellido']." ".$row['segundo_apellido']." ". $row['primer_nombre']." ".$row['segundo_nombre'];
         ?>
 
         <tr class="<?=$active = $num%2==0?'active':''?> inputs editable" id="<?=$row['id_estudiante']?>" >
@@ -138,7 +138,7 @@ if($baseDatos=='agoranet_iesr'){
             <td>
 				<span data-id="<?=$row['id_estudiante']?>">
 
-					<?= $row['primer_apellido']." ".$row['segundo_apellido']." ". $row['primer_nombre']." ".$row['segundo_nombre']?>
+					<?= $estudiante?>
 
 
 				</span>
@@ -151,7 +151,9 @@ if($baseDatos=='agoranet_iesr'){
                 <span> <?=$row['novedad']?></span>
             </td>
             <td>
-                <i data-id="<?=$row['id_estudiante']?>" class="fa fa-user" aria-hidden="true"></i>
+                <button data-student="<?= $estudiante?>" data-id="<?=$row['id_estudiante']?>" data-click="aggObsAsig" data-request="openModal" class="btn btn-primary btn-sm" title="Agregar Ovservacion en la Asignatura">
+			    	<i class="fa fa-user-plus" aria-hidden="true"></i>
+			    </button>
             </td>
 
             <td >

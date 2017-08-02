@@ -106,6 +106,7 @@ class GeneralObservationController
 	public function storeAction()
 	{	
 	
+		
 		$response = array();
 		foreach($_POST['students'] as $key => $id):
 					

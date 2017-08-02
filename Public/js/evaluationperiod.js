@@ -113,7 +113,7 @@ $(function() {
                 data: dataString
             })
                 .done(function (datos) {
-                    console.log(datos);
+                	console.log(datos);
                 });
 
             $('#form-select').show(170);
@@ -228,8 +228,8 @@ $(function() {
                 "autoWidth": false,
                 "bFilter": true,
                 language: {
-                    url: '/Public/json/Spanish.json'
-                }
+	        		url: '/Public/json/Spanish.json'
+	        	}
             });
 
             $('#table_id').find('a.ntf').hide();
@@ -255,8 +255,37 @@ $(function() {
                             paging: false,
                             "autoWidth": false,
                             "bFilter": true,
-                            language: {
-                                url: '/Public/json/Spanish.json'
+
+                            "oLanguage": {
+                                "sProcessing": "Procesando...",
+                                "sLengthMenu": 'Mostrar <select>' +
+                                '<option value="10">10</option>' +
+                                '<option value="20">20</option>' +
+                                '<option value="30">30</option>' +
+                                '<option value="40">40</option>' +
+                                '<option value="50">50</option>' +
+                                '<option value="-1">All</option>' +
+                                '</select> registros',
+                                "sZeroRecords": "No se encontraron resultados",
+                                "sEmptyTable": "Ningún dato disponible en esta tabla",
+                                "sInfo": "Mostrando del (_START_ al _END_) de un total de _TOTAL_ registros",
+                                "sInfoEmpty": "Mostrando del 0 al 0 de un total de 0 registros",
+                                "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                                "sInfoPostFix": "",
+                                "sSearch": "Filtrar:",
+                                "sUrl": "",
+                                "sInfoThousands": ",",
+                                "sLoadingRecords": "Por favor espere - cargando...",
+                                "oPaginate": {
+                                    "sFirst": "Primero",
+                                    "sLast": "Último",
+                                    "sNext": "Siguiente",
+                                    "sPrevious": "Anterior"
+                                },
+                                "oAria": {
+                                    "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                                    "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                                }
                             }
                         });
 
@@ -324,7 +353,7 @@ $(function() {
 
                             });
 
-                    }); //Fin each
+                    });	//Fin each
 
                     //Ya la tabla de calificaciones esta renderizadas, ahora se le va añadir diferentes eventos a los inputs
                     $('tr.editable').find('input').blur(function (ev) {
@@ -482,9 +511,10 @@ $(function() {
 
                             inputsAModificar.each(function (i, element) {
 
-                               if(element.value != ''){
-                                    stringCadena += element.name + ":'" + element.value + "',";
-                                }
+                              //console.log(element.value.length);
+								if(element.value.length != 0 && element.value != null && element.value != "0" && element.value != "0.00" ){
+													stringCadena += element.name + ":'" + element.value + "',";
+								 }
                             });
 
                             stringCadena = "{" + stringCadena + "}";
@@ -498,27 +528,29 @@ $(function() {
                                 if (periodoSelect == numPeriodo) {
                                     var json = JSON.stringify(eval("(" + stringCadena + ")"));
                                     var obj = JSON.parse(json);
-                                    console.log(periodoSelect+", "+numPeriodo);
+                                    
 
+									if(stringCadena != ''){
                                     if(ev.keyCode != 8 || ev.keyCode != 46 || ev.keyCode != 110){
-                                        $.ajax({
-                                            method: "POST",
-                                            url: "/Evaluation/updateAll",
-                                            data: {
-                                                obj,
-                                                idEstudiante,
-                                                grupoDB,
-                                                asignaturaDB
-                                            },
-                                            beforeSend: function(xhr){
-                                                //inputDisabled.prop('disabled', true);
-                                            }
-                                        })
-                                            .done(function (data) {
-                                                //inputDisabled.prop('disabled', false);
-                                                // console.log(data);
-                                            });
-                                    }
+		                                $.ajax({
+		                                    method: "POST",
+		                                    url: "/Evaluation/updateAll",
+		                                    data: {
+		                                    	obj,
+		                                    	idEstudiante,
+		                                    	grupoDB,
+		                                    	asignaturaDB
+		                                    },
+		                                    beforeSend: function(xhr){
+		                                    	//inputDisabled.prop('disabled', true);
+		                                    }
+		                                })
+		                                    .done(function (data) {
+		                                    	//inputDisabled.prop('disabled', false);
+		                                    	// console.log(data);
+		                                    });
+		                            }
+								}
                                 }
                                 else {
 
@@ -532,7 +564,7 @@ $(function() {
 
                             }
                             else {
-                                console.log("jj");
+                                
                                 swal({
                                     title: "Periodo seleccionado inactivo!",
                                     text: "No se puede modificar..!",
@@ -599,7 +631,98 @@ $(function() {
 
                         });//Fin de Keydown
 
+					// FUNCIONALIDAD PARA AGREGAR OBSERVACIONES A LAS ASIGNATURAS
+                    // OBSERVACIONES DE ASIGNATURA
+                    var modalAddObs = $("#modalAggObs"),
+                        period = $("#periodos").val(),
+                        backModal   =   $("#backModal"),
+                        inputTargetView = $("#targerView"),
+                        input_id_student = $("#id_student");
+                        // id_asignature = $("#id_asignature").val();
+                    // CARGAR LA VISTA QUE CONTIEN LA TABLA
+                    var loadTable = function(){
 
+                        backModal.attr(
+                            'data-id',
+                            input_id_student.val()
+                        );
+
+                        var url = "/Asignature/indexObservations/"+input_id_student.val()+"/"+id_asignature+"/"+period;
+
+                        $.get(url, function(data){
+                            modalAddObs.find('.modal-body').empty().append(data)
+                        });
+                    }
+
+                    // MOSTRAR EL MODAL Y CARGAR LA TABLA
+                    $('[data-click="aggObsAsig"]').click(function(e){
+
+                        e.preventDefault();
+
+                        var that = $(this),
+                            request = that.data('request');
+
+                        input_id_student.val( that.data('id') );
+
+                        modalAddObs.find("#myModalLabel").text(that.attr('data-student'));
+
+                        if(request == 'openModal'){
+
+                            modalAddObs.modal({
+                                show: true,
+                                backdrop: 'static',
+                                keyboard: false
+                            })
+
+                        }
+
+                        if(!backModal.hasClass('hide'))
+                            backModal.addClass('hide');
+
+                        loadTable();
+                    })
+
+                    // Eliminar Observacion
+                    $("#deleteObservationAsig").submit(function(e){
+                        e.preventDefault();
+
+                        var form = $(this),
+                            btnSubmit = form.find("button[type=submit]"),
+                            btnCancel = $("#subModalCance");
+
+                        $.ajax({
+                            type: form.attr('method'),
+                            url: form.attr('action'),
+                            dataType: 'html',
+                            data: form.serialize(),
+                            beforeSend: function(){
+
+                                btnSubmit.text('');
+                                btnSubmit.append(
+                                    $('<i>', {class: 'fa fa-spinner fa-spin fa-fw'}),
+                                    $('<span>Eliminando...</span>')
+                                );
+                                form.find("button").prop('disabled', true);
+                            },
+                            success: function(data){
+                                
+                                btnSubmit.empty().text("Eliminar");
+                                form.find("button").prop('disabled', false);
+                                
+                                // 
+                                btnCancel.click();
+                                
+                                // 
+                                loadTable();
+                            },
+                            error(xhr, estado){
+                                console.log(xhr);
+                                console.log(estado);
+                            }
+                        });
+                    });
+
+                    // FIN FUNCIONALIDAD PARA LAS OBSERVACIONES
                 }//**Fin Success
 
             })//Fin ajax #periodo else
@@ -607,103 +730,103 @@ $(function() {
         }//Fin else
 
     });//Fin select change periodo
-     
+
 });
 
-    //**************************
+	//**************************
 
 
-function getDT(idEstudiante){   
-    //console.log('Hola');
+function getDT(idEstudiante){	
+	//console.log('Hola');
 }
 
 
 function posicionesClick(ev){
-    var position = this.dataset.pos;
-    var id_group = this.dataset.grup;
-    var id_asignature = this.dataset.asign;
-    var id_performance = this.dataset.desemp;
-    var period = $('#periodos').val();
-    var databaseDB = $('#databaseDB').val();
+	var position = this.dataset.pos;
+	var id_group = this.dataset.grup;
+	var id_asignature = this.dataset.asign;
+	var id_performance = this.dataset.desemp;
+	var period = $('#periodos').val();
+	var databaseDB = $('#databaseDB').val();
 
-    $.ajax({
-        method: "POST",
-        url: "/Performance/deleteRelation/",
-        data: {
-            position,
-            id_group,
-            id_asignature,
-            id_performance,
-            period
-        }
-    })
-    .done(function(datos) {
-        $('#item-posicion').find('th[data-update='+position+']').empty()
-        .addClass('posiciones');
+	$.ajax({
+		method: "POST",
+		url: "/Performance/deleteRelation/",
+		data: {
+			position,
+			id_group,
+			id_asignature,
+			id_performance,
+			period
+		}
+	})
+	.done(function(datos) {
+		$('#item-posicion').find('th[data-update='+position+']').empty()
+		.addClass('posiciones');
 
-    });
+	});
 }
 
 function setSeleccionarDesemp(idGrado, idGrupo, idAsig, periodo, database){
 
-    $('#table_id').find('button[data-fun=seleccionar]').each(function(i,element){
-        element.addEventListener('click', function(ev){
-            var per = $('#periodos').val();
-            var categoriaIndicadores = $('#form-select').find('select[name=categoriaSelect]').val();
+	$('#table_id').find('button[data-fun=seleccionar]').each(function(i,element){
+		element.addEventListener('click', function(ev){
+			var per = $('#periodos').val();
+			var categoriaIndicadores = $('#form-select').find('select[name=categoriaSelect]').val();
 
-            var array = Array();
-            let elth;
-            $('#item-posicion').find('.posiciones[data-tipo='+categoriaIndicadores+'] ').each(function(i,element){
-                array[i] = $(element).data('update');
-                if(i==0){elth = element;}
-            });
+			var array = Array();
+			let elth;
+			$('#item-posicion').find('.posiciones[data-tipo='+categoriaIndicadores+'] ').each(function(i,element){
+				array[i] = $(element).data('update');
+				if(i==0){elth = element;}
+			});
 
-            if(array.length > 0)
-            {
-                var pos = array[0];
-                var desem = ev.currentTarget.dataset.id;
+			if(array.length > 0)
+			{
+				var pos = array[0];
+				var desem = ev.currentTarget.dataset.id;
 
-                var dataString = 'grado='+ idGrado + '&grupo='+ idGrupo + '&asignatura='+ idAsig + '&periodo='+ per + '&posicion='+ pos+ '&cod_desemp='+ desem;
-                $.ajax({
-                    method: "POST",
-                    url: "/Performance/storeRelation/",
-                    data: dataString
-                })
-                .done(function(datos) {
+				var dataString = 'grado='+ idGrado + '&grupo='+ idGrupo + '&asignatura='+ idAsig + '&periodo='+ per + '&posicion='+ pos+ '&cod_desemp='+ desem;
+				$.ajax({
+					method: "POST",
+					url: "/Performance/storeRelation/",
+					data: dataString
+				})
+				.done(function(datos) {
 
-                    $(elth).append(desem);
-                    $(elth).removeClass('posiciones');
-                    $(elth).append('<span class="delete-pos" data-pos="'+pos+'" data-desemp="'+desem+'" data-grup="'+idGrupo+'" data-asign="'+idAsig+'"> <i class="fa fa-trash" aria-hidden="true"></i></span>');
-                    console.log("Grado:"+idGrado+"gru: "+idGrupo+" asig:"+idAsig);
-                    $(elth).addClass('pos-hover');
-                    $(elth).find('.delete-pos')[0].addEventListener("click", posicionesClick);
+					$(elth).append(desem);
+					$(elth).removeClass('posiciones');
+					$(elth).append('<span class="delete-pos" data-pos="'+pos+'" data-desemp="'+desem+'" data-grup="'+idGrupo+'" data-asign="'+idAsig+'"> <i class="fa fa-trash" aria-hidden="true"></i></span>');
+					console.log("Grado:"+idGrado+"gru: "+idGrupo+" asig:"+idAsig);
+					$(elth).addClass('pos-hover');
+					$(elth).find('.delete-pos')[0].addEventListener("click", posicionesClick);
 
 
 
-                });
+				});
 
-            }
-        });
-    });
+			}
+		});
+	});
 
-    $("body").on( "click", function() {
-        $("body").css('padding-right','10px');
-    });
+	$("body").on( "click", function() {
+		$("body").css('padding-right','10px');
+	});
 }
 
 function getValuesGrupos(idEstudiante, desempenoGrupo){
-    var inputPorcentajes = getInputsDesempeno(idEstudiante, desempenoGrupo )[0];
-    return parseFloat(inputPorcentajes.value);
+	var inputPorcentajes = getInputsDesempeno(idEstudiante, desempenoGrupo )[0];
+	return parseFloat(inputPorcentajes.value);
 }
 
 function getInputsDesempeno(idEstudiante, desempeno){
-    var inputsDesem = $('tr[id='+idEstudiante+']').find('input[data-desemp='+desempeno+']');     
-    return inputsDesem;
+	var inputsDesem = $('tr[id='+idEstudiante+']').find('input[data-desemp='+desempeno+']');	 
+	return inputsDesem;
 }
 
 function getInputsLista(idEstudiante, lista){
-    var inputsDesem = $('tr[id='+idEstudiante+']').find('input[data-grupo='+lista+']');     
-    return inputsDesem;
+	var inputsDesem = $('tr[id='+idEstudiante+']').find('input[data-grupo='+lista+']');	 	
+	return inputsDesem;
 }
 
 function promedio(objetosInputs, valorMinimo, valorMaximo){

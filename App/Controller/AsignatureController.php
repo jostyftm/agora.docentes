@@ -35,7 +35,7 @@ class AsignatureController
 			echo '<option value=0>No hay Resultados</option>';
 		endif;
 	}
-
+	
 	/**
 	*
 	*

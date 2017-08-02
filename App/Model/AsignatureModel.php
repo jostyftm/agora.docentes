@@ -11,7 +11,7 @@ class AsignatureModel extends DB
 {
 	private $table = 't_asignaturas';
 	private $table_observation = 'observacion_asignatura';
-
+	
 	function __construct($db='')
 	{	
 		if(!$db)
@@ -41,7 +41,7 @@ class AsignatureModel extends DB
 		$this->query = "SELECT * FROM {$this->table}";
 		return $this->getResultsFromQuery();
 	}
-
+	
 	/**
 	*
 	*
@@ -108,8 +108,8 @@ class AsignatureModel extends DB
 
 		return $this->executeQuerySingle();
 	}
-
-
+	
+	
 	/**
 	*
 	*
@@ -124,7 +124,6 @@ class AsignatureModel extends DB
 
 		return $this->getResultsFromQuery();
 	}
-
 	public function getTypeAsignature($id_asignature, $id_grado)
     {
         $this->table = "t_asignatura_x_area";

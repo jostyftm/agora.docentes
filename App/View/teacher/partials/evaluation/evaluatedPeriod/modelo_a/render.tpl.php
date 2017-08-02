@@ -2,11 +2,12 @@
 <div class="row hidden">
 	<div id="idAlert" class="alert alert-danger" role="alert"> </div>
 </div>
-
+<!-- 
 <div class="col-md-12 ">
 	<div class="panel panel-default">
 		<div class="panel-body">
 			<div class="table-responsive">
+ -->
 				<table class="table content-table table_evaluated" id="content-inputs">
 					<!-- On rows -->
 					<thead class="">
@@ -90,7 +91,7 @@
 
 					foreach ($datos  as $clave => $row) {
 
-
+						$estudiante = $row['primer_apellido']." ".$row['segundo_apellido']." ". $row['primer_nombre']." ".$row['segundo_nombre'];
 						?>
 
 						<tr class="<?=$active = $num%2==0?'active':''?> inputs editable" id="<?=$row['id_estudiante']?>" >
@@ -101,7 +102,7 @@
 							<td>
 								<span data-id="<?=$row['id_estudiante']?>">
 
-									<?= $row['primer_apellido']." ".$row['segundo_apellido']." ". $row['primer_nombre']." ".$row['segundo_nombre']?>
+									<?= $estudiante?>
 
 
 								</span>  
@@ -114,7 +115,9 @@
 								<span> <?=$row['novedad']?></span>
 							</td>
 							<td>
-								<i data-id="<?=$row['id_estudiante']?>" class="fa fa-user" aria-hidden="true"></i>
+								<button data-student="<?= $estudiante?>" data-id="<?=$row['id_estudiante']?>" data-click="aggObsAsig" data-request="openModal" class="btn btn-primary btn-sm" title="Agregar Ovservacion en la Asignatura">
+			                    <i class="fa fa-user-plus" aria-hidden="true"></i>
+			                	</button>
 							</td>
 
 							<td >
@@ -195,7 +198,8 @@
 					<input type="hidden" id="numRegistro" name="" value="<?=$num?>">
 					<input type="hidden" id="numInputs" name="" value="<?=$cont;?>">
 				</table>
+<!-- 
 			</div>
 		</div>
 	</div>
-</div>
+</div> -->

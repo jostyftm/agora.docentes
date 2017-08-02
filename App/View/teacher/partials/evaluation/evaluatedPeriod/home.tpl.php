@@ -78,7 +78,7 @@
 							</button>
 						-->
 
-						<a href="/teacher" id="" type="button"  class="btn btn-danger">
+						<a href="http://docentes.agora.net.co/teacher" id="" type="button"  class="btn btn-danger">
 							Salir
 						</a>
 					</div>
@@ -111,7 +111,7 @@
 			</div>
 		</div>
 	</div>
-</div> 
+</div>
 
 
 <!--  -->
@@ -594,5 +594,51 @@
 		</div>
 	</div>	
 </div>
+
+<!-- Modal O.A -->
+<div class="modal fade bs-example-modal-lg" id="modalAggObs" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel"></h4>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <input type="hidden" id="targerView" value="dsdd">
+                <input type="hidden" id="id_student" value="">
+                <input type="hidden" id="id_asignature" value="<?= $id_asignature?>">
+                <a class="btn btn-primary hide" id="backModal" data-click="aggObsAsig" data-request="lists" data-id="">Atras</a>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END MODAL O.A -->
+
+<!-- MODAL DELTE -->
+<div class="modal fade subModal" id="modalDelete" tabindex="-2" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form action="/Asignature/deleteObservation" method="POST" id="deleteObservationAsig" enctype="application/x-www-form-urlencoded">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Eliminar Observación</h4>
+                </div>
+                <div class="modal-body">
+                    <span>¿Este seguro que desea eliminar esta Observación ?</span>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" name="id_observation" id="id_observation" value="">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" id="subModalCance">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Continuar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- END MODAL DETELE -->
 
 <script src="/Public/js/evaluationperiod.js"></script>

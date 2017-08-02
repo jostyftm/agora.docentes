@@ -1,4 +1,3 @@
-
 <!--
 Plantilla para:
 Antonio Nariño,
@@ -14,25 +13,23 @@ Antonio Nariño,
 			<th rowspan="2">APELLIDOS Y Nombres Estudiante</th>
 			<th rowspan="2"> <span data-toggle="tooltip" data-placement="top" title="ESTADO"> Est</span></th>
 			<th rowspan="2"> <span data-toggle="tooltip" data-placement="top" title="NOVEDADES">Nov</span></th>
-			<th rowspan="2">afa</th>
+			<th rowspan="2">O.A</th>
 			<th rowspan="2"> <span data-toggle="tooltip" data-placement="top" title="INASISTENCIA">FAA</span></th>
 
-			<th colspan="4"><?=$porcentajes['etiqueta_grupo_1']; ?></th>
+			<th colspan="4"><?=$porcentajes['etiqueta_grupo_1']; ?> <?=$porcentajes['porcentaje_grupo1']; ?>%</th>
 
-<th rowspan="2" ><?=$porcentajes['porcentaje_grupo1']; ?>%</th>
+<th rowspan="2" ></th>
 
-<th colspan="4" ><?=$porcentajes['etiqueta_grupo_2']; ?></th>
-<th rowspan="2"><?=$porcentajes['porcentaje_grupo2']?>%</th>
+<th colspan="4" ><?=$porcentajes['etiqueta_grupo_2']; ?> <?=$porcentajes['porcentaje_grupo2']?>%</th>
+<th rowspan="2"></th>
 
-<th colspan="4" ><?=$porcentajes['etiqueta_grupo_3']; ?></th>
-<th rowspan="2"><?=$porcentajes['porcentaje_grupo3']?>%
+<th colspan="4" ><?=$porcentajes['etiqueta_grupo_3']; ?> <?=$porcentajes['porcentaje_grupo3']?>%</th>
+<th rowspan="2">
 
 </th>
 
 
-<th rowspan="2">per 1</th>
-<th rowspan="2">..</th>
-<th rowspan="2">..</th>
+<th rowspan="2">VAL</th>
 </tr>
 <tr id="item-posicion" valign="middle" class="border-th">
 
@@ -104,7 +101,7 @@ $active = 'active';
 
 
 foreach ($datos  as $clave => $row) {
-
+	$estudiante = $row['primer_apellido']." ".$row['segundo_apellido']." ". $row['primer_nombre']." ".$row['segundo_nombre'];
 
     ?>
 
@@ -116,7 +113,7 @@ foreach ($datos  as $clave => $row) {
         <td>
 				<span data-id="<?=$row['id_estudiante']?>">
 
-					<?= $row['primer_apellido']." ".$row['segundo_apellido']." ". $row['primer_nombre']." ".$row['segundo_nombre']?>
+					<?= $estudiante?>
 
 
 				</span>
@@ -129,7 +126,9 @@ foreach ($datos  as $clave => $row) {
             <span> <?=$row['novedad']?></span>
         </td>
         <td>
-            <i data-id="<?=$row['id_estudiante']?>" class="fa fa-user" aria-hidden="true"></i>
+            <button data-student="<?= $estudiante?>" data-id="<?=$row['id_estudiante']?>" data-click="aggObsAsig" data-request="openModal" class="btn btn-primary btn-sm" title="Agregar Ovservacion en la Asignatura">
+			                    <i class="fa fa-user-plus" aria-hidden="true"></i>
+			</button>
         </td>
 
         <td >
@@ -201,8 +200,6 @@ foreach ($datos  as $clave => $row) {
 
         </td>
 
-        <td>..</td>
-        <td>..</td>
 
     </tr>
 

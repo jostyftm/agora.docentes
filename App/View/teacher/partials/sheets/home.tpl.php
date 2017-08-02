@@ -13,7 +13,7 @@
 			  					<select class="form-control" id="sheet" name="type_sheet">
 			  						<option value="0" class="text-center"> - Seleccione un tipo de planilla - </option>
 			  						<option value="Attendance">Asistencia</option>
-			  						<option value="Evaluation">Evaluacion</option>
+			  						<option value="Evaluation">Evaluación</option>
 			  					</select>
 			  				</div>
 			  			</div>

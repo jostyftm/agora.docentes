@@ -8,14 +8,14 @@
       	<title></title>
 
       	<!-- Bootstrap -->
-        <link href="/Public/css/bootstrap.css" rel="stylesheet" type="text/css">
-        <link href="/Public/css/dataTables.bootstrap.min.css" rel="stylesheet" type="text/css">
+      	<link href="/Public/css/bootstrap.css" rel="stylesheet" type="text/css">
+   		  <link href="/Public/css/dataTables.bootstrap.min.css" rel="stylesheet" type="text/css">
 
         <!-- Font Awesome -->
         <link href="/Public/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
-      <!-- Style -->
-      <link href="/Public/css/default2.css" rel="stylesheet" type="text/css">
+   		<!-- Style -->
+   		<link href="/Public/css/default2.css" rel="stylesheet" type="text/css">
 
         <!-- Styles Sweetalert -->
         <link href="/Public/css/sweetalert.css" rel="stylesheet"  type="text/css">
@@ -77,7 +77,7 @@
                 <b>Derechos Reservados </b>&copy; <?php  echo date('Y') ?>
               </div>
               <div class="pull-right">
-                Ágora
+                @tenea
               </div> 
             </div> 
           </footer>

@@ -4,7 +4,6 @@ namespace App\Model;
 
 use App\Config\DataBase as DB;
 use App\Model\ValorationModel as Valoration;
-
 /**
 * 
 */
@@ -12,12 +11,12 @@ class EvaluationPeriodModel extends DB
 {
 	protected $table = 't_evaluacion';
 	protected $table_recovery = 'superacion';
-
+	
 	private $_periods = array();
 
 	// 
 	private $_valoration;
-
+	
 	function __construct($db='')
 	{
 		if(!$db)
@@ -39,7 +38,7 @@ class EvaluationPeriodModel extends DB
 						INNER JOIN students s ON e.id_estudiante=s.idstudents
 						INNER JOIN t_grupos g ON g.id_grupo={$id_group} AND e.id_grupo=g.id_grupo 
 						INNER JOIN t_asignaturas a ON a.id_asignatura={$id_asignature} AND e.id_asignatura=a.id_asignatura 
-						-- WHERE e.$column IS NULL OR e.$column = 0 
+						WHERE e.$column IS NULL OR e.$column = 0 
 						ORDER BY e.primer_apellido";
 
 		return $this->getResultsFromQuery();
@@ -82,14 +81,29 @@ class EvaluationPeriodModel extends DB
 	}
 
 	public function getEvaluation($id_group, $id_asignature){
-		$this->query = "SELECT * 
-						FROM t_evaluacion 
-						WHERE id_grupo = '{$id_group}' AND id_asignatura = '{$id_asignature}'
-						ORDER BY primer_apellido";
+			$this->query = "SELECT * 
+							FROM t_evaluacion 
+							WHERE id_grupo = '{$id_group}' AND id_asignatura = '{$id_asignature}'
+							ORDER BY primer_apellido";
 
-		return $this->getResultsFromQuery();
+			return $this->getResultsFromQuery();
 	}
+	
+	public function getEvaluationByDiscipline($id_group){
+        $this->query = "SELECT id_estudiante, eval_1_per, eval_2_per, eval_3_per, eval_4_per 
+							FROM t_evaluacion 
+							WHERE id_grupo = '{$id_group}' AND id_asignatura = 9
+							ORDER BY primer_apellido";
 
+        return $this->getResultsFromQuery();
+    }
+
+	public function queryChangeColumns($data){
+
+        $this->query = "ALTER TABLE t_evaluacion CHANGE '{data[0][columnOld]}'  '{data[0][columnNew]}' '{data[0][type]}'";
+        $this->execute_single_query();
+    }
+	
 	/**
 	*
 	*
