@@ -270,6 +270,7 @@ body{
     width: 100%;
     bottom: 0px;
     background-color: #fff;
+    border-top: 1px solid #ddd;
     padding: 10px;
     font-size: 12px;
     color: #676a6c;
@@ -281,14 +282,20 @@ body{
 }
 
 /**/
-/**/
+
+/* MODAL */
+
+.subModal{
+    z-index: 1080;
+    height: auto;
+}
 
 @media (min-width: 992px){
     .modal-lg {
         width: 95%;
     }
 
-    .modal-lg .modal-body{
+    .modal-lg > .modal-body{
         height: 500px;
     }
 }

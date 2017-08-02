@@ -8,14 +8,17 @@
       	<title></title>
 
       	<!-- Bootstrap -->
-      	<link href="/Public/css/bootstrap.css" rel="stylesheet" type="text/css">
-   		  <link href="/Public/css/dataTables.bootstrap.min.css" rel="stylesheet" type="text/css">
+        <link href="/Public/css/bootstrap.css" rel="stylesheet" type="text/css">
+        <link href="/Public/css/dataTables.bootstrap.min.css" rel="stylesheet" type="text/css">
 
         <!-- Font Awesome -->
         <link href="/Public/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
-   		<!-- Style -->
-   		<link href="/Public/css/default2.css" rel="stylesheet" type="text/css">
+      <!-- Style -->
+      <link href="/Public/css/default2.css" rel="stylesheet" type="text/css">
+
+        <!-- Styles Sweetalert -->
+        <link href="/Public/css/sweetalert.css" rel="stylesheet"  type="text/css">
     
       <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
       <script src="/Public/js/jquery-1.12.4.js"></script>
@@ -32,6 +35,9 @@
 
       <!-- PDFObject -->
       <script src="/Public/plugin/PDFObject/pdfobject.js"></script>
+
+      <!-- Swealert js -->
+      <script src="/Public/js/sweetalert.min.js"> </script>
       
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->

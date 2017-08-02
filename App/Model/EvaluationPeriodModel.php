@@ -39,7 +39,7 @@ class EvaluationPeriodModel extends DB
 						INNER JOIN students s ON e.id_estudiante=s.idstudents
 						INNER JOIN t_grupos g ON g.id_grupo={$id_group} AND e.id_grupo=g.id_grupo 
 						INNER JOIN t_asignaturas a ON a.id_asignatura={$id_asignature} AND e.id_asignatura=a.id_asignatura 
-						WHERE e.$column IS NULL OR e.$column = 0 
+						-- WHERE e.$column IS NULL OR e.$column = 0 
 						ORDER BY e.primer_apellido";
 
 		return $this->getResultsFromQuery();
@@ -76,7 +76,7 @@ class EvaluationPeriodModel extends DB
 						INNER JOIN t_grupos g ON e.id_grupo=g.id_grupo AND g.id_grupo={$id_group}
 						INNER JOIN t_asignaturas a ON e.id_asignatura=a.id_asignatura AND a.id_asignatura={$id_asignature}
 						INNER JOIN docentes d ON g.id_director_grupo=d.id_docente
-						ORDER BY e.primer_apellido";
+						ORDER BY e.primer_apellido, e.segundo_apellido";
 
 		return $this->getResultsFromQuery();
 	}

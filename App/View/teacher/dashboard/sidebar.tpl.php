@@ -71,5 +71,13 @@
             	Configuración
             </a>
         </li>
+        <li>
+            <a href="/Public/pdf/a.pdf" target="_blank">  
+                <span class="fa-stack fa-lg pull-left">
+                    <i class="fa fa-question fa-stack-1x "></i>
+                </span>
+                Ayuda
+            </a>
+        </li>
 	</ul>
 </div>

@@ -1,12 +1,6 @@
-
-//console.log('hola');
-
 $(function() {
 
-    var url = $('#url').val();
 
-    var arreglo = url.split('/');
-   //Limite de valoraciones
     var numMinimo = parseInt($('#minimo').val());
     var numMaximo = parseInt($('#maximo').val());
 
@@ -35,52 +29,6 @@ $(function() {
     var numPeriodo = (parseInt($('#periodoDB').val()));
 
 
-    //Relaciona un desempeño con una posición
-    /*
-    $('#content-btn-criterios').find('a').each(function (i, element) {
-
-        $(element).click(function (ev) {
-            var idDesemp = ev.currentTarget.id;
-            $(this).hide();
-            $('#content-btn-criterios').find('input[data-criterio=' + idDesemp + ']').each(
-                function (i, element) {
-                    $(element).keyup(function (ev) {
-                        var pos = ev.currentTarget.dataset.criterio;
-                        var campo = ev.currentTarget.dataset.name;
-                        var value = ev.currentTarget.value;
-
-                        var stringCadena = '';
-                        stringCadena += campo + ":'" + value + "',";
-                        stringCadena = "{" + stringCadena + "}";
-                        var json = JSON.stringify(eval("(" + stringCadena + ")"));
-                        var obj = JSON.parse(json);
-
-
-                        $.ajax({
-                            method: "POST",
-                            url: "/Evaluacion/setUpdateCriterio/" + pos + "/" + databaseDB,
-                            data: obj
-                        })
-                            .done(function (msg) {
-
-                                if (campo == 'abreviacion') {
-                                    $('tr#item-posicion').find('th[data-update=' + pos + ']').empty().append(value);
-                                }
-
-                            });
-
-                    });
-                    $(element).removeAttr('readonly', false);
-
-
-                }
-            );
-
-        });
-    });
-    */
-
-    //*************************
 
     //Condición solo para el Liceo
     if (databaseDB == 'agoranet_liceo') {
@@ -101,7 +49,8 @@ $(function() {
         var tBasico = $('#t-basico').val();
         var tBajo = $('#t-bajo').val();
 
-        var textoSuperior = $('#text-desempeno').val();
+        var textoSuperior = $('#text-desempeno').val().toUpperCase();
+
         if (textoSuperior == '') {
             tAlto = '';
             tBasico = '';
@@ -110,7 +59,7 @@ $(function() {
         $('#text-alto').val((tAlto + textoSuperior));
         $('#text-basico').val((tBasico + textoSuperior));
         $('#text-bajo').val((tBajo + textoSuperior));
-
+        $('#text-desempeno').empty().val(textoSuperior).toUpperCase();
 
     });
     //**********************
@@ -164,7 +113,7 @@ $(function() {
                 data: dataString
             })
                 .done(function (datos) {
-                	console.log(datos);
+                    console.log(datos);
                 });
 
             $('#form-select').show(170);
@@ -279,8 +228,8 @@ $(function() {
                 "autoWidth": false,
                 "bFilter": true,
                 language: {
-	        		url: '/Public/json/Spanish.json'
-	        	}
+                    url: '/Public/json/Spanish.json'
+                }
             });
 
             $('#table_id').find('a.ntf').hide();
@@ -306,37 +255,8 @@ $(function() {
                             paging: false,
                             "autoWidth": false,
                             "bFilter": true,
-
-                            "oLanguage": {
-                                "sProcessing": "Procesando...",
-                                "sLengthMenu": 'Mostrar <select>' +
-                                '<option value="10">10</option>' +
-                                '<option value="20">20</option>' +
-                                '<option value="30">30</option>' +
-                                '<option value="40">40</option>' +
-                                '<option value="50">50</option>' +
-                                '<option value="-1">All</option>' +
-                                '</select> registros',
-                                "sZeroRecords": "No se encontraron resultados",
-                                "sEmptyTable": "Ningún dato disponible en esta tabla",
-                                "sInfo": "Mostrando del (_START_ al _END_) de un total de _TOTAL_ registros",
-                                "sInfoEmpty": "Mostrando del 0 al 0 de un total de 0 registros",
-                                "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
-                                "sInfoPostFix": "",
-                                "sSearch": "Filtrar:",
-                                "sUrl": "",
-                                "sInfoThousands": ",",
-                                "sLoadingRecords": "Por favor espere - cargando...",
-                                "oPaginate": {
-                                    "sFirst": "Primero",
-                                    "sLast": "Último",
-                                    "sNext": "Siguiente",
-                                    "sPrevious": "Anterior"
-                                },
-                                "oAria": {
-                                    "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
-                                    "sSortDescending": ": Activar para ordenar la columna de manera descendente"
-                                }
+                            language: {
+                                url: '/Public/json/Spanish.json'
                             }
                         });
 
@@ -356,24 +276,7 @@ $(function() {
     var id_group = $('#grupoDB').val();
 
 
-    //Evento para eliminar un desempeño seleccionado
-    /**
-     function posicionesClick(ev)
-     {
-         var posDelet = this.dataset.pos;
-         var grup = this.dataset.grup;
-         var asign = this.dataset.asign;
-         var desemp = this.dataset.desemp;
-         var per = $('#periodos').val();
-         $.ajax({
-             method: "POST",
-             url: urls+"/Indicadores/deleteCodigosDesemp/"+posDelet+"/"+desemp+"/"+grup+"/"+asign+"/"+per,
-             data: ''
-         })
-         .done(function(datos) {
-             //console.log(datos);
-         });
-     }*/
+
 
     //Selecciona un periodo
     $('#periodos').change(function () {
@@ -421,7 +324,7 @@ $(function() {
 
                             });
 
-                    });	//Fin each
+                    }); //Fin each
 
                     //Ya la tabla de calificaciones esta renderizadas, ahora se le va añadir diferentes eventos a los inputs
                     $('tr.editable').find('input').blur(function (ev) {
@@ -579,48 +482,63 @@ $(function() {
 
                             inputsAModificar.each(function (i, element) {
 
-                                stringCadena += element.name + ":'" + element.value + "',";
+                               if(element.value != ''){
+                                    stringCadena += element.name + ":'" + element.value + "',";
+                                }
                             });
 
                             stringCadena = "{" + stringCadena + "}";
                             var periodoSelect = $('#periodos').val();
 
+
+
                             //Si el periodo seleccionado esta áctivo guarda por ajax cada una de las modificaciones en los inputs
                             if (numPeriodo) {
+
                                 if (periodoSelect == numPeriodo) {
                                     var json = JSON.stringify(eval("(" + stringCadena + ")"));
                                     var obj = JSON.parse(json);
                                     console.log(periodoSelect+", "+numPeriodo);
 
                                     if(ev.keyCode != 8 || ev.keyCode != 46 || ev.keyCode != 110){
-		                                $.ajax({
-		                                    method: "POST",
-		                                    url: "/Evaluation/updateAll",
-		                                    data: {
-		                                    	obj,
-		                                    	idEstudiante,
-		                                    	grupoDB,
-		                                    	asignaturaDB
-		                                    },
-		                                    beforeSend: function(xhr){
-		                                    	inputDisabled.prop('disabled', true);
-		                                    }
-		                                })
-		                                    .done(function (data) {
-		                                    	inputDisabled.prop('disabled', false);
-		                                    	// console.log(data);
-		                                    });
-		                            }
+                                        $.ajax({
+                                            method: "POST",
+                                            url: "/Evaluation/updateAll",
+                                            data: {
+                                                obj,
+                                                idEstudiante,
+                                                grupoDB,
+                                                asignaturaDB
+                                            },
+                                            beforeSend: function(xhr){
+                                                //inputDisabled.prop('disabled', true);
+                                            }
+                                        })
+                                            .done(function (data) {
+                                                //inputDisabled.prop('disabled', false);
+                                                // console.log(data);
+                                            });
+                                    }
                                 }
                                 else {
-                                    var str = 'El periodo ' + periodoSelect + ' no esta activado, ninguna modificación que se realice será guardada!';
-                                    $('#idAlert').empty().append(str).show(100);
+
+                                    swal({
+                                        title: "Periodo seleccionado inactivo!",
+                                        text: "No se puede modificar..!",
+                                        timer: 4000,
+                                        showConfirmButton: false
+                                    });
                                 }
 
                             }
                             else {
-                                var str = 'El periodo ' + periodoSelect + ' no esta activo, ninguna modificación que se realice será guardada!';
-                                $('#idAlert').empty().append(str).show(100);
+                                console.log("jj");
+                                swal({
+                                    title: "Periodo seleccionado inactivo!",
+                                    text: "No se puede modificar..!",
+                                    timer: 2000,
+                                    showConfirmButton: false
+                                });
                             }
 
                         })//Fin Keyup*************
@@ -689,103 +607,103 @@ $(function() {
         }//Fin else
 
     });//Fin select change periodo
-
+     
 });
 
-	//**************************
+    //**************************
 
 
-function getDT(idEstudiante){	
-	//console.log('Hola');
+function getDT(idEstudiante){   
+    //console.log('Hola');
 }
 
 
 function posicionesClick(ev){
-	var position = this.dataset.pos;
-	var id_group = this.dataset.grup;
-	var id_asignature = this.dataset.asign;
-	var id_performance = this.dataset.desemp;
-	var period = $('#periodos').val();
-	var databaseDB = $('#databaseDB').val();
+    var position = this.dataset.pos;
+    var id_group = this.dataset.grup;
+    var id_asignature = this.dataset.asign;
+    var id_performance = this.dataset.desemp;
+    var period = $('#periodos').val();
+    var databaseDB = $('#databaseDB').val();
 
-	$.ajax({
-		method: "POST",
-		url: "/Performance/deleteRelation/",
-		data: {
-			position,
-			id_group,
-			id_asignature,
-			id_performance,
-			period
-		}
-	})
-	.done(function(datos) {
-		$('#item-posicion').find('th[data-update='+position+']').empty()
-		.addClass('posiciones');
+    $.ajax({
+        method: "POST",
+        url: "/Performance/deleteRelation/",
+        data: {
+            position,
+            id_group,
+            id_asignature,
+            id_performance,
+            period
+        }
+    })
+    .done(function(datos) {
+        $('#item-posicion').find('th[data-update='+position+']').empty()
+        .addClass('posiciones');
 
-	});
+    });
 }
 
 function setSeleccionarDesemp(idGrado, idGrupo, idAsig, periodo, database){
 
-	$('#table_id').find('button[data-fun=seleccionar]').each(function(i,element){
-		element.addEventListener('click', function(ev){
-			var per = $('#periodos').val();
-			var categoriaIndicadores = $('#form-select').find('select[name=categoriaSelect]').val();
+    $('#table_id').find('button[data-fun=seleccionar]').each(function(i,element){
+        element.addEventListener('click', function(ev){
+            var per = $('#periodos').val();
+            var categoriaIndicadores = $('#form-select').find('select[name=categoriaSelect]').val();
 
-			var array = Array();
-			let elth;
-			$('#item-posicion').find('.posiciones[data-tipo='+categoriaIndicadores+'] ').each(function(i,element){
-				array[i] = $(element).data('update');
-				if(i==0){elth = element;}
-			});
+            var array = Array();
+            let elth;
+            $('#item-posicion').find('.posiciones[data-tipo='+categoriaIndicadores+'] ').each(function(i,element){
+                array[i] = $(element).data('update');
+                if(i==0){elth = element;}
+            });
 
-			if(array.length > 0)
-			{
-				var pos = array[0];
-				var desem = ev.currentTarget.dataset.id;
+            if(array.length > 0)
+            {
+                var pos = array[0];
+                var desem = ev.currentTarget.dataset.id;
 
-				var dataString = 'grado='+ idGrado + '&grupo='+ idGrupo + '&asignatura='+ idAsig + '&periodo='+ per + '&posicion='+ pos+ '&cod_desemp='+ desem;
-				$.ajax({
-					method: "POST",
-					url: "/Performance/storeRelation/",
-					data: dataString
-				})
-				.done(function(datos) {
+                var dataString = 'grado='+ idGrado + '&grupo='+ idGrupo + '&asignatura='+ idAsig + '&periodo='+ per + '&posicion='+ pos+ '&cod_desemp='+ desem;
+                $.ajax({
+                    method: "POST",
+                    url: "/Performance/storeRelation/",
+                    data: dataString
+                })
+                .done(function(datos) {
 
-					$(elth).append(desem);
-					$(elth).removeClass('posiciones');
-					$(elth).append('<span class="delete-pos" data-pos="'+pos+'" data-desemp="'+desem+'" data-grup="'+idGrupo+'" data-asign="'+idAsig+'"> <i class="fa fa-trash" aria-hidden="true"></i></span>');
-					console.log("Grado:"+idGrado+"gru: "+idGrupo+" asig:"+idAsig);
-					$(elth).addClass('pos-hover');
-					$(elth).find('.delete-pos')[0].addEventListener("click", posicionesClick);
+                    $(elth).append(desem);
+                    $(elth).removeClass('posiciones');
+                    $(elth).append('<span class="delete-pos" data-pos="'+pos+'" data-desemp="'+desem+'" data-grup="'+idGrupo+'" data-asign="'+idAsig+'"> <i class="fa fa-trash" aria-hidden="true"></i></span>');
+                    console.log("Grado:"+idGrado+"gru: "+idGrupo+" asig:"+idAsig);
+                    $(elth).addClass('pos-hover');
+                    $(elth).find('.delete-pos')[0].addEventListener("click", posicionesClick);
 
 
 
-				});
+                });
 
-			}
-		});
-	});
+            }
+        });
+    });
 
-	$("body").on( "click", function() {
-		$("body").css('padding-right','10px');
-	});
+    $("body").on( "click", function() {
+        $("body").css('padding-right','10px');
+    });
 }
 
 function getValuesGrupos(idEstudiante, desempenoGrupo){
-	var inputPorcentajes = getInputsDesempeno(idEstudiante, desempenoGrupo )[0];
-	return parseFloat(inputPorcentajes.value);
+    var inputPorcentajes = getInputsDesempeno(idEstudiante, desempenoGrupo )[0];
+    return parseFloat(inputPorcentajes.value);
 }
 
 function getInputsDesempeno(idEstudiante, desempeno){
-	var inputsDesem = $('tr[id='+idEstudiante+']').find('input[data-desemp='+desempeno+']');	 
-	return inputsDesem;
+    var inputsDesem = $('tr[id='+idEstudiante+']').find('input[data-desemp='+desempeno+']');     
+    return inputsDesem;
 }
 
 function getInputsLista(idEstudiante, lista){
-	var inputsDesem = $('tr[id='+idEstudiante+']').find('input[data-grupo='+lista+']');	 	
-	return inputsDesem;
+    var inputsDesem = $('tr[id='+idEstudiante+']').find('input[data-grupo='+lista+']');     
+    return inputsDesem;
 }
 
 function promedio(objetosInputs, valorMinimo, valorMaximo){

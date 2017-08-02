@@ -39,8 +39,17 @@
 								<label for="">PERIODO</label>
 								<select name="" id="periodos" class="form-control">
 									<option selected value="0">SELECCIONAR PERIODO</option>
-									<option  value="1">Periodo 1</option>
-								</select>
+                                    <?php
+
+                                    foreach ($periodos as $key => $value) {
+                                        if($value['periodos']==1){
+                                            echo '<option value="'.$value['periodos'].'">Periodo '.$value['periodos'].'</option>';
+                                        }else{
+                                            echo '<option value="'.$value['periodos'].'">Periodo '.$value['periodos'].'</option>';
+                                        }
+                                    }
+                                    ?>
+                                </select>
 							</div>
 						</form>
 
@@ -55,7 +64,7 @@
 							<a href="#" id="btn-down" class="medio-vertical btn btn-default btn-xs"><i class="fa fa-chevron-down" aria-hidden="true"></i></a>
 							<a href="#" id="btn-left" class="medio-horinzontal btn btn-default btn-xs"><i class="fa fa-chevron-left" aria-hidden="true"></i></a>
 							<a href="#" id="btn-right" class="medio-horinzontal btn btn-default btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i></a>
-							<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.css">
+							<!-- <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.css"> -->
 						</div>
 					</div>
 					<div class="col-lg-4">
@@ -69,7 +78,7 @@
 							</button>
 						-->
 
-						<a href="http://agora.net.co/grid_t_grupos/" id="" type="button"  class="btn btn-danger">
+						<a href="/teacher" id="" type="button"  class="btn btn-danger">
 							Salir
 						</a>
 					</div>
@@ -92,7 +101,17 @@
 </div>
 
 <!--  -->
-<div id="contenedorTabla" class="row row-table"></div> 
+<div id="" class="row row-table">
+	<div class="col-md-12">
+		<div class="panel panel-default">
+			<div class="panel-body" >
+				<div class="table-responsive" id="contenedorTabla">
+					
+				</div>
+			</div>
+		</div>
+	</div>
+</div> 
 
 
 <!--  -->
@@ -334,9 +353,9 @@
 
 									foreach ($periodos as $key => $value) {
 										if($value['periodos']==1){
-											echo '<option value="'.$value['periodos'].'" selected>Periodo '.$value['periodos'].'</option>';
+											echo '<option value="'.$value['periodos'].'" selected>'.$value['periodos'].'</option>';
 										}else{
-											echo '<option value="'.$value['periodos'].'">Periodo '.$value['periodos'].'</option>';
+											echo '<option value="'.$value['periodos'].'">'.$value['periodos'].'</option>';
 										}								
 									}
 									?>	
@@ -439,7 +458,7 @@
 
 										foreach ($periodos as $key => $value) {
 
-											echo '<option value="'.$value['periodos'].'">Periodo '.$value['periodos'].'</option>';
+											echo '<option value="'.$value['periodos'].'">'.$value['periodos'].'</option>';
 
 										}
 										?>

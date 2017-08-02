@@ -18,14 +18,14 @@
 							<th rowspan="2">afa</th>
 							<th rowspan="2"> <span data-toggle="tooltip" data-placement="top" title="INASISTENCIA">FAA</span></th>
 
-							<th colspan="5">DESEMPEÑO COGNITIVO</th>
+							<th colspan="5"><?php echo $porcentajes['etiqueta_grupo_1'] ?></th>
 
 							<th rowspan="2" ><?=$porcentajes['porcentaje_grupo1']; ?>%</th>
 
-							<th colspan="3" >DESEMPEÑO PERSONAL</th>			
+							<th colspan="3" ><?php echo $porcentajes['etiqueta_grupo_2'] ?></th>			
 							<th rowspan="2"><?=$porcentajes['porcentaje_grupo2']?>%</th>
 
-							<th colspan="3" >DESEMPEÑO SOCIAL</th>			
+							<th colspan="3" ><?php echo $porcentajes['etiqueta_grupo_3'] ?></th>			
 							<th rowspan="2"><?=$porcentajes['porcentaje_grupo3']?>%
 
 							</th>
@@ -118,66 +118,66 @@
 							</td>
 
 							<td >
-								<input data-id="<?=$row['id_estudiante']?>" name="inasistencia_p1" data-cont="<?=$cont++;?>" step="1.0"  type="text"  class="form-control"   value="<?=$row['inasistencia_p1']?>"> 
+								<input data-id="<?=$row['id_estudiante']?>" name="inasistencia_<?=$p;?>" data-cont="<?=$cont++;?>" step="1.0"  type="text"  class="form-control"   value="<?=$row['inasistencia_'.$p]?>">
 							</td>       
 							<td>
-								<input data-id="<?=$row['id_estudiante']?>" data-desemp="dc" name="dc1"  data-cont="<?=$cont++;?>" step="0.1" type="text" class="form-control " value="<?=$row['dc1']?>">                 
+								<input data-id="<?=$row['id_estudiante']?>" data-desemp="dc" name="dc1_<?=$p;?>"  data-cont="<?=$cont++;?>" step="0.1" type="text" class="form-control " value="<?=$row['dc1_'.$p]?>">
 							</td>
 							<td>
-								<input data-id="<?=$row['id_estudiante']?>" data-desemp="dc" name="dc2" data-cont="<?=$cont++;?>" step="0.1"   type="text"  class="form-control"    value="<?=$row['dc2']?>">                
+								<input data-id="<?=$row['id_estudiante']?>" data-desemp="dc" name="dc2_<?=$p;?>" data-cont="<?=$cont++;?>" step="0.1"   type="text"  class="form-control"    value="<?=$row['dc2_'.$p]?>">
 							</td>
 
 							<td>              
-								<input data-id="<?=$row['id_estudiante']?>" data-desemp="dc" name="dc3" data-cont="<?=$cont++;?>" step="0.1"   type="text"  class="form-control" placeholder=""
-								value="<?=$row['dc3']?>">  
+								<input data-id="<?=$row['id_estudiante']?>" data-desemp="dc" name="dc3_<?=$p;?>" data-cont="<?=$cont++;?>" step="0.1"   type="text"  class="form-control" placeholder=""
+								value="<?=$row['dc3_'.$p]?>">
 
 							</td>
 							<td>
-								<input data-id="<?=$row['id_estudiante']?>" data-desemp="dc" name="dc4" data-cont="<?=$cont++;?>" step="0.1"   type="text"  class="form-control"   value="<?=$row['dc4']?>">                
+								<input data-id="<?=$row['id_estudiante']?>" data-desemp="dc" name="dc4_<?=$p;?>" data-cont="<?=$cont++;?>" step="0.1"   type="text"  class="form-control"   value="<?=$row['dc4_'.$p]?>">
 							</td>
 							<td>
-								<input data-id="<?=$row['id_estudiante']?>" data-desemp="dc" name="dc5" data-cont="<?=$cont++;?>" step="0.1"   type="text"   class="form-control"   value="<?=$row['dc5']?>">               
+								<input data-id="<?=$row['id_estudiante']?>" data-desemp="dc" name="dc5_<?=$p;?>" data-cont="<?=$cont++;?>" step="0.1"   type="text"   class="form-control"   value="<?=$row['dc5_'.$p]?>">
 							</td>
 							<td>  
 
-								<input data-id="<?=$row['id_estudiante']?>" data-desemp="grupodc" name="pcent_dc" data-grupo="lista" type="number" step="0.1"   type="text"  class="form-control input-sin-borde" readonly disabled   value="<?=$row['pcent_dc']?>">  
+								<input data-id="<?=$row['id_estudiante']?>" data-desemp="grupodc" name="pcent_dc_<?=$p;?>" data-grupo="lista" type="number" step="0.1"   type="text"  class="form-control input-sin-borde" readonly disabled   value="<?=$row['pcent_dc_'.$p]?>">
 
 
 							</td>
 							<td>  
-								<input data-id="<?=$row['id_estudiante']?>" data-desemp="dp" name="dp1" data-cont="<?=$cont++;?>" step="0.1"   type="text"  class="form-control"   value="<?=$row['dp1']?>">                
+								<input data-id="<?=$row['id_estudiante']?>" data-desemp="dp" name="dp1_<?=$p;?>" data-cont="<?=$cont++;?>" step="0.1"   type="text"  class="form-control"   value="<?=$row['dp1_'.$p]?>">
 							</td>
 							<td>
-								<input data-id="<?=$row['id_estudiante']?>" data-desemp="dp" name="dp2" data-cont="<?=$cont++;?>" step="0.1"   type="text"  class="form-control"   value="<?=$row['dp2']?>">                
+								<input data-id="<?=$row['id_estudiante']?>" data-desemp="dp" name="dp2_<?=$p;?>" data-cont="<?=$cont++;?>" step="0.1"   type="text"  class="form-control"   value="<?=$row['dp2_'.$p]?>">
 							</td>
 							<td>
-								<input data-id="<?=$row['id_estudiante']?>" data-desemp="dp" name="dp3" data-cont="<?=$cont++;?>" step="0.1"   type="text"  class="form-control"   value="<?=$row['dp3']?>">                
+								<input data-id="<?=$row['id_estudiante']?>" data-desemp="dp" name="dp3_<?=$p;?>" data-cont="<?=$cont++;?>" step="0.1"   type="text"  class="form-control"   value="<?=$row['dp3_'.$p]?>">
 							</td>
 							<td>
-								<input data-id="<?=$row['id_estudiante']?>" data-desemp="grupodp"  name="pcent_dp" data-grupo="lista"  type="number" class="form-control input-sin-borde" readonly disabled   value="<?=$row['pcent_dp']?>">  
+								<input data-id="<?=$row['id_estudiante']?>" data-desemp="grupodp"  name="pcent_dp_<?=$p;?>" data-grupo="lista"  type="number" class="form-control input-sin-borde" readonly disabled   value="<?=$row['pcent_dp_'.$p]?>">
 
 							</td>
 							<td>
-								<input data-id="<?=$row['id_estudiante']?>" data-desemp="ds" name="ds1" data-cont="<?=$cont++;?>" step="0.1"   type="text"  class="form-control"  value="<?=$row['ds1']?>">               
+								<input data-id="<?=$row['id_estudiante']?>" data-desemp="ds" name="ds1_<?=$p;?>" data-cont="<?=$cont++;?>" step="0.1"   type="text"  class="form-control"  value="<?=$row['ds1_'.$p]?>">
 							</td>
 							<td>
-								<input data-id="<?=$row['id_estudiante']?>" data-desemp="ds" name="ds2" data-cont="<?=$cont++;?>" step="0.1"   type="text"  class="form-control"  value="<?=$row['ds2']?>">               
+								<input data-id="<?=$row['id_estudiante']?>" data-desemp="ds" name="ds2_<?=$p;?>" data-cont="<?=$cont++;?>" step="0.1"   type="text"  class="form-control"  value="<?=$row['ds2_'.$p]?>">
 							</td>
 							<td>
-								<input data-id="<?=$row['id_estudiante']?>" data-desemp="ds" name="ds3" data-cont="<?=$cont++;?>" step="0.1"   type="text"  class="form-control" value="<?=$row['ds3']?>">                 
+								<input data-id="<?=$row['id_estudiante']?>" data-desemp="ds" name="ds3_<?=$p;?>" data-cont="<?=$cont++;?>" step="0.1"   type="text"  class="form-control" value="<?=$row['ds3_'.$p]?>">
 							</td>
 							<td>
-								<input data-id="<?=$row['id_estudiante']?>" data-desemp="grupods" name="pcent_ds" data-grupo="lista" type="number" class="form-control input-sin-borde" readonly disabled   value="<?=$row['pcent_ds']?>">     
+								<input data-id="<?=$row['id_estudiante']?>" data-desemp="grupods" name="pcent_ds_<?=$p;?>" data-grupo="lista" type="number" class="form-control input-sin-borde" readonly disabled   value="<?=$row['pcent_ds_'.$p]?>">
 
 							</td>
 							<td>
-								<input data-id="<?=$row['id_estudiante']?>" data-desemp="da" name="aeep1" data-cont="<?=$cont++;?>" step="0.1"   type="text"  class="form-control"  value="<?=$row['aeep1']?>">                
+								<input data-id="<?=$row['id_estudiante']?>" data-desemp="da" name="aeep_<?=$p;?>" data-cont="<?=$cont++;?>" step="0.1"   type="text"  class="form-control"  value="<?=$row['aeep_'.$p]?>">
 							</td>
 							<td>
-								<input data-id="<?=$row['id_estudiante']?>" data-desemp="grupoda" data-p="pae" data-grupo="lista" name="porcent_aeep1" type="text" class="form-control input-sin-borde" readonly disabled   value="<?=$row['porcent_aeep1']?>">					              
+								<input data-id="<?=$row['id_estudiante']?>" data-desemp="grupoda" data-p="pae" data-grupo="lista" name="porcent_aeep_<?=$p;?>" type="text" class="form-control input-sin-borde" readonly disabled   value="<?=$row['porcent_aeep_'.$p]?>">
 							</td>
 							<td>
-								<input data-id="<?=$row['id_estudiante']?>" data-desemp="periodo" name="eval_1_per" step="0.1" type="text" class="form-control input-sin-borde" readonly disabled   value="<?=$row['eval_1_per']?>">
+								<input data-id="<?=$row['id_estudiante']?>" data-desemp="periodo" name="eval_<?=$p;?>_per" step="0.1" type="text" class="form-control input-sin-borde" readonly disabled   value="<?=$row['eval_'.$p.'_per']?>">
 
 							</td>
 

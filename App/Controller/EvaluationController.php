@@ -51,6 +51,9 @@ class EvaluationController
 		// obtenerDatos	
 		$datosTitulos = $this->_group->groupAndAsign($id_asignature, $id_group);
 
+        $id_grade = $this->_group->getGradeByGroup($id_group)['data'][0]['id_grado'];
+		$type_asignature = $this->_asignature->getTypeAsignature($id_asignature,$id_grade)['data'][0]['tipo_asig'];
+
 
 		if($datosTitulos['state']):
 
@@ -63,6 +66,9 @@ class EvaluationController
 			$asignaturas = $this->_asignature->all()['data'];
 			$criterios = $this->_performance->getCriterions()['data'];
 			$categorias = $this->_performance->allCategories()['data'];
+
+            if($id_grade <= 4 || $type_asignature == "C")
+                $result_porcentajes[0]['porcentaje_grupo1']=100;
 
 			$view = new View(
 				'teacher/partials/evaluation/evaluatedPeriod', 
@@ -78,6 +84,7 @@ class EvaluationController
                     'expresiones' => $expresiones['data'][0],
 					'asignatura'=>$id_asignature, 
 					'asignaturas' => $asignaturas, 
+					'database' => Session::get('db'),
 					'porcentajes' => $result_porcentajes[0] , 
 					'grado' => $id_grado, 
                     'porcentajeDefinidos' => $porcentajeDefinidos			
@@ -94,48 +101,58 @@ class EvaluationController
 	*/
 	public function evaluateGroupRenderAction($period, $id_asignature, $id_group)
 	{
-		
+
 		$resultado = $this->_evaluation->getEvaluation($id_group, $id_asignature);
-		
+
 
 		if($resultado['state']):
 
-			$result_porcentajes = $this->_performance->getPercentage()['data'];	
+			$result_porcentajes = $this->_performance->getPercentage()['data'];
 			$criterios = $this->_performance->getCriterions()['data'];
 			$codigos = $this->_performance->getCodes($id_group, $id_asignature, $period)['data'];
+			$id_grade = $this->_group->getGradeByGroup($id_group)['data'][0]['id_grado'];
+			$type_asignature = $this->_asignature->getTypeAsignature($id_asignature,$id_grade)['data'][0]['tipo_asig'];
 
 			$modelo ='';
 			if(Session::get('db') == 'agoranet_ieag')
 				$modelo = 'modelo_a';
 			
-			else if(Session::get('db') == 'agoranet_ipec' || Session::get('db') == 'agoranet_cabal' || Session::get('db') == 'agoranet_jrbejarano' )
+			else if(Session::get('db') == 'agoranet_ipec' || Session::get('db') == 'agoranet_cabal'
+                || Session::get('db') == 'agoranet_jrbejarano' || Session::get('db') == 'agoranet_iensjl' )
 				$modelo = 'modelo_b';
 			
-			else if(Session::get('db') == 'agoranet_iean')
+			else if(Session::get('db') == 'agoranet_iean' )
 				$modelo = 'modelo_c';				
 			
 			else if(Session::get('db') == 'agoranet_simonb' ||Session::get('db') == 'agoranet_liceo' )
 				$modelo = 'modelo_d';				
 			
-            else if(Session::get('db') == 'agoranet_termarit'  )
+            else if(Session::get('db') == 'agoranet_termarit' || Session::get('db') == 'agoranet_iesr' || Session::get('db') == 'agoranet_litoral'
+				   || Session::get('db') == 'agoranet_comfamar')
             	$modelo = 'modelo_e';
-            
 
             else if(Session::get('db') == 'agoranet_jjrondon' || Session::get('db') == 'agoranet_itigvc')
             	$modelo = 'modelo_f';
-            
+
+            if($id_grade <= 4 || $type_asignature == "C")
+                $modelo = 'modelo_z';
+
             $view = new View(
             	'teacher/partials/evaluation/evaluatedPeriod/'.$modelo,
             	'render',
 				[
-					'datos'=>$resultado['data'], 
-					'porcentajes' => $result_porcentajes[0], 
 					'codigos' => $codigos, 
+                    'p'        =>$period,
+					'criterios' =>$criterios,
+					'datos'=>$resultado['data'], 
+					'id_asignature'	=> $id_asignature,
 					'baseDatos' => Session::get('db'),
-					'criterios' =>$criterios
+					'porcentajes' => $result_porcentajes[0]
 				]
 			);
 			$view->execute();
+
+
 		endif;
 	}
 

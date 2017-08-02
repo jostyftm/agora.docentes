@@ -35,5 +35,128 @@ class AsignatureController
 			echo '<option value=0>No hay Resultados</option>';
 		endif;
 	}
+
+	/**
+	*
+	*
+	*/
+	public function indexObservationsAction($id_student, $id_asignature, $period)
+	{
+
+		$view = new View(
+			'teacher/partials/evaluation/evaluatedPeriod/asignatureObservations',
+			'home',
+			[
+				'id_student'	=>	$id_student,
+				'id_asignature'	=>	$id_asignature,
+				'period'		=>	$period
+			]
+		);
+		$view->execute();
+	}
+
+	/**
+	*
+	*
+	*/
+	public function createObservationAction(){
+
+		if(!empty($_GET) && isset($_GET['id_student']) && isset($_GET['id_asignature'])):
+
+			$view = new View(
+				$_GET['rol'].'/partials/evaluation/evaluatedPeriod/asignatureObservations',
+				'create',
+				[
+					'id_student'	=>	$_GET['id_student'],
+					'id_asignature'	=>	$_GET['id_asignature'],
+					'period'	=>	$_GET['period']
+				]
+			);
+			$view->execute();
+
+		endif;
+	}
+
+
+	/**
+	*
+	*
+	*/
+	public function storeObservationsAction()
+	{	
+		// sleep(3);
+		// echo json_encode(array('pre' => 'pro'));
+		if(!empty($_POST)):
+			echo json_encode($this->_asignature->saveObservation($_POST));
+		endif;
+	}
+
+	/**
+	*
+	*
+	*/
+	public function editObservationAction($id_observation)
+	{
+		$observation = $this->_asignature->finObservation($id_observation)['data'][0];
+
+		$view = new View(
+			$_GET['rol'].'/partials/evaluation/evaluatedPeriod/asignatureObservations',
+			'edit',
+			[
+				'observation'	=>	$observation
+			]
+		);
+		$view->execute();
+	}
+
+	/**
+	*
+	*
+	*/
+	public function updateObservationAction()
+	{
+		if(!empty($_POST)):
+
+			echo json_encode(
+				$this->_asignature->updaeObservation(
+					$_POST['id_observation'],
+					$_POST['observation']
+				)
+			);
+
+		endif;
+	}
+
+	/**
+	*
+	*
+	*/
+	public function deleteObservationAction()
+	{
+
+		if(!empty($_POST)):
+
+			echo json_encode(
+				$this->_asignature->deleteObservation($_POST['id_observation'])
+			);
+
+		endif;
+	}
+
+	/**
+	*
+	*
+	*/
+	public function getObservationByStudentJSONAction($id_student, $id_asignature, $period){
+
+		// sleep(5);
+		$resp = $this->_asignature->getObservationByStudent(
+					$id_student, 
+					$id_asignature,
+					$period
+				);
+
+		echo json_encode($resp);
+	}
 }
 ?>

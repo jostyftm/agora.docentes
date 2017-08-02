@@ -74,5 +74,12 @@ class GroupModel extends DB
 						WHERE id_grupo = {$id_group} AND id_asignatura = {$id_asignature}";
 		return	$this->getResultsFromQuery();
 	}
+
+	public function getGradeByGroup($id_group){
+        $this->query = "SELECT id_grado
+						FROM {$this->table}
+						WHERE id_grupo={$id_group}";
+        return $this->getResultsFromQuery();
+    }
 }
 ?>
