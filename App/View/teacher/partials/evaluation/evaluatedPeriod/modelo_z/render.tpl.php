@@ -17,7 +17,7 @@
 							<th rowspan="2">O.A.</th>
 							<th rowspan="2"> <span data-toggle="tooltip" data-placement="top" title="INASISTENCIA">FAA</span></th>
 
-							<th colspan="7"><?php echo $porcentajes['etiqueta_grupo_1'] ?> </th>
+							<th colspan="7"></th>
 							<th rowspan="2">VAL</th>
 
 						</tr>
@@ -85,7 +85,7 @@
 								<span> <?=$row['novedad']?></span>
 							</td>
 							<td>
-								<button data-student="<?= $estudiante?>" data-id="<?=$row['id_estudiante']?>" data-click="aggObsAsig" data-request="openModal" class="btn btn-primary btn-sm" title="Agregar Ovservacion en la Asignatura">
+								<button data-student="<?= $estudiante?>" data-id="<?=$row['id_estudiante']?>" data-click="aggObsAsig" data-request="openModal" class="btn btn-primary btn-sm" title="Agregar Observación en la Asignatura">
 			                    <i class="fa fa-user-plus" aria-hidden="true"></i>
 			                	</button>
 							</td>

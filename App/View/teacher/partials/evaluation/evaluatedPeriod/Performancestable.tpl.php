@@ -1,7 +1,7 @@
-<table id="table_id" class="display">
+<table id="table_id" class="cell-border" width="100%">
 	<thead>
 		<tr>
-			<th>Acciones</th>
+			<th>Seleccionar</th>
 			<th>Periodo</th>
 			<th>Codigo</th>
 			<th>Descripción</th>
@@ -13,14 +13,14 @@
 		foreach ($indicadores  as $clave => $row) {
 
 			?>
-			<tr>
-				<td width="200px">					
+			<tr class="rows-padding"  style="padding:2px">
+				<td width="200px" height="40px">					
 					<button data-id="<?=$row['codigo']?>" data-fun="seleccionar" type="button" class="btn btn-warning "  >
 						Seleccionar 
 					</button>						
 					
-					<a href="#" id="<?=$row['codigo']?>" class="btn btn-primary"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-					<a href="#" id="<?=$row['codigo']?>"  class="btn btn-success ntf"><i class="fa fa-check" aria-hidden="true"></i></a>					
+			<!--	<a href="#" id="<?=$row['codigo']?>" class="btn btn-primary"><i class="fa fa-pencil" aria-hidden="true"></i></a> -->
+			<!--	<a href="#" id="<?=$row['codigo']?>"  class="btn btn-success ntf"><i class="fa fa-check" aria-hidden="true"></i></a>-->
 
 				</td>
 				<td data-id="<?=$row['codigo']?>"><?=$row['periodos']?></td>			

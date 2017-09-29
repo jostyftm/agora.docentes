@@ -10,7 +10,12 @@
 	  		<div class="panel-body">
 		  		<div class="row">
 	            	<div class="col-md-8">
-	               	<h4><?php echo $asignature['asignatura']." | ".$group['nombre_grupo']; ?></h4>
+	               	<h4>
+	               		<?php echo $asignature['asignatura']." | ";
+
+	               			echo ($type == 'group') ? $group['nombre_grupo'] :  $group['nombre_subgrupo'];
+	               		?>	
+	               		</h4>
 	            	</div>
 	            	<div class="col-md-4">
 		               	<form action="">
@@ -23,8 +28,9 @@
 										<option value="<?= $period['periodos'] ?>">Periodo <?= $period['periodos'] ?></option>
 			                        <?php endforeach; ?>
 		                     	</select>
+		                     	<input type="hidden" name="type" id="type" value="<?= $type?>">
 		                     	<input type="hidden" name="id_asignature" id="asignature" value="<?php echo $asignature["id_asignatura"]; ?>">
-		                     	<input type="hidden" name="id_group" id="group" value="<?php echo $group["id_grupo"]; ?>">
+		                     	<input type="hidden" name="id_group" id="group" value="<?php echo ($type == 'group') ? $group["id_grupo"]: $group['id_subgrupo']; ?>">
 		                  	</div>
 		               	</form>
 	            	</div>
@@ -44,13 +50,14 @@
             console.log("Nada");
          }else{
          	var asignature = $("#asignature").val(),
-         		group = $("#group").val();
+         		group = $("#group").val(),
+         		type = $("#type").val();
             $.ajax({
 
                type: "GET",
                dataType: "html",
-               url: '/evaluation/getGroupRecoveryRender/'+this.value+'/'+group+'/'+asignature,
-
+               url: '/evaluation/getGroupRecoveryRender/'+this.value+'/'+group+'/'+asignature+'/'+type
+               ,
                success: function(data){
                   $('#contenedorTabla').empty().append(data);
                },

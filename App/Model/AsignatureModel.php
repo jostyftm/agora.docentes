@@ -39,6 +39,7 @@ class AsignatureModel extends DB
 	public function all()
 	{
 		$this->query = "SELECT * FROM {$this->table}";
+
 		return $this->getResultsFromQuery();
 	}
 	
@@ -78,7 +79,7 @@ class AsignatureModel extends DB
 		$this->query = "INSERT INTO {$this->table_observation}
 						(id_asignatura, id_estudiante, periodo, observacion)
 						VALUES
-						({$data['id_asignature']}, {$data['id_student']}, {$data['period']}, '{$data["observation"]}')";
+						({$data['id_asignature']}, 3166841704, {$data['period']}, '{$data["observation"]}')";
 
 		return $this->executeQuerySingle();
 	}
@@ -124,10 +125,19 @@ class AsignatureModel extends DB
 
 		return $this->getResultsFromQuery();
 	}
+	
 	public function getTypeAsignature($id_asignature, $id_grado)
     {
-        $this->table = "t_asignatura_x_area";
-        $this->query = "SELECT tipo_asig FROM {$this->table} WHERE id_asignatura='{$id_asignature}' and id_grado='{$id_grado}' ";
+        // $this->table = "t_asignatura_x_area";
+        $this->query = "SELECT tipo_asig FROM t_asignatura_x_area WHERE id_asignatura='{$id_asignature}' and id_grado='{$id_grado}' ";
+        return $this->getResultsFromQuery();
+    }
+
+    public function getIdAreaByIdAsignatura($id_asignature, $id_grado){
+        
+        // $this->table = "t_asignatura_x_area";
+        $this->query = "SELECT id_area FROM t_asignatura_x_area WHERE id_asignatura='{$id_asignature}' and id_grado='{$id_grado}' lIMIT 1";
+
         return $this->getResultsFromQuery();
     }
 }

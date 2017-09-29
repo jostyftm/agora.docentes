@@ -1,15 +1,19 @@
 <div class="row" >
 	<div class="col-md-12 content">
 		<div class="panel panel-default">
-			<div class="panel-heading">
-				<h3 class="panel-title">
+			<div class="panel-heading clearfix">
+				<h3 class="panel-title pull-left">
 					<i class="fa fa-info-circle" aria-hidden="true"></i>
 					Fecha 
 					<?php 
 					date_default_timezone_set("America/Bogota");
 					echo date("Y-m-d"); 
-					?> 
+					?> 						
 				</h3> 
+				<a href="/teacher" id="" type="button"  class="btn btn-primary pull-right">
+							Atrás
+						</a>
+				
 			</div>
 			<div class="panel-body">
 				<div class="row">
@@ -17,7 +21,11 @@
 						Asignatura: <p><?=$titulos['asignatura'];?></p>
 					</div>
 					<div class="col-lg-4">
-						Grupo:<p> <?=$titulos['nombre_grupo'];?></p>
+						Grupo:
+						<p> <?php
+							echo ($groupType == 'group') ? $titulos['nombre_grupo'] : $titulos['nombre_subgrupo'] ; ?>
+							
+						</p>
 					</div>
 					<div class="col-lg-4">
 						<form action="">
@@ -58,7 +66,7 @@
 			</div>
 			<div class="panel-footer">
 				<div class="row">
-					<div class="col-lg-4">
+					<div class="col-lg-3">
 						<div id="content-control" class="control-desp hidden">
 							<a href="#" id="btn-up" class="medio-vertical btn btn-default btn-xs"><i class="fa fa-chevron-up" aria-hidden="true"></i></a>
 							<a href="#" id="btn-down" class="medio-vertical btn btn-default btn-xs"><i class="fa fa-chevron-down" aria-hidden="true"></i></a>
@@ -68,30 +76,32 @@
 						</div>
 					</div>
 					<div class="col-lg-4">
-						<div class="titles-center">
-							<button id="button-desempeno" type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal" disabled >
-								Configurar Desempeño
+						<div  style="text-align:right">
+							<button id="button-desempeno" type="button" class="btn btn-warning" data-toggle="modal" data-target="#myModal" disabled >
+								<i class="fa fa-pencil-square-o" aria-hidden="true"></i> Configurar Desempeño
 							</button>
 							<!--
-							<button id="button-criterios" type="button" data-toggle="modal" data-target="#modal-critetios" class="btn btn-warning">
+							<button id="button-criterios" type="button" data-toggle="modal" data-target="#modal-critetios" class="btn btn-default">
 								Configurar Criterios
 							</button>
 						-->
 
-						<a href="http://docentes.agora.net.co/teacher" id="" type="button"  class="btn btn-danger">
-							Salir
-						</a>
+						
 					</div>
 				</div>
-				<div class="col-lg-4">
-					<div class="titles-center">
-						<!--
-							<button type="button" class="btn btn-danger">Salir</button>
-							<button type="button" class="btn btn-default">PDF</button>
-							<button type="button" class="btn btn-default">
-								<i class="fa fa-print" aria-hidden="true"></i>
-							</button>
-						-->
+				<div class="col-lg-5">
+					<div style="text-align:right">
+						<div id="divFechasPeriodos">
+                            <?php
+                            foreach($periodos as $key => $value){
+                                $apertura = $value['apertura'];
+                                $cierre = $value['cierre'];
+                                $period = $value['periodos'];
+                                echo "<div id=inputPeriodo_".$period." class='hidden'><b>Fecha Apertura:</b> ".$apertura." | <b>Fecha Cierre:</b>
+									".$cierre." </div>";
+                            }
+                            ?>
+                        </div>
 					</div>
 				</div>
 			</div>
@@ -118,7 +128,7 @@
 <input type="hidden" id="gradoDB" value="<?=$grado; ?>">
 <input type="hidden" id="grupoDB" value="<?php echo $grupo ?>">
 <input type="hidden" id="asignaturaDB" value="<?php echo $asignatura ?>">
-<input type="hidden" id="databaseDB" value="<?php echo $database?>">
+<input type="hidden" id="groupType" value="<?= $groupType?>">
 <input type="hidden" id="minimo" value="<?php echo $valoracion[1]['minimo'] ?>">
 <input type="hidden" id="maximo" value="<?php echo $valoracion[3]['maximo'] ?>">
 
@@ -137,6 +147,7 @@
 
 <!--  -->
 <input type="hidden" id="url" value="<?php echo $_GET['url'];?>">
+<input type="hidden" id="inputIdArea" value="<?=$id_area[0]['id_area']?>">
 
 <!-- MODAL PARA CONFIGURAR CRITERIOS FIJOS-->
 <div class="modal fade" role="dialog" tabindex="-1" role="dialog" id="modal-critetios">
@@ -264,6 +275,8 @@
 </div>
 
 <!-- FIN MODAL CRITERIOS-->
+
+
 <div id="myModal" class="modal fade" role="dialog">
 	<div class="modal-dialog modal-lg">
 
@@ -279,7 +292,7 @@
 						<div class="col-lg-3">
 							<div class="form-group">
 								<label for="">ASIGNATURA</label>
-								<select name="asignaturaSelect" id="" class="form-control">
+								<select name="asignaturaSelect" id="asignaturaDesempeno" class="form-control">
 									<option selected value="0">Selecciona una Asignatura</option>
 
 									<?php
@@ -289,8 +302,7 @@
 											echo '<option value="'.$value['id_asignatura'].'" selected>'.$value['asignatura'].'</option>';
 										}else{
 											echo '<option value="'.$value['id_asignatura'].'">'.$value['asignatura'].'</option>';
-										}											
-
+										}
 									}
 									?>	
 									<option value="-1">TODOS</option>																		
@@ -302,17 +314,15 @@
 						<div class="col-lg-3">
 							<div class="form-group">
 								<label for="">GRADO</label>
-								<select name="gradoSelect" id="" class="form-control">
+								<select name="gradoSelect" id="gradoDesempeno" class="form-control">
 									<option selected value="0">Selecciona un Grado</option>
 									<?php
-
 									foreach ($grados as $key => $value) {
 										if($value['id_grado']==$grado){
 											echo '<option value="'.$value['id_grado'].'" selected>'.$value['grado'].'</option>';
 										}else{
 											echo '<option value="'.$value['id_grado'].'">'.$value['grado'].'</option>';
-										}											
-
+										}
 									}
 									?>	
 									<option value="-1">TODOS</option>												
@@ -320,21 +330,14 @@
 							</div>
 
 						</div>
-
 						<div class="col-lg-3">
 							<div class="form-group">
 								<label for="">CATEGORIA</label>
-								<select name="categoriaSelect" id="" class="form-control">
-									<option selected value="0">Selecciona un Categoria</option>
+								<select name="categoriaSelect" id="categoriaDesempeno" class="form-control">
 									<?php
 
 									foreach ($categorias as $key => $value) {
-										if($value['id_saber_chs']==1){
-											echo '<option value="'.$value['id_saber_chs'].'" selected>'.$value['saber'].'</option>';
-										}else{
 											echo '<option value="'.$value['id_saber_chs'].'">'.$value['saber'].'</option>';
-										}											
-
 									}
 
 									?>	
@@ -346,17 +349,13 @@
 
 						<div class="col-lg-3">									
 							<div class="form-group">
-								<label for="">Periodo</label>
-								<select name="periodoSelect" id="periodos" class="form-control">
+								<label for="">Periodo</label>ddd
+								<select name="periodoSelect" id="periodosDesempeno" class="form-control">
 									<option selected value="0">Selecciona un Periodo</option>
 									<?php
 
 									foreach ($periodos as $key => $value) {
-										if($value['periodos']==1){
-											echo '<option value="'.$value['periodos'].'" selected>'.$value['periodos'].'</option>';
-										}else{
 											echo '<option value="'.$value['periodos'].'">'.$value['periodos'].'</option>';
-										}								
 									}
 									?>	
 									<option value="-1">TODOS</option>
@@ -417,8 +416,12 @@
 										<?php
 
 										foreach ($grados as $key => $value) {
+                                            if($value['id_grado'] == $grado){
+                                                echo '<option value="'.$value['id_grado'].'" selected>'.$value['grado'].'</option>';
+                                            }else{
+                                                echo '<option value="'.$value['id_grado'].'">'.$value['grado'].'</option>';
+                                            }
 
-											echo '<option value="'.$value['id_grado'].'">'.$value['grado'].'</option>';												
 
 										}
 										?>
@@ -455,11 +458,8 @@
 									<select name="periodoInsertar" id="periodoInsertar" required class="form-control">
 
 										<?php
-
 										foreach ($periodos as $key => $value) {
-
 											echo '<option value="'.$value['periodos'].'">'.$value['periodos'].'</option>';
-
 										}
 										?>
 
@@ -494,7 +494,10 @@
 							<div class="col-lg-4">
 								<br>
 								<input type="submit" type="button" id="btn-guardar-desemp"  class="btn btn-success" value="GUARDAR">
-								<button type="button"  id="btn-cancelar" class="btn btn-default" data-dismiss="modal"> CANCELAR</button>
+								<button type="button"  id="btn-cancelar" class="btn btn-primary" > Atrás</button>
+								<label class="radio-inline">
+									<input type="checkbox" id="idCheckCopy" name=""> Desactivar auto-copiado.
+								</label>
 								<br>
 							</div>
 							<div class="col-lg-8">

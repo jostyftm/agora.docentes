@@ -46,7 +46,7 @@ class GeneralObservationModel extends DB
 						(id_estudiante, id_grupo, id_periodo, id_director_grupo, observaciones)
 						VALUES 
 						({$data['id_student']}, {$data['id_group']}, {$data['id_period']}, {$data['id_group_director']},'{$data["observations"]}')";
-
+		
 		return $this->executeQuerySingle();
 	}
 

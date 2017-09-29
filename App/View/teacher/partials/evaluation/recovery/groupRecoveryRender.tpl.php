@@ -5,7 +5,9 @@
 				<th>N°</th>
 				<th>Apellidos y nombres estudiantes</th>
 				<th>Superación</th>
+				<th>Nota superacion</th>
 				<th>Periodo <?= $period;?></th>
+				<th>Observación</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -21,10 +23,42 @@
 						</div>
 					</td>
 					<td>
+						<?php
+							$nota_supe = 0;
+
+							if(!empty($respRecovery)):
+
+								foreach($respRecovery as $key => $recovery):
+
+									if($student['idstudents'] == $recovery['id_estudiante']):
+										$nota_supe = $recovery['nota'];
+									endif;
+
+								endforeach;
+
+							endif;
+						?>
 						<strong>
-							<span class="bold"><?= $student['periodo']?>
+							<span class="bold">
+								<?php
+									echo (strlen($nota_supe) == 1) ? $nota_supe.'.0' : $nota_supe
+								?>
 							</span>
 						</strong>
+					</td>
+					<td>
+						<strong>
+							<span class="bold">
+								<?php
+									echo (strlen($student['periodo']) == 1) ? $student['periodo'].'.0' : $student['periodo']
+								?>
+							</span>
+						</strong>
+					</td>
+					<td>
+						<a data-student="<?= $estudiante?>" data-id="<?=$row['id_estudiante']?>" data-click="aggObsAsig" data-request="openModal" class="btn btn-primary btn-sm" title="Agregar Observación en la Asignatura">
+							<i class="fa fa-user-plus"></i>
+						</a>
 					</td>
 				</tr>
 			<?php endforeach; ?>
@@ -56,7 +90,8 @@
         	var oldContent = $(this).attr('data-old'),
         		id_group = <?= $id_group?>.
         		id_asignature = <?= $id_asignature?>,
-        		period = <?= $period?>;
+        		period = <?= $period?>,
+        		typeGroup = "<?= $type ?>";
         	
         	this.select();
         	
@@ -74,7 +109,7 @@
 			         dataType: "json",
 			         url: '/evaluation/updateGroupRecovery',
 			         data:{
-			         	period, id_student,id_asignature,id_group, oldContent,newContent
+			         	period, id_student,id_asignature,id_group, oldContent,newContent, typeGroup
 			         },
 			         beforeSend: function(){
 			         	that.next().text("Guardando Cambios");
@@ -100,6 +135,7 @@
 			         			that.parent().addClass('has-error');
 			         	}
 
+			           	that.val('');
 			           	console.log(data);
 			         },
 			         error(xhr, estado){

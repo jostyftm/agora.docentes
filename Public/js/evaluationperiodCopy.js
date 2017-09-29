@@ -201,12 +201,9 @@ $(function() {
 
 						$('#item-posicion').find('th[data-estado="false"]').each(function (i, element) {
 
-							codDesemp = $(element)[0].innerText;
-							codDesemp = codDesemp.replace(/\s+/g,'');
-							if(codDesemp != '' || codDesemp != null || codDesemp != ' ')
-							{																
-								$('#table_id').find('button[data-id='+codDesemp+']').attr('disabled', true);
-							}
+										codDesemp = $(element)[0].innerText;							
+										if(codDesemp != '')
+											$('#table_id').find('button[data-id='+codDesemp+']').attr('disabled', true);								
 
 						});
 
@@ -245,12 +242,9 @@ $(function() {
 
 									$('#item-posicion').find('th[data-estado="false"]').each(function (i, element) {
 
-										codDesemp = $(element)[0].innerText;
-										codDesemp = codDesemp.replace(/\s+/g,'');
-										if(codDesemp != '' || codDesemp != null || codDesemp != ' ')
-										{																
-											$('#table_id').find('button[data-id='+codDesemp+']').attr('disabled', true);
-										}
+										codDesemp = $(element)[0].innerText;							
+										if(codDesemp != '')
+											$('#table_id').find('button[data-id='+codDesemp+']').attr('disabled', true);								
 
 									});
 									setSeleccionarDesemp(gradoDB, grupoDB, asignaturaDB, numPeriodo, databaseDB);
@@ -533,12 +527,9 @@ $(function() {
 
 			$('#item-posicion').find('th[data-estado="false"]').each(function (i, element) {
 							
-							codDesemp = $(element)[0].innerText;
-							codDesemp = codDesemp.replace(/\s+/g,'');
-							if(codDesemp != '' || codDesemp != null || codDesemp != ' ')
-							{																
-								$('#table_id').find('button[data-id='+codDesemp+']').attr('disabled', true);
-							}
+							codDesemp = $(element)[0].innerText;							
+							if(codDesemp != '')
+								$('#table_id').find('button[data-id='+codDesemp+']').attr('disabled', true);								
 								
 			});
 
@@ -587,12 +578,9 @@ $(function() {
                         });
 						$('#item-posicion').find('th[data-estado="false"]').each(function (i, element) {
 							
-							codDesemp = $(element)[0].innerText;
-							codDesemp = codDesemp.replace(/\s+/g,'');
-							if(codDesemp != '' || codDesemp != null || codDesemp != ' ')
-							{																
-								$('#table_id').find('button[data-id='+codDesemp+']').attr('disabled', true);
-							}
+							codDesemp = $(element)[0].innerText;							
+							if(codDesemp != '')
+								$('#table_id').find('button[data-id='+codDesemp+']').attr('disabled', true);								
 								
 						});
                         setSeleccionarDesemp(gradoDB, grupoDB, asignaturaDB, numPeriodo, databaseDB);
@@ -743,12 +731,8 @@ $(function() {
                     $('#item-posicion').find('th[data-estado="false"]').each(function (i, element) {
 
                         codDesemp = $(element)[0].innerText;
-						codDesemp = codDesemp.replace(/\s+/g,'');
-						if(codDesemp != '' || codDesemp != null || codDesemp != ' ')
-							{																
-								$('#table_id').find('button[data-id='+codDesemp+']').attr('disabled', true);
-							}
-                            
+                        if(codDesemp != '')
+                            $('#table_id').find('button[data-id='+codDesemp+']').attr('disabled', true);
 
                     });
                     setSeleccionarDesemp(gradoDB, grupoDB, asignaturaDB, numPeriodo, databaseDB);
@@ -761,11 +745,11 @@ $(function() {
 
 
             /** Muestra fecha de apertura y cierre del periodo seleccionado*/
-			 $('#divFechasPeriodos div:not(.hidden)').addClass('hidden');
+			$('#divFechasPeriodos div:not(.hidden)').addClass('hidden');
             $('#divFechasPeriodos #inputPeriodo_'+this.value).removeClass('hidden');
             $.ajax({
                 type: "GET",
-                url: '/Evaluation/evaluateGroupRender/' + this.value + '/' + id_asignature + '/' + id_group+'/'+ groupType,
+                url: '/Evaluation/evaluateGroupRender/' + this.value + '/' + id_asignature + '/' + id_group,
 
                 //Success
                 success: function (data) {
@@ -989,10 +973,11 @@ $(function() {
 		                                    url: "/Evaluation/updateAll",
 		                                    data: {
 		                                    	obj,
-                                                idEstudiante,
-                                                asignaturaDB,
+		                                    	idEstudiante,
+		                                    	asignaturaDB,
                                                 grupoDB,
                                                 groupType
+		                                    	
 		                                    },
 		                                    beforeSend: function(xhr){
 		                                    	//inputDisabled.prop('disabled', true);
@@ -1093,14 +1078,14 @@ $(function() {
                         input_id_student = $("#id_student");
                         // id_asignature = $("#id_asignature").val();
                     // CARGAR LA VISTA QUE CONTIEN LA TABLA
-                    var loadForm = function(){
+                    var loadTable = function(){
 
                         backModal.attr(
                             'data-id',
                             input_id_student.val()
                         );
 
-                        var url = "/Asignature/createObservation/"+input_id_student.val()+"/"+id_asignature+"/"+period;
+                        var url = "/Asignature/indexObservations/"+input_id_student.val()+"/"+id_asignature+"/"+period;
 
                         $.get(url, function(data){
                             modalAddObs.find('.modal-body').empty().append(data)
@@ -1132,7 +1117,7 @@ $(function() {
                         if(!backModal.hasClass('hide'))
                             backModal.addClass('hide');
 
-                        loadForm();
+                        loadTable();
                     })
 
                     // Eliminar Observacion
@@ -1309,5 +1294,3 @@ function promedio(objetosInputs, valorMinimo, valorMaximo){
     });
     return contador>0?(suma/contador).toFixed(2):0;
 }
-
-

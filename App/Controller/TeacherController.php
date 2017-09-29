@@ -97,7 +97,17 @@ class TeacherController
 	public function evaluationAction()
 	{	
 		if(Session::check('authenticated')):
-			$groupsAndAsign = $this->_teacher->getAsignaturesAndGroups($_SESSION['id_teacher'])['data'];
+
+			// 
+			$groups = $this->_teacher->getAsignaturesAndGroups(
+				$_SESSION['id_teacher']
+			)['data'];
+
+			// 
+			$subgroups = $this->_teacher->getAsignaturesAndSubGroups(
+				$_SESSION['id_teacher']
+			)['data'];
+
 			$teacher = $this->_teacher->find($_SESSION['id_teacher'])['data'][0];
 
 			// Creamos el subheader para los menus horizontal
@@ -135,13 +145,48 @@ class TeacherController
 					'tittle_panel'		=>	'',
 					'include'			=>	'partials/evaluation/home.tpl.php',
 					'subheader'			=>	$subheader,
-					'groupsAndAsign'	=>	$groupsAndAsign,
+					'groups'			=>	$groups,
+					'subgroups'			=>	$subgroups,
 					'institution'		=>	$_SESSION['institution'],
 					'teacher'			=>	$teacher
 				]
 			);
 
 			$view->execute();
+		endif;
+	}
+
+	/**
+	 *
+	 *	@param
+	 *  @return
+	*/ 
+	public function evaluateAction()
+	{
+		if(Session::check('authenticated')):
+
+			// 
+			$groups = $this->_teacher->getAsignaturesAndGroups(
+				$_SESSION['id_teacher']
+			)['data'];
+
+			// 
+			$subgroups = $this->_teacher->getAsignaturesAndSubGroups(
+				$_SESSION['id_teacher']
+			)['data'];
+
+			$view = new View(
+				'teacher/partials/evaluation',
+				'home',
+				[
+					'tittle_panel'		=>	'',
+					'groups'			=>	$groups,
+					'subgroups'			=>	$subgroups
+				]
+			);
+
+			$view->execute();
+
 		endif;
 	}
 
@@ -203,10 +248,11 @@ class TeacherController
 				'teacher',
 				'index',
 				[
-					'include'		=>	'construction.tpl.php',
+					'include'		=>	'partials/statistic/index.tpl.php',
 					'institution'	=>	$_SESSION['institution'],
 					'subheader'		=>	$subheader,
-					'teacher'		=>	$teacher
+					'teacher'		=>	$teacher,
+					'url'			=> 	'http://agora.net.co/estadisticas/Estadisticas/setIndex/'.Session::get('db'),
 				]
 			);
 			$view->execute();
@@ -416,41 +462,47 @@ class TeacherController
 		endif;
 	}
 
+	// /**
+	//  *
+	//  *	@param
+	//  *  @return
+	// */ 
+	// public function evaluateAction()
+	// {	
+
+	// 	$groupsAndAsign = $this->_teacher->getAsignaturesAndGroups($_SESSION['id_teacher'])['data'];
+
+	// 	$view = new View(
+	// 		'teacher/partials/evaluation',
+	// 		'home',
+	// 		[
+	// 			'tittle_panel'		=>	'Evaluar Periodo',
+	// 			'groupsAndAsign'	=>	$groupsAndAsign
+	// 		]
+	// 	);
+
+	// 	$view->execute();
+	// }
+
+
 	/**
 	 *
 	 *	@param
 	 *  @return
 	*/ 
-	public function evaluateAction()
-	{	
-
-		$groupsAndAsign = $this->_teacher->getAsignaturesAndGroups($_SESSION['id_teacher'])['data'];
-
-		$view = new View(
-			'teacher/partials/evaluation',
-			'home',
-			[
-				'tittle_panel'		=>	'Evaluar Periodo',
-				'groupsAndAsign'	=>	$groupsAndAsign
-			]
-		);
-
-		$view->execute();
-	}
-
-
-	/**
-	 *
-	 *	@param
-	 *  @return
-	*/ 
-	public function showFormEvaluatePeriodAction()
+	public function showFormEvaluatePeriodAction($groupType = 'group')
 	{
 		// Validamos la peticion GET
 		if(isset($_GET['options']['request']) && $_GET['options']['request']== 'spa'):
 			
-			$infoGroup = $this->_group->find($_GET['id_group'])['data'][0];
+			$infoGroup = array();
 			$infoAsignature = $this->_asignature->find($_GET['id_asignature'])['data'][0];
+
+			if($groupType == 'group'):
+				$infoGroup = $this->_group->find($_GET['id_group'])['data'][0];
+			else:
+				$infoGroup = $this->_group->findSubGroup($_GET['id_group'])['data'][0];
+			endif;
 
 			$view = new View(
 				'teacher/partials/evaluation',
@@ -458,6 +510,7 @@ class TeacherController
 				[
 					'tittle_panel'	=>	'Evaluar periodo pendiente',
 					'group'			=> 	$infoGroup,
+					'groupType'		=>	$groupType,
 					'asignature'	=>	$infoAsignature,
 					'back'			=>	$_GET['options']['back']
 				]
@@ -489,16 +542,22 @@ class TeacherController
 	public function getStudentWithoutPeriodEvaluationAction(
 		$column,
 		$id_asignature, 
-		$id_group
+		$id_group,
+		$groupType = 'group'
 	){
 
-		$students = $this->_evaluation->getPeriodsWithOutEvaluating($column, $id_asignature, $id_group)['data'];
+
+		$students = $this->_evaluation->getPeriodsWithOutEvaluating(
+			$column, $id_asignature, $id_group, $groupType
+		)['data'];
 
 		$view = new View(
 			'teacher/partials/evaluation',
 			'formEvaluatePeriodRender',
 			[
-				'students'	=> $students,
+				'students'	=> 	$students,
+				'groupType'	=>	$groupType,
+				'id_group'	=>	$id_group,
 				'periodo'	=>	$column
 			]
 		);
@@ -511,9 +570,25 @@ class TeacherController
 	 *	@param
 	 *  @return
 	*/ 
-	public function updatePeriodAction($period, $id_student, $id_asignature, $value)
+	public function updatePeriodAction(
+		$period, 
+		$id_student, 
+		$id_asignature, 
+		$id_group,
+		$value,
+		$groupType = 'group'
+	)
 	{
-		echo $this->_evaluation->updatePeriod($period, $id_student, $id_asignature, $value);
+		echo json_encode(
+			$this->_evaluation->updatePeriod(
+				$period,
+				$id_student,
+				$id_asignature, 
+				$id_group,
+				$value,
+				$groupType
+			)
+		);
 	}
 }
 ?>

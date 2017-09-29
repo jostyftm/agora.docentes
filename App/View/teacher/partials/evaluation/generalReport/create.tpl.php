@@ -67,7 +67,7 @@
 		</div>
 	</div>
 </div>
-<script src="/Public/plugin/ckeditor/ckeditor.js"></script>
+<script src="/Public/plugin/ckeditor/ckeditor.js"  charset="utf-8"></script>
 <script>
 	$(document).ready(function(){
    		

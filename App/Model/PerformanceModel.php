@@ -142,11 +142,18 @@ class PerformanceModel extends DB
 	 *
 	 *
 	*/
-	public function getCodes($id_group, $id_asignature, $period)
+	public function getCodes(
+		$id_group, 
+		$id_asignature, 
+		$period, 
+		$groupType = 'group'
+	)
 	{
+		$column_group = ($groupType== 'group') ? 'id_grupo' : 'id_subgrupo';
+
 		$this->query = "SELECT cod_desemp, posicion 
 						FROM rel_desemp_posicion 
-						WHERE id_grupo = {$id_group} AND id_asign = {$id_asignature} AND periodo ={$period}";
+						WHERE {$column_group} = {$id_group} AND id_asign = {$id_asignature} AND periodo ={$period}";
 
 		return $this->getResultsFromQuery();
 	}
@@ -156,11 +163,19 @@ class PerformanceModel extends DB
 	 *
 	 *
 	*/
-	public function getCodesByPosition($position, $id_group, $id_asignature, $period)
+	public function getCodesByPosition(
+		$position, 
+		$id_group, 
+		$id_asignature, 
+		$period,
+		$groupType = 'group'
+	)
 	{
+		$column_group = ($groupType== 'group') ? 'id_grupo' : 'id_subgrupo';
+
 		$this->query = "SELECT cod_desemp 
 						FROM rel_desemp_posicion 
-						WHERE id_grupo = {$id_group} AND id_asign = {$id_asignature}  AND periodo = {$period} AND posicion = '{$position}'";
+						WHERE {$column_group} = {$id_group} AND id_asign = {$id_asignature}  AND periodo = {$period} AND posicion = '{$position}'";
 		return $this->getResultsFromQuery();
 	}
 

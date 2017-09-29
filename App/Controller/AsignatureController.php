@@ -59,22 +59,26 @@ class AsignatureController
 	*
 	*
 	*/
-	public function createObservationAction(){
+	public function createObservationAction($id_student, $id_asignature, $period){
 
-		if(!empty($_GET) && isset($_GET['id_student']) && isset($_GET['id_asignature'])):
+		$resp = $this->_asignature->getObservationByStudent(
+			$id_student, 
+			$id_asignature,
+			$period
+		);
 
-			$view = new View(
-				$_GET['rol'].'/partials/evaluation/evaluatedPeriod/asignatureObservations',
-				'create',
-				[
-					'id_student'	=>	$_GET['id_student'],
-					'id_asignature'	=>	$_GET['id_asignature'],
-					'period'	=>	$_GET['period']
-				]
-			);
-			$view->execute();
 
-		endif;
+		$view = new View(
+			'teacher/partials/evaluation/evaluatedPeriod/asignatureObservations',
+			'create',
+			[
+				'id_student'	=>	$id_student,
+				'id_asignature'	=>	$id_asignature,
+				'period'		=>	$period,
+				'observation'	=>	(isset($resp['data'][0])) ? $resp['data'][0] : ''
+			]
+		);
+		$view->execute();
 	}
 
 
@@ -84,10 +88,26 @@ class AsignatureController
 	*/
 	public function storeObservationsAction()
 	{	
-		// sleep(3);
-		// echo json_encode(array('pre' => 'pro'));
+		
 		if(!empty($_POST)):
-			echo json_encode($this->_asignature->saveObservation($_POST));
+
+			$response = $this->_asignature->getObservationByStudent(
+				$_POST['id_student'], 
+				$_POST['id_asignature'],
+				$_POST['period']
+			);
+
+			if($response['state']):
+
+				echo json_encode(
+					$this->_asignature->updaeObservation(
+						$response['data'][0]['id'],
+						$_POST['observation']
+					)
+				);
+			else:
+				echo json_encode($this->_asignature->saveObservation($_POST));
+			endif;
 		endif;
 	}
 

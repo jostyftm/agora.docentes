@@ -31,6 +31,7 @@ class SheetModel extends DB
 
 	// 
 	public $options = array();
+	public $current_period = 1;
 
 	/**
 	*
@@ -105,7 +106,7 @@ class SheetModel extends DB
 	 * @return
 	 *
 	*/
-	public function evaluactionSheet($period, $id_asignature, $id_group)
+	public function evaluactionSheet($periods, $id_asignature, $id_group)
 	{
 		$this->_pdf = new EvaluationSheetPDF(
 			$this->options['orientation'],
@@ -113,11 +114,16 @@ class SheetModel extends DB
 			$this->options['papper']
 		);
 
-		$resp = $this->_evaluation->getPeriods($period, $id_asignature, $id_group)['data'];
+		$resp = $this->_evaluation->getPeriods(count($periods), $id_asignature, $id_group)['data'];
 
-		$this->_pdf->maxPeriod = $period;
+		$this->_pdf->maxPeriod = count($periods);
+		$this->_pdf->periods = $periods;
+		$this->_pdf->current_period = $this->current_period;
 		$this->_pdf->institution = $this->options['infoIns'];
 		$this->_pdf->evaluation_parameters = $this->options['e_parameters'];
+		$this->_pdf->low_valoration = $this->options['low_valoration'];
+		$this->_pdf->min_basic = $this->options['min_basic'];
+		$this->_pdf->max_valoration = $this->options['max_valoration'];
 		$this->_pdf->infoGroupAndAsig = $this->_teacher->getInfoAsignatureAndGroup($id_asignature, $id_group)['data'][0];
 		$this->_pdf->novelties = $this->_novelty->getByYear(Date('Y'))['data'];
 		$this->_pdf->AddPage();

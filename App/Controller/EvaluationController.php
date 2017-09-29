@@ -41,7 +41,11 @@ class EvaluationController
 		endif;
 	}
 
-	public function evaluateGroupAction($id_asignature, $id_group)
+	public function evaluateGroupAction(
+		$id_asignature, 
+		$id_group, 
+		$groupType = 'group'
+	)
 	{	
 		//obtenerPorcentajesDefinidos
 		$porcentajeDefinidos = $this->_performance->getIndicators(); 
@@ -49,9 +53,12 @@ class EvaluationController
 		$expresiones = $this->_performance->getExpression(); //obtenerExpresiones
 
 		// obtenerDatos	
-		$datosTitulos = $this->_group->groupAndAsign($id_asignature, $id_group);
+		$datosTitulos = $this->_group->groupAndAsign(
+			$id_asignature, $id_group, $groupType
+		);
 
-        $id_grade = $this->_group->getGradeByGroup($id_group)['data'][0]['id_grado'];
+        $id_grade = $datosTitulos['data'][0]['id_grado'];
+
 		$type_asignature = $this->_asignature->getTypeAsignature($id_asignature,$id_grade)['data'][0]['tipo_asig'];
 
 
@@ -60,6 +67,8 @@ class EvaluationController
 			$id_grado = $datosTitulos['data'][0]['id_grado'];
 			$valoraciones = $this->_valoration->all()['data'];
 			$result_porcentajes = $this->_performance->getPercentage()['data'];	
+
+			$id_area = $this->_asignature->getIdAreaByIdAsignatura($id_asignature, $id_grade)['data'];
 
 			$grados = $this->_grade->all()['data'];
 			$periodos = $this->_period->all()['data'];
@@ -75,6 +84,7 @@ class EvaluationController
 				'home', 
 				[
 					'grupo'=>$id_group, 
+					'groupType'=>$groupType,
 					'grados' => $grados, 
 					'periodos' => $periodos, 
 					'titulos' =>$datosTitulos['data'][0], 
@@ -86,7 +96,8 @@ class EvaluationController
 					'asignaturas' => $asignaturas, 
 					'porcentajes' => $result_porcentajes[0] , 
 					'grado' => $id_grado, 
-                    'porcentajeDefinidos' => $porcentajeDefinidos			
+                    'porcentajeDefinidos' => $porcentajeDefinidos['data'],
+                    'id_area' => $id_area	
 				]
 			);
 			$view->execute();
@@ -98,20 +109,44 @@ class EvaluationController
 	*
 	*
 	*/
-	public function evaluateGroupRenderAction($period, $id_asignature, $id_group)
-	{
+	public function evaluateGroupRenderAction(
+		$period, 
+		$id_asignature, 
+		$id_group,
+		$groupType = 'group'
+	)
+	{	
+		$porcentajeDefinidos = $this->_performance->getIndicators(); 
 
-		$resultado = $this->_evaluation->getEvaluation($id_group, $id_asignature);
-		$disciplina = $this->_evaluation->getEvaluationByDiscipline($id_group);
+		$resultado = $this->_evaluation->getEvaluation(
+			$id_group, 
+			$id_asignature,
+			$groupType
+		);
+
+		$disciplina = $this->_evaluation->getEvaluationByDiscipline(
+			$id_group,
+			$groupType
+		);
 
 
 		if($resultado['state']):
 
 			$result_porcentajes = $this->_performance->getPercentage()['data'];
+			
 			$criterios = $this->_performance->getCriterions()['data'];
-			$codigos = $this->_performance->getCodes($id_group, $id_asignature, $period)['data'];
-			$id_grade = $this->_group->getGradeByGroup($id_group)['data'][0]['id_grado'];
-			$type_asignature = $this->_asignature->getTypeAsignature($id_asignature,$id_grade)['data'][0]['tipo_asig'];
+			
+			$codigos = $this->_performance->getCodes(
+				$id_group, $id_asignature, $period, $groupType
+			)['data'];
+
+			$id_grade = $this->_group->getGradeByGroup(
+				$id_group, $groupType
+			)['data'][0]['id_grado'];
+
+			$type_asignature = $this->_asignature->getTypeAsignature(
+				$id_asignature,$id_grade
+			)['data'][0]['tipo_asig'];
 
 			$modelo ='';
 			if(Session::get('db') == 'agoranet_ieag')
@@ -131,7 +166,7 @@ class EvaluationController
             else if(Session::get('db') == 'agoranet_termarit' || Session::get('db') == 'agoranet_iesr'
 					|| Session::get('db') == 'agoranet_esther_ea' || Session::get('db') == 'agoranet_litoral'
                 	|| Session::get('db') == 'agoranet_jose_ag'   || Session::get('db') == 'agoranet_jmcordoba'
-                	|| Session::get('db') == 'agoranet_lavictoria'
+                	|| Session::get('db') == 'agoranet_lavictoria' || Session::get('db') == 'agoranet_anunciacion'
 				   )
             	$modelo = 'modelo_e';
 
@@ -140,18 +175,20 @@ class EvaluationController
 
             if($id_grade <= 4 || $type_asignature == "C")
                 $modelo = 'modelo_z';
-
+			
             $view = new View(
             	'teacher/partials/evaluation/evaluatedPeriod/'.$modelo,
             	'render',
 				[
 					'datos'=>$resultado['data'], 
+					'groupType'	=>	$groupType,
 					'porcentajes' => $result_porcentajes[0], 
 					'codigos' => $codigos, 
 					'baseDatos' => Session::get('db'),
 					'criterios' =>$criterios,
                     'p'        =>$period,
-					'disciplina'    => $disciplina['data']
+					'disciplina'    => $disciplina['data'],
+					'porcentajeDefinidos' => $porcentajeDefinidos['data']
 				]
 			);
 			$view->execute();
@@ -178,7 +215,9 @@ class EvaluationController
 						$key, 
 						$_POST['idEstudiante'],
 						$_POST['asignaturaDB'],
-						$value
+						$_POST['grupoDB'],
+						$value,
+						$_POST['groupType']
 					)
 				);
 			endforeach;
@@ -194,17 +233,21 @@ class EvaluationController
 	*
 	*
 	*/
-	public function groupRecoveryAction($id_asignature, $id_group){
+	public function groupRecoveryAction($id_asignature, $id_group, $type='group'){
 
-		$group = $this->_group->find($id_group)['data'][0];
+		$group = ($type == 'group') ? $this->_group->find($id_group)['data'][0]
+				: $this->_group->findSubGroup($id_group)['data'][0];
+
 		$asignature = $this->_asignature->find($id_asignature)['data'][0];
 
+		
 		$view = new View(
             'teacher/partials/evaluation/recovery',
             'groupRecovery',
 			[
 				'tittle_panel'	=>	'Superaciones',
 				'asignature'	=>	$asignature,
+				'type'			=>	$type,
 				'group'			=>	$group,
 				'periods'		=>	$this->_period->all()['data'],
 				'back'			=>	$_GET['options']['back']
@@ -219,19 +262,35 @@ class EvaluationController
 	*
 	*
 	*/
-	public function getGroupRecoveryRenderAction($period, $id_group, $id_asignature)
+	public function getGroupRecoveryRenderAction(
+		$period, 
+		$id_group, 
+		$id_asignature,
+		$type= 'group'
+	)
 	{
-		$resp = $this->_evaluation->getGroupRecovery($period,$id_group, $id_asignature );
+		$resp = $this->_evaluation->getGroupRecovery(
+			$period,
+			$id_group, 
+			$id_asignature,
+			$type
+		)['data'];
+
+		$respRecovery = $this->_evaluation->findRecoveryByGroup(
+			$id_group, $type
+		)['data'];
 
 		$view = new View(
             'teacher/partials/evaluation/recovery',
             'groupRecoveryRender',
 			[
-				'students'		=>	$resp['data'],
+				'students'		=>	$resp,
+				'type'			=>	$type,
+				'period'		=>	$period,
 				'period'		=>	$period,
 				'id_group'		=>	$id_group,
+				'groupRecovery'	=>	$respRecovery,
 				'id_asignature'	=>	$id_asignature,
-				'period'		=>	$period,
 				'periods'		=>	$this->_period->all()['data']
 			]
 		);
@@ -247,14 +306,14 @@ class EvaluationController
 	public function updateGroupRecoveryAction()
 	{
 		
-
-		if(!empty($_POST) && count($_POST) == 6):
+		if(!empty($_POST) && count($_POST) == 7):
 			
 			$recovery = $this->_evaluation->getRecovery(
 				$_POST['id_student'],
 				$_POST['id_group'],
 				$_POST['id_asignature'],
-				$_POST['period']
+				$_POST['period'],
+				$_POST['typeGroup']
 			);
 
 			if($recovery['state']):
@@ -269,9 +328,9 @@ class EvaluationController
 			else:
 
 				echo json_encode(
-					$this->_evaluation->saveRecovery($_POST)
+					$this->_evaluation->saveRecovery($_POST, $_POST['typeGroup'])
 				);
-
+				
 			endif;
 		endif;
 	}

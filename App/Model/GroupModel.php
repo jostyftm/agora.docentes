@@ -10,6 +10,7 @@ class GroupModel extends DB
 {
 	
 	private $table = 't_grupos';
+	private $table_subgroup = 't_subgrupos';
 
 	function __construct($db='')
 	{
@@ -29,6 +30,19 @@ class GroupModel extends DB
 		$this->query = "SELECT * 
 						FROM {$this->table}
 						WHERE id_grupo={$id_group}";
+
+		return $this->getResultsFromQuery();
+	}
+
+	/**
+	*
+	*
+	*/
+	public function findSubGroup($id_subgroup)
+	{
+		$this->query = "SELECT *
+						FROM {$this->table_subgroup}
+						WHERE id_subgrupo={$id_subgroup}";
 
 		return $this->getResultsFromQuery();
 	}
@@ -68,17 +82,25 @@ class GroupModel extends DB
 	 *	@param
 	 *  @return
 	*/ 
-	public function groupAndAsign($id_asignature, $id_group)
+	public function groupAndAsign($id_asignature, $id_group, $groupType = 'group')
 	{
-		$this->query = "SELECT nombre_grupo, asignatura, t_grupos.id_grado FROM t_grupos, t_asignaturas 
-						WHERE id_grupo = {$id_group} AND id_asignatura = {$id_asignature}";
+		$column_group = ($groupType== 'group') ? 'id_grupo' : 'id_subgrupo';
+		$table_group  = ($groupType== 'group') ? 't_grupos' : 't_subgrupos';
+		$column_nameGroup = ($groupType == 'group') ? 'nombre_grupo' : 'nombre_subgrupo';
+
+		$this->query = "SELECT {$column_nameGroup}, asignatura, {$table_group}.id_grado FROM {$table_group}, t_asignaturas 
+						WHERE {$column_group} = {$id_group} AND id_asignatura = {$id_asignature}";
 		return	$this->getResultsFromQuery();
 	}
 
-	public function getGradeByGroup($id_group){
+	public function getGradeByGroup($id_group, $groupType = 'group'){
+
+		$column_group = ($groupType== 'group') ? 'id_grupo' : 'id_subgrupo';
+		$table_group  = ($groupType== 'group') ? 't_grupos' : 't_subgrupos';
+
         $this->query = "SELECT id_grado
-						FROM {$this->table}
-						WHERE id_grupo={$id_group}";
+						FROM {$table_group}
+						WHERE {$column_group}={$id_group}";
         return $this->getResultsFromQuery();
     }
 }

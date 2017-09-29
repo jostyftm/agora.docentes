@@ -25,5 +25,14 @@ class ValorationModel extends DB
 
 		return $this->getResultsFromQuery();
 	}
+
+	public function find($valoration)
+	{
+		$this->query = "SELECT * 
+						FROM {$this->_table}
+						WHERE valoracion='{$valoration}' ";
+
+		return $this->getResultsFromQuery();
+	}
 }
 ?>

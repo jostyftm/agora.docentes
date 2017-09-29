@@ -5,7 +5,9 @@
 				<div class="col-md-12">
 					<div class="form-group">
 						<label for="">Observación</label>
-						<textarea id="obsAsig"></textarea>
+						<textarea id="obsAsig">
+							<?= (isset($observation['observacion'])) ? $observation['observacion'] : ''?>
+						</textarea>
 					</div>
 				</div>
 			</div>
@@ -15,7 +17,7 @@
 						<input type="hidden" name="id_student" id="id_studentFrm" value="<?= $id_student?>">
 						<input type="hidden" name="id_asignature" id="id_asignatureFrm" value="<?= $id_asignature?>">
 						<input type="hidden" name="period" id="periodFrm" value="<?= $period?>">
-						<button type="submit" id="btnSubmit" class="btn btn-primary" >Crear Observación</button>
+						<button type="submit" id="btnSubmit" class="btn btn-primary" >Guardar</button>
 					</div>
 				</div>
 			</div>
@@ -63,7 +65,7 @@
                 	btnSubmit.prop('disabled', true);
                 },
                 success: function(data){
-					backBtn.click();	
+					modal.modal('hide');
                 },
                 error(xhr, estado){
                     console.log(xhr);

@@ -115,7 +115,7 @@
 								<span> <?=$row['novedad']?></span>
 							</td>
 							<td>
-								<button data-student="<?= $estudiante?>" data-id="<?=$row['id_estudiante']?>" data-click="aggObsAsig" data-request="openModal" class="btn btn-primary btn-sm" title="Agregar Ovservacion en la Asignatura">
+								<button data-student="<?= $estudiante?>" data-id="<?=$row['id_estudiante']?>" data-click="aggObsAsig" data-request="openModal" class="btn btn-primary btn-sm" title="Agregar Observación en la Asignatura">
 			                    <i class="fa fa-user-plus" aria-hidden="true"></i>
 			                	</button>
 							</td>

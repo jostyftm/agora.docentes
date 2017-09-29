@@ -7,7 +7,7 @@
 		  	<div class="panel-body">
 		  		<form action="" method="POST" id="formCreateSheets" enctype="application/x-www-form-urlencoded" target="_blank">
 			  		<div class="row">
-			  			<div class="col-md-offset-2 col-md-3">
+			  			<div class=" col-md-3">
 			  				<div class="form-group">
 			  					<label for="">Tipo de planilla</label>
 			  					<select class="form-control" id="sheet" name="type_sheet">
@@ -17,6 +17,17 @@
 			  					</select>
 			  				</div>
 			  			</div>
+			  			<div class="col-md-3">
+					  		<div class="form-group">
+					  			<label for="">Periodo</label>
+					  			<select class="form-control" name="period" id="period" disabled>
+						  			<option value="0" class="text-center"> - Seleccione un periodo - </option>
+						  			<?php foreach($periods as $period):?>
+						  				<option value="<?= $period['periodos']?>">Periodo <?= $period['periodos']?></option>
+						  			<?php endforeach;?>
+					  			</select>
+					  		</div>
+					  	</div>
 			  			<div class="col-md-3">
 			  				<div class="form-group">
 			  					<label for="">Diseño</label>

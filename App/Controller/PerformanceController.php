@@ -57,9 +57,22 @@ class PerformanceController
 	 *
 	 *
 	*/
-	public function getCodesByIdAction($position, $id_group, $id_asignature, $period, $id_grade='')
+	public function getCodesByIdAction(
+		$position,
+		$id_group, 
+		$id_asignature, 
+		$period, 
+		$id_grade='',
+		$groupType = 'group'
+	)
 	{
-		$codes = $this->_performance->getCodesByPosition($position, $id_group, $id_asignature, $period);
+		$codes = $this->_performance->getCodesByPosition(
+			$position, 
+			$id_group, 
+			$id_asignature, 
+			$period,
+			$groupType
+		);
 
 		if($codes['state'])
 			echo $codes['data'][0]['cod_desemp'];

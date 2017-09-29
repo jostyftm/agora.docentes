@@ -5,6 +5,7 @@ use App\Config\Session as Session;
 use App\Model\SheetModel as Sheet;
 use App\Model\PeriodModel as Period;
 use App\Model\TeacherModel as Teacher;
+use App\Model\ValorationModel as Valoration;
 use App\Model\PerformanceModel as Performance;
 use App\Model\InstitutionModel as Institution;
 use App\Model\EvaluationPeriodModel as Evaluation;
@@ -16,6 +17,7 @@ class SheetController
 	private $_sheet;
 	private $_period;
 	private $_teacher;
+	private $_valoration;
 	private $_evaluation;
 	private $_institution;
 	private $_performance;
@@ -30,6 +32,7 @@ class SheetController
 			$this->_sheet = new Sheet(Session::get('db'));
 			$this->_period = new Period(Session::get('db'));
 			$this->_teacher = new Teacher(Session::get('db'));
+			$this->_valoration = new Valoration(Session::get('db'));
 			$this->_evaluation = new Evaluation(Session::get('db'));
 			$this->_performance = new Performance(Session::get('db'));
 			$this->_institution = new Institution(Session::get('db'));
@@ -78,7 +81,7 @@ class SheetController
 		if(!empty($_POST) && isset($_POST['groups'])):
 
 			// Creamos el directorio
-			$path = './'.time().'/';
+			$path = 'pdf/'.time().'/';
 
 			if(!file_exists($path))
 			{	
@@ -86,7 +89,14 @@ class SheetController
 			}
 
 			// Obtenemos la cantidad de periodos
-			$periods = count($this->_period->all()['data']);
+			$periods = $this->_period->all()['data'];
+			$current_period = $_POST['period'];
+
+			//  Obtenemos las valoraciones
+			$low_valoration = $this->_valoration->find('Bajo')['data'][0];
+			$min_basic = $this->_valoration->find('Basico')['data'][0];
+			$max_valoration = $this->_valoration->find('Superior')['data'][0];
+
 
 			// OBtenemos los parametros de evaluacion
 			$Resp_eP = $this->_performance->getEvaluationParameters()['data'];
@@ -109,6 +119,9 @@ class SheetController
 			$options = array(
 				'infoIns'			=> $this->_institution->getInfo()['data'][0],
 				'e_parameters'		=>	$evaluation_parameters,
+				'low_valoration'	=>	$low_valoration,
+				'min_basic'			=>	$min_basic,
+				'max_valoration'	=>	$max_valoration,
 				'orientation'		=>	$_POST['orientation'],
 				'papper'			=>	$_POST['papper']
 			);
@@ -117,6 +130,8 @@ class SheetController
 			$this->_sheet->setPath($path);
 			// Asignamos las opciones
 			$this->_sheet->setOptions($options);
+			// 
+			$this->_sheet->current_period = $current_period;
 
 			// Recorremos los grupos y las asignaturas recibidos por POST
 			foreach ($_POST['groups'] as $key => $group) {

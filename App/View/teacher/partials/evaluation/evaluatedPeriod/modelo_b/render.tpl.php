@@ -39,15 +39,8 @@ if ($baseDatos=='agoranet_comfamar'){
 
         </th>
         <th rowspan="2"></th>
-
-
-
-
-
-
         <th colspan="5" ><?=$porcentajes['etiqueta_grupo_2']; ?> <?=$porcentajes['porcentaje_grupo2']?>%</th>
         <th rowspan="2"> </th>
-
         <th colspan="5" ><?=$porcentajes['etiqueta_grupo_3']; ?> <?=$porcentajes['porcentaje_grupo3']?>%</th>
         <th rowspan="2">
 
@@ -61,22 +54,12 @@ if ($baseDatos=='agoranet_comfamar'){
     <tr id="item-posicion" valign="middle" class="border-th">
 
 
-        <th data-update="dc1" data-estado="false" data-tipo="1">
-            <?php //foreach ($codigos  as  $row) 	{ echo $row['posicion']=='dc1'?$row["cod_desemp"]:'';}?>
-        </th>
+        <th data-update="dc1" data-estado="false" data-tipo="1"></th>
 
-        <th data-update="dc2" data-estado="false" data-tipo="1">
-
-        </th>
-        <th data-update="dc3" data-estado="false" data-tipo="1">
-
-        </th>
-        <th data-update="dc4" data-estado="false" data-tipo="1">
-
-        </th>
-        <th data-update="dc5" data-estado="false" data-tipo="1">
-
-        </th>
+        <th data-update="dc2" data-estado="false" data-tipo="1"></th>
+        <th data-update="dc3" data-estado="false" data-tipo="1"></th>
+        <th data-update="dc4" data-estado="false" data-tipo="1"></th>
+        <th data-update="dc5" data-estado="false" data-tipo="1"></th>
 
         <th class="<?=($status?"hidden":"")?>" >EFP <?=$porcentajes['porcentaje_efp']; ?>%</th>
 
@@ -153,7 +136,7 @@ if ($baseDatos=='agoranet_comfamar'){
                 <span> <?=$row['novedad']?></span>
             </td>
             <td>
-                <button data-student="<?= $estudiante?>" data-id="<?=$row['id_estudiante']?>" data-click="aggObsAsig" data-request="openModal" class="btn btn-primary btn-sm" title="Agregar Ovservacion en la Asignatura">
+                <button data-student="<?= $estudiante?>" data-id="<?=$row['id_estudiante']?>" data-click="aggObsAsig" data-request="openModal" class="btn btn-primary btn-sm" title="Agregar Observación en la Asignatura">
                     <i class="fa fa-user-plus" aria-hidden="true"></i>
                 </button>
             </td>

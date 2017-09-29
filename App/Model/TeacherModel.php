@@ -99,11 +99,30 @@ class TeacherModel extends DB
 						INNER JOIN grupo_x_asig_x_doce ad ON a.id_asignatura=ad.id_asignatura
 						INNER JOIN t_grupos g ON ad.id_grupo=g.id_grupo
 						WHERE ad.id_docente = '{$id_teacher}' 
-						ORDER BY a.asignatura";
+						ORDER BY g.id_grado";
 
 		return $this->getResultsFromQuery();
 
 	}
+
+	/**
+	 *	Funcion para obtener las asignturas y subgrupos que dictan un profesor
+	 *
+	 *	@param $id_teacher
+	 *  @return query results
+	*/
+	public function getAsignaturesAndSubGroups($id_teacher)
+	{
+		$this->query = "SELECT g.id_subgrupo, g.nombre_subgrupo, a.id_asignatura, a.asignatura, g.id_grado
+						FROM t_asignaturas a
+						INNER JOIN sub_grupo_x_asig_x_doce ad ON a.id_asignatura=ad.id_asignatura
+						INNER JOIN t_subgrupos g ON ad.id_subgrupo=g.id_subgrupo
+						WHERE ad.id_docente = {$id_teacher}
+						ORDER BY g.id_grado";
+
+		return $this->getResultsFromQuery();
+	}
+
 
 	/**
 	 * Funcion que obtiene todos los grupos de un director de curso

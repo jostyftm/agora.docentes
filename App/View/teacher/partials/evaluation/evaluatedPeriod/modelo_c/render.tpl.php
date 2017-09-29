@@ -12,8 +12,9 @@ Antonio Nariño,
 			<th rowspan="2">#</th>
 			<th rowspan="2">APELLIDOS Y Nombres Estudiante</th>
 			<th rowspan="2"> <span data-toggle="tooltip" data-placement="top" title="ESTADO"> Est</span></th>
-			<th rowspan="2"> <span data-toggle="tooltip" data-placement="top" title="NOVEDADES">Nov</span></th>
+			<th rowspan="2"> <span data-toggle="tooltip" data-placement="top" title="NOVEDADES">Nov</span></th>			
 			<th rowspan="2">O.A</th>
+			<th rowspan="2">RET</th>
 			<th rowspan="2"> <span data-toggle="tooltip" data-placement="top" title="INASISTENCIA">FAA</span></th>
 
 			<th colspan="4"><?=$porcentajes['etiqueta_grupo_1']; ?> <?=$porcentajes['porcentaje_grupo1']; ?>%</th>
@@ -38,54 +39,26 @@ Antonio Nariño,
         <?php //foreach ($codigos  as  $row) 	{ echo $row['posicion']=='dc1'?$row["cod_desemp"]:'';}?>
     </th>
 
-    <th data-update="dc2" data-estado="false" data-tipo="1">
-
-    </th>
-    <th data-update="dc3" data-estado="false" data-tipo="1">
-
-    </th>
-    <th data-update="dc4" data-estado="false" data-tipo="1">
-
-    </th>
-    <th data-update="dc5" data-estado="false" data-tipo="1" class="<?=($status?"":"hidden")?>">
-
-    </th>
+    <th data-update="dc2" data-estado="false" data-tipo="1"></th>
+    <th data-update="dc3" data-estado="false" data-tipo="1"></th>
+    <th data-update="dc4" data-estado="false" data-tipo="1"></th>
+    <th data-update="dc5" data-estado="false" data-tipo="1" class="<?=($status?"":"hidden")?>"></th>
 
 
-    <th data-update="dp1" data-estado="false" data-tipo="2">
-
-    </th>
-    <th data-update="dp2" data-estado="false" data-tipo="2">
-
-    </th>
-    <th data-update="dp3" data-estado="false" data-tipo="2">
-
-    </th>
-    <th data-update="dp4" data-estado="false" data-tipo="2">
-
-    </th>
-    <th data-update="dp5" class="<?=($status?"":"hidden")?>">
-
-    </th>
+    <th data-update="dp1" data-estado="false" data-tipo="2"></th>
+    <th data-update="dp2" data-estado="false" data-tipo="2"></th>
+    <th data-update="dp3" data-estado="false" data-tipo="2"></th>
+    <th data-update="dp4" data-estado="false" data-tipo="2"></th>
+    <th data-update="dp5" class="<?=($status?"":"hidden")?>"></th>
 
 
 
 
-    <th data-update="ds1" data-estado="false" data-tipo="3">
-
-    </th>
-    <th data-update="ds2" data-estado="false" data-tipo="3">
-
-    </th>
-    <th data-update="ds3" data-estado="false" data-tipo="3">
-
-    </th>
-    <th data-update="ds4" data-estado="false" data-tipo="3">
-
-    </th>
-    <th data-update="ds5" class="<?=($status?"":"hidden")?>">
-
-    </th>
+    <th data-update="ds1" data-estado="false" data-tipo="3"></th>
+    <th data-update="ds2" data-estado="false" data-tipo="3"></th>
+    <th data-update="ds3" data-estado="false" data-tipo="3"></th>
+    <th data-update="ds4" data-estado="false" data-tipo="3"></th>
+    <th data-update="ds5" class="<?=($status?"":"hidden")?>"></th>
 
 
 
@@ -126,9 +99,12 @@ foreach ($datos  as $clave => $row) {
             <span> <?=$row['novedad']?></span>
         </td>
         <td>
-            <button data-student="<?= $estudiante?>" data-id="<?=$row['id_estudiante']?>" data-click="aggObsAsig" data-request="openModal" class="btn btn-primary btn-sm" title="Agregar Ovservacion en la Asignatura">
+            <button data-student="<?= $estudiante?>" data-id="<?=$row['id_estudiante']?>" data-click="aggObsAsig" data-request="openModal" class="btn btn-primary btn-sm" title="Agregar Observación en la Asignatura">
 			                    <i class="fa fa-user-plus" aria-hidden="true"></i>
 			</button>
+        </td>
+		<td >
+            <input data-id="<?=$row['id_estudiante']?>" name="retardo<?=$p;?>" data-cont="<?=$cont++;?>" step="1.0"  type="number"  class="form-control"   value="<?=$row['retardo'.$p]?>">
         </td>
 
         <td >
