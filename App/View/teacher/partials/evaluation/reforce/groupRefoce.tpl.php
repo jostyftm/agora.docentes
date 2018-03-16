@@ -27,8 +27,6 @@
 			                        <?php foreach($periods as $period): ?>
 										<option value="<?= $period['periodos'] ?>">Periodo <?= $period['periodos'] ?></option>
 			                        <?php endforeach; ?>
-
-			                        <option value="if">I.F</option>
 		                     	</select>
 		                     	<input type="hidden" name="type" id="type" value="<?= $type?>">
 		                     	<input type="hidden" name="id_asignature" id="asignature" value="<?php echo $asignature["id_asignatura"]; ?>">
@@ -58,7 +56,7 @@
 
                type: "GET",
                dataType: "html",
-               url: '/evaluation/getGroupRecoveryRender/'+this.value+'/'+group+'/'+asignature+'/'+type
+               url: '/evaluation/getGroupReforceRender/'+this.value+'/'+group+'/'+asignature+'/'+type
                ,
                success: function(data){
                   $('#contenedorTabla').empty().append(data);

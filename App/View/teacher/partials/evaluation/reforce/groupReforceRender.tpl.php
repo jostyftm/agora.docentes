@@ -5,8 +5,8 @@
 				<th>N°</th>
 				<th>Apellidos y nombres estudiantes</th>
 				<th>Superación</th>
-				<th>Nota superacion</th>
-				<th><?= ($period == 'if') ? "Definitiva" : "Periodo {$period}";?></th>
+				<th>Nota refuerzo</th>
+				<th>Periodo <?= $period;?></th>
 				<th>Observación</th>
 			</tr>
 		</thead>
@@ -25,6 +25,7 @@
 					<td>
 						<?php
 							$nota_supe = 0;
+							$nota_eval = 0;
 
 							if(!empty($respRecovery)):
 
@@ -32,6 +33,7 @@
 
 									if($student['idstudents'] == $recovery['id_estudiante']):
 										$nota_supe = $recovery['nota'];
+										$nota_eval = $recovery['nota_evaluacion'];
 									endif;
 
 								endforeach;
@@ -50,13 +52,17 @@
 						<strong>
 							<span class="bold">
 								<?php
-									echo (strlen($student['periodo']) == 1) ? $student['periodo'].'.0' : $student['periodo']
+									if($nota_eval != 0):
+										echo (strlen($nota_eval) == 1) ? $nota_eval.'.0' : $nota_eval;
+									else:
+										echo (strlen($student['periodo']) == 1) ? $student['periodo'].'.0' : $student['periodo'];
+									endif;
 								?>
 							</span>
 						</strong>
 					</td>
 					<td>
-						<a data-id="<?=$student['idstudents']?>" data-click="aggObsAsig" data-request="openModal" class="btn btn-primary btn-sm" title="Agregar Observación en la Asignatura">
+						<a data-student="<?= $student['idstudents']?>" data-id="<?=$student['idstudents']?>" data-click="aggObsAsig" data-request="openModal" class="btn btn-primary btn-sm" title="Agregar Observación en la Asignatura">
 							<i class="fa fa-user-plus"></i>
 						</a>
 					</td>
@@ -90,7 +96,7 @@
         	var oldContent = $(this).attr('data-old'),
         		id_group = <?= $id_group?>.
         		id_asignature = <?= $id_asignature?>,
-        		period = "<?= $period?>",
+        		period = <?= $period?>,
         		typeGroup = "<?= $type ?>";
         	
         	this.select();
@@ -107,7 +113,7 @@
                $.ajax({
                	type: "POST",
 			         dataType: "json",
-			         url: '/evaluation/updateGroupRecovery',
+			         url: '/evaluation/updateGroupReforce',
 			         data:{
 			         	period, id_student,id_asignature,id_group, oldContent,newContent, typeGroup
 			         },

@@ -22,8 +22,8 @@ class EvaluationController
 	private $_teacher;
 	private $_evaluation;
 	private $_valoration;
-	private $_performance;
 	private $_asignature;
+	private $_performance;
 
 	function __construct()
 	{
@@ -36,6 +36,7 @@ class EvaluationController
 			$this->_valoration = new Valoration(Session::get('db'));
 			$this->_asignature = new Asignature(Session::get('db'));
 			$this->_performance = new Performance(Session::get('db'));
+			
 		else:
 			echo "404";
 		endif;
@@ -268,17 +269,24 @@ class EvaluationController
 		$id_asignature,
 		$type= 'group'
 	)
-	{
-		$resp = $this->_evaluation->getGroupRecovery(
-			$period,
-			$id_group, 
-			$id_asignature,
-			$type
-		)['data'];
+	{   
+		$resp = array();
+		$respRecovery = array();
 
-		$respRecovery = $this->_evaluation->findRecoveryByGroup(
-			$id_group, $type
-		)['data'];
+		if($period == 'if'):
+			$resp = $this->_evaluation->getGroupRecoveryIF(
+				$id_group, $id_asignature, $type
+			)['data'];
+
+		else:
+			$resp = $this->_evaluation->getGroupRecovery(
+				$period, $id_group, $id_asignature, $type
+			)['data'];
+
+			$respRecovery = $this->_evaluation->findRecoveryByGroup(
+				$id_group, $type
+			)['data'];
+		endif;
 
 		$view = new View(
             'teacher/partials/evaluation/recovery',
@@ -286,7 +294,6 @@ class EvaluationController
 			[
 				'students'		=>	$resp,
 				'type'			=>	$type,
-				'period'		=>	$period,
 				'period'		=>	$period,
 				'id_group'		=>	$id_group,
 				'groupRecovery'	=>	$respRecovery,
@@ -306,14 +313,155 @@ class EvaluationController
 	public function updateGroupRecoveryAction()
 	{
 		
-		if(!empty($_POST) && count($_POST) == 7):
-			
+		$next = false;
+		$blocked = array(
+			'agoranet_anunciacion' => array(
+				'period_enable' => '1,2,3,4',
+				'period_if' => false,
+			), 
+			'agoranet_cabal' => array(
+				'period_enable' => '1,2,3,4',
+				'period_if' => false,
+			), 
+			'agoranet_comfamar' => array(
+				'period_enable' => '1,2,3,4',
+				'period_if' => false,
+			),
+			'agoranet_diocesano' => array(
+				'period_enable' => '1,2,3,4',
+				'period_if' => false,
+			),
+			'agoranet_esther_ea' => array(
+				'period_enable' => '1,2,3,4',
+				'period_if' => false,
+			),
+			'agoranet_ieag' => array(
+				'period_enable' => '1,2,3,4',
+				'period_if' => false,
+			),
+			'agoranet_iean' => array(
+				'period_enable' => '1,2,3,4',
+				'period_if' => false,
+			),
+			'agoranet_iensjl' => array(
+				'period_enable' => '1,2,3,4',
+				'period_if' => true,
+			),
+			'agoranet_iesr' => array(
+				'period_enable' => '1,2,3,4',
+				'period_if' => false,
+			),
+			'agoranet_ipec' => array(
+				'period_enable' => '1,2,3,4',
+				'period_if' => false,
+			),
+			'agoranet_itigvc' => array(
+				'period_enable' => '1,2,3,4',
+				'period_if' => false,
+			),
+			'agoranet_itimp' => array(
+				'period_enable' => '1,2,3,4',
+				'period_if' => false,
+			),
+			'agoranet_jjrondon' => array(
+				'period_enable' => '1,2,3,4',
+				'period_if' => false,
+			),
+			'agoranet_jmcordoba' => array(
+				'period_enable' => '1,2,3,4',
+				'period_if' => false,
+			),
+			'agoranet_jose_ag' => array(
+				'period_enable' => '1,2,3,4',
+				'period_if' => false,
+			),
+			'agoranet_jrbejarano' => array(
+				'period_enable' => '1,2,3,4',
+				'period_if' => false,
+			),
+			'agoranet_lavictoria' => array(
+				'period_enable' => '1,2,3,4',
+				'period_if' => false,
+			),
+			'agoranet_liceo' => array(
+				'period_enable' => '',
+				'period_if' => true,
+			),
+			'agoranet_litoral' => array(
+				'period_enable' => '1,2,3,4',
+				'period_if' => false,
+			),
+			'agoranet_patricio_oa' => array(
+				'period_enable' => '1,2,3,4',
+				'period_if' => false,
+			),
+			'agoranet_simonb' => array(
+				'period_enable' => '1,2,3,4',
+				'period_if' => false,
+			),
+			'agoranet_termarit' => array(
+				'period_enable' => '1,2,3,4',
+				'period_if' => false,
+			),
+		);
+
+		foreach($blocked as $key => $value):
+			if($key == Session::get('db')):
+				if($_POST['period'] == 'if'):
+					if($value['period_if']):
+						print_r($this->changeGroupIFAction($_POST));
+					else:
+						echo json_encode(
+							[
+								'state'	=>	false,
+								'mensaje'=>	'El modulo de superacion esta desabilitado',
+							]
+						);
+					endif;
+				else:
+					if(strstr($value['period_enable'], $_POST['period'])):
+						$this->changeGroupRecoveryAction($_POST);
+					else:
+						echo json_encode(
+							[
+								'state'	=>	false,
+								'mensaje'=>	'El modulo de superacion esta desabilitado',
+							]
+						);
+					endif;
+				endif;
+			endif;
+		endforeach;
+	}
+
+	public function changeGroupIFAction($data = array())
+	{
+		$if = $this->_evaluation->getIF(
+			$data['id_student'],
+			$data['id_group'],
+			$data['id_asignature'],
+			$data['typeGroup']
+		);
+
+		if(!$if['state']):
+			echo json_encode($this->_evaluation->saveIF($data, $data['typeGroup']));
+		else:
+			echo json_encode($this->_evaluation->updateIF(
+				$if['data'][0]['id'], $data
+			));
+		endif;
+	}
+
+	public function changeGroupRecoveryAction($data=array())
+	{
+		if(!empty($data) && count($data) == 7):
+				
 			$recovery = $this->_evaluation->getRecovery(
-				$_POST['id_student'],
-				$_POST['id_group'],
-				$_POST['id_asignature'],
-				$_POST['period'],
-				$_POST['typeGroup']
+				$data['id_student'],
+				$data['id_group'],
+				$data['id_asignature'],
+				$data['period'],
+				$data['typeGroup']
 			);
 
 			if($recovery['state']):
@@ -321,41 +469,118 @@ class EvaluationController
 				echo json_encode(
 					$this->_evaluation->updateRecovery(
 						$recovery['data'][0]['id_superacion'],
-						$_POST
+						$data
 					)
 				);
 
 			else:
 
 				echo json_encode(
-					$this->_evaluation->saveRecovery($_POST, $_POST['typeGroup'])
+					$this->_evaluation->saveRecovery($data, $data['typeGroup'])
 				);
 				
 			endif;
+		endif;	
+	}
+
+    // REFUERZO ACADEMICO
+
+	public function updateGroupReforceAction()
+	{	
+		if(Session::get('db') != 'agoranet_liceo'):
+			if(!empty($data) && count($data) == 7):
+					
+				$recovery = $this->_evaluation->getReforce(
+					$data['id_student'],
+					$data['id_group'],
+					$data['id_asignature'],
+					$data['period'],
+					$data['typeGroup']
+				);
+
+				if($recovery['state']):
+					
+					echo json_encode(
+						$this->_evaluation->updateReforce(
+							$recovery['data'][0]['id'],
+							$data
+						)
+					);
+
+				else:
+
+					echo json_encode(
+						$this->_evaluation->saveReforce($data, $data['typeGroup'])
+					);
+					
+				endif;
+			endif;
+		else:
+			echo json_encode(
+				[
+					'state'	=>	false,
+					'mensaje'=>	'El modulo de refuerzo esta desabilitado',
+				]
+			);
 		endif;
 	}
-	
-	/**
-     *
-     *
-     *
-    
-	public function changeColumnsTableAction(){
-        $p=0;
-	    $fields=array(
-	        0 => array(
-	            'columnOld' =>  'dc1',
-                'columnNew' =>  'dc1_'.$p,
-                'type'      =>  'float'
-            )
-        );
-	    $this->_evaluation->queryChangeColumns($fields);
 
-	    //var_dump($fields);
+    public function getGroupReforceAction($id_asignature, $id_group, $type='group')
+    {
+    	$group = ($type == 'group') ? $this->_group->find($id_group)['data'][0]
+				: $this->_group->findSubGroup($id_group)['data'][0];
 
+		$asignature = $this->_asignature->find($id_asignature)['data'][0];
 
+		
+		$view = new View(
+            'teacher/partials/evaluation/reforce',
+            'groupRefoce',
+			[
+				'tittle_panel'	=>	'Refuerzo Academico',
+				'asignature'	=>	$asignature,
+				'type'			=>	$type,
+				'group'			=>	$group,
+				'periods'		=>	$this->_period->all()['data'],
+				'back'			=>	$_GET['options']['back']
+			]
+		);
+		$view->execute();
     }
-	 */
+
+    public function getGroupReforceRenderAction(
+    	$period, 
+		$id_group, 
+		$id_asignature,
+		$type= 'group')
+    {
+    	$resp = $this->_evaluation->getGroupReforce(
+			$period,
+			$id_group, 
+			$id_asignature,
+			$type
+		)['data'];
+
+		$respRecovery = $this->_evaluation->findReforceByGroup(
+			$id_group, $period, $type
+		)['data'];
+
+		$view = new View(
+            'teacher/partials/evaluation/reforce',
+            'groupReforceRender',
+			[
+				'students'		=>	$resp,
+				'type'			=>	$type,
+				'period'		=>	$period,
+				'period'		=>	$period,
+				'id_group'		=>	$id_group,
+				'respRecovery'	=>	$respRecovery,
+				'id_asignature'	=>	$id_asignature,
+				'periods'		=>	$this->_period->all()['data']
+			]
+		);
+		$view->execute();
+    }
 
 }
 ?>

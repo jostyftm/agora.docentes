@@ -48,6 +48,18 @@ class TeacherModel extends DB
 	 * @param
 	 * @return
 	*/
+	public function login($username, $password)
+	{
+		$this->query = "SELECT * FROM {$this->table} WHERE login='{$username}' AND pswd='{$password}'";
+
+		return $this->getResultsFromQuery();
+	}
+
+	/**
+	 *
+	 * @param
+	 * @return
+	*/
 	public function update($id, $field, $value)
 	{
 		$this->query = "UPDATE {$this->table}

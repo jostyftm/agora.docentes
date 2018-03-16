@@ -40,7 +40,7 @@
 				                       		<a href='/teacher/showFormEvaluatePeriod/group' data-asignature='<?=$group['id_asignatura']?>' data-group='<?=$group['id_grupo']?>' data-request='spa'>Evaluar Periodo Pendiente
 				                       		</a>
 				                       	</li>
-				                       	<li><a >Refuerzo Academico</a></li>
+				                       	<li><a href='/evaluation/getGroupReforce/<?=$group['id_asignatura']."/".$group['id_grupo']?>/group' data-request='spa'>Refuerzo Academico</a></li>
 		                           	</ul>
 		                        </div>
 	    					</td>

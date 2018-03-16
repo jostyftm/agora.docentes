@@ -4,6 +4,7 @@ namespace App\Model;
 
 use App\Config\DataBase as DB;
 use App\Model\ValorationModel as Valoration;
+use App\Model\FinalReportModel as FinalReport; //New
 /**
 * 
 */
@@ -11,11 +12,13 @@ class EvaluationPeriodModel extends DB
 {
 	protected $table = 't_evaluacion';
 	protected $table_recovery = 'superacion';
+	protected $table_reforce = 'refuerzo';
 	
 	private $_periods = array();
 
 	// 
 	private $_valoration;
+	private $_finalReport;
 	
 	function __construct($db='')
 	{
@@ -24,6 +27,7 @@ class EvaluationPeriodModel extends DB
 		else{
 			parent::__construct($db);
 			$this->_valoration = new Valoration($db);
+			$this->_finalReport = new FinalReport($db);
 		}
 	}
 
@@ -211,16 +215,45 @@ class EvaluationPeriodModel extends DB
 	*
 	*
 	*/
-	public function findRecoveryByGroup($id_group, $typeGroup ='group')
-	{
+	public function updateRecovery($id_recovery, $data=array()){
 
-		$column_group = ($typeGroup == 'group') ? 'id_grupo' : 'id_subgrupo';
+		$response = array();
+		if($this->checkQualification($data['newContent'])):
 
-		$this->query = "SELECT * 
-						FROM {$this->table_recovery}
-						WHERE $column_group={$id_group}";
+			$this->query = "UPDATE {$this->table_recovery} 
+							SET nota={$data['newContent']}, nota_evaluacion={$data['oldContent']} 
+							WHERE id_superacion={$id_recovery} ";
 
-		return $this->getResultsFromQuery();
+			$rows = $this->executeQuerySingle();
+
+			array_push($response, $rows);
+
+			if($rows['data']):
+				$data = $this->updatePeriod(
+					"eval_{$data['period']}_per",
+					$data['id_student'],
+					$data['id_asignature'],
+					$data['id_group'],
+					$data['newContent'],
+					$data['typeGroup']
+				);
+
+			array_push($response, $data);
+			endif;
+
+			return array(
+				'state'	=>	true,
+				'data'	=>	$response
+			);
+
+		else:
+
+			return array(
+				'state'		=> 	false,
+				'mensaje'	=>	'Rango excedido'
+			);
+
+		endif;
 	}
 
 	/**
@@ -272,20 +305,158 @@ class EvaluationPeriodModel extends DB
 			);
 		endif;
 	}
+	
+	// REFUERZO ACADEMICO
+
+	/**
+	*
+	*
+	*/
+	public function getGroupReforce($period, $id_group, $id_asignature, $type='group'){
+
+		$column_group = ($type== 'group') ? 'id_grupo' : 'id_subgrupo';
+		$table_group  = ($type== 'group') ? 't_grupos' : 't_subgrupos';
+		$column_nameGroup = ($type == 'group') ? 'nombre_grupo' : 'nombre_subgrupo';
+
+		$this->query = "SELECT ev.eval_{$period}_per AS periodo,  s.idstudents, s.primer_apellido AS primer_ape_alu, s.segundo_apellido AS segundo_ape_alu, s.primer_nombre AS primer_nom_alu, s.segundo_nombre AS segundo_nom_alu, a.asignatura, g.{$column_nameGroup}
+						FROM t_evaluacion ev
+						INNER JOIN students s ON ev.id_estudiante=s.idstudents
+						INNER JOIN {$table_group} g ON ev.{$column_group} = g.{$column_group} AND g.{$column_group} = {$id_group}
+						INNER JOIN t_asignaturas a ON ev.id_asignatura=a.id_asignatura AND a.id_asignatura = {$id_asignature}
+						WHERE ev.eval_{$period}_per >= 
+						(
+						    SELECT v.minimo
+						    FROM valoracion v
+						    WHERE v.valoracion='Basico'
+						) AND ev.eval_{$period}_per < 
+						(
+							SELECT v.maximo
+						    FROM valoracion v
+						    WHERE v.valoracion='Superior'	
+						)";
+
+		return $this->getResultsFromQuery();
+	}
+
+	/**
+	*
+	*
+	*/
+	public function getReforce(
+		$id_student, 
+		$id_group, 
+		$id_asignature, 
+		$period,
+		$type
+	)
+	{	
+		$column_group = ($type == 'group') ? 'id_grupo' : 'id_subgrupo';
+
+		$this->query = "SELECT * 
+						FROM {$this->table_reforce} 
+						WHERE id_estudiante={$id_student}  AND id_asignatura={$id_asignature} AND {$column_group}={$id_group}";
+
+		return $this->getResultsFromQuery();
+	}
+
+	/**
+	*
+	*
+	*/
+	public function findRecoveryByGroup($id_group, $period, $typeGroup ='group')
+	{
+
+		$column_group = ($typeGroup == 'group') ? 'id_grupo' : 'id_subgrupo';
+
+		$this->query = "SELECT * 
+						FROM {$this->table_recovery}
+						WHERE $column_group={$id_group}";
+
+		
+		return $this->getResultsFromQuery();
+	}
+
+	/**
+	*
+	*
+	*/
+	public function findReforceByGroup($id_group, $period, $typeGroup ='group')
+	{
+
+		$column_group = ($typeGroup == 'group') ? 'id_grupo' : 'id_subgrupo';
+
+		$this->query = "SELECT * 
+						FROM {$this->table_reforce}
+						WHERE $column_group={$id_group} AND periodo={$period}";
+		return $this->getResultsFromQuery();
+	}
 
 
 	/**
 	*
 	*
 	*/
-	public function updateRecovery($id_recovery, $data=array()){
+	public function saveReforce($data=array(), $groupType){
+
+		$resp = array();
+
+		$column_group = ($groupType == 'group') ? 'id_grupo' : 'id_subgrupo' ;
+
+		if($this->checkQualification($data['newContent'])):
+
+			$this->query = "INSERT INTO {$this->table_reforce} 
+							(id_estudiante, id_asignatura, {$column_group}, periodo, nota, nota_evaluacion)
+							VALUES
+							({$data['id_student']}, {$data['id_asignature']}, {$data['id_group']}, {$data['period']}, {$data['newContent']}, {$data['oldContent']})";
+
+			$rows = $this->executeQuerySingle();
+
+			array_push($resp, $rows);
+
+			if($rows['data']):
+				
+				$data = $this->updatePeriod(
+					"eval_{$data['period']}_per",
+					$data['id_student'],
+					$data['id_asignature'],
+					$data['id_group'],
+					$data['newContent'],
+					$groupType
+				);
+
+				array_push($resp, $data);
+			endif;
+
+
+			return array(
+				'state'		=>	true,
+				'mensaje' 	=>	$resp
+			);
+
+		else:
+
+			return array(
+				'state'		=> 	false,
+				'mensaje'	=>	'Rango excedido'
+			);
+		endif;
+	}
+
+	
+
+
+	/**
+	*
+	*
+	*/
+	public function updateReforce($id_reforce, $data=array()){
 
 		$response = array();
 		if($this->checkQualification($data['newContent'])):
 
-			$this->query = "UPDATE {$this->table_recovery} 
+			$this->query = "UPDATE {$this->table_reforce} 
 							SET nota={$data['newContent']}, nota_evaluacion={$data['oldContent']} 
-							WHERE id_superacion={$id_recovery} ";
+							WHERE id={$id_reforce} ";
 
 			$rows = $this->executeQuerySingle();
 
@@ -317,6 +488,151 @@ class EvaluationPeriodModel extends DB
 			);
 
 		endif;
+	}
+
+	// SUPERACION IF
+	/**
+	*
+	*
+	*/
+	public function getGroupRecoveryIF($id_group, $id_asignature, $type='group'){
+
+		$column_group = ($type== 'group') ? 'id_grupo' : 'id_subgrupo';
+		$table_group  = ($type== 'group') ? 't_grupos' : 't_subgrupos';
+		$column_nameGroup = ($type == 'group') ? 'nombre_grupo' : 'nombre_subgrupo';
+
+		$this->query = "SELECT ifg.id_informe, ifg.id_estudiante AS idstudents , ifg.id_grupo, ifa.id_asignatura, ifa.valoracion AS periodo, s.primer_apellido AS primer_ape_alu, s.segundo_apellido AS segundo_ape_alu, s.primer_nombre AS primer_nom_alu, s.segundo_nombre AS segundo_nom_alu
+						FROM informe_final_general ifg
+						INNER JOIN informe_final_asignaturas ifa ON ifg.id_informe=ifa.id_informe
+						INNER JOIN students s ON ifg.id_estudiante = s.idstudents
+						WHERE ifg.id_grupo={$id_group} AND ifa.id_asignatura={$id_asignature} AND ifa.valoracion < (
+							SELECT v.minimo
+							FROM valoracion v
+							WHERE v.valoracion = 'Basico'
+						)
+						ORDER BY s.primer_apellido";
+
+		// return $this->query;
+
+		return $this->getResultsFromQuery();
+	}
+
+	/**
+	*
+	*
+	*/
+	public function getIF(
+		$id_student, 
+		$id_group, 
+		$id_asignature,
+		$type = 'group'
+	)
+	{	
+		$column_group = ($type == 'group') ? 'id_grupo' : 'id_subgrupo';
+
+		$this->query = "SELECT * 
+						FROM superacion_informe_final 
+						WHERE id_estudiante={$id_student}  AND id_asignatura={$id_asignature} AND {$column_group}={$id_group}";
+
+		return $this->getResultsFromQuery();
+	}
+
+	/**
+	*
+	*
+	*/
+	public function saveIF($data=array(), $groupType){
+
+		$resp = array();
+
+		$column_group = ($groupType == 'group') ? 'id_grupo' : 'id_subgrupo' ;
+
+		if($this->checkQualification($data['newContent'])):
+
+			$this->query = "INSERT INTO superacion_informe_final 
+							(id_estudiante, id_asignatura, {$column_group}, nota, nota_if)
+							VALUES
+							({$data['id_student']}, {$data['id_asignature']}, {$data['id_group']}, {$data['newContent']}, {$data['oldContent']})";
+
+			$rows = $this->executeQuerySingle();
+
+			array_push($resp, $rows);
+
+			if($rows['data']):
+				
+				$response = $this->_finalReport->find(
+					$data['id_student'], $data['id_group'], $data['id_asignature']
+				)['data'][0];
+
+				$respo = $this->_finalReport->update(
+					$response['id_informe'], 
+					$response['id_asignatura'],
+					$data['newContent']
+				);
+
+				array_push($resp, $respo);
+			endif;
+
+
+			return array(
+				'state'		=>	true,
+				'mensaje' 	=>	$resp
+			);
+
+		else:
+
+			return array(
+				'state'		=> 	false,
+				'mensaje'	=>	'Rango excedido'
+			);
+		endif;
+	}
+
+	/*
+	 *
+	*/
+	public function updateIF($recovery_id, $data=array())
+	{
+		
+		if($this->checkQualification($data['newContent'])):
+
+			$resp = array();
+
+			$this->query = "UPDATE superacion_informe_final SET nota={$data['newContent']}, nota_if={$data['oldContent']} WHERE id={$recovery_id} ";
+
+			$rows = $this->executeQuerySingle();
+
+			array_push($resp, $rows);
+
+			if($rows['state']):
+				
+				$if = $this->_finalReport->find(
+					$data['id_student'], $data['id_group'], $data['id_asignature']
+				)['data'][0];
+
+				$respo = $this->_finalReport->update(
+					$if['id_informe'], 
+					$data['id_asignature'],
+					$data['newContent']
+				);
+
+				array_push($resp, $respo);
+			endif;
+
+
+			return array(
+				'state'		=>	true,
+				'mensaje' 	=>	$resp
+			);
+
+		else:
+			return array(
+				'state'		=> 	false,
+				'mensaje'	=>	'Rango excedido'
+			);
+		endif;
+
+
 	}
 }
 ?>
